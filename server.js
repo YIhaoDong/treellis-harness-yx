@@ -8,7 +8,7 @@ const { createGenerationJobs, publicError } = require('./src/generation/jobs.cjs
 const app = express();
 const port = process.env.PORT || 3001;
 
-// A public deployment sets ALLOWED_ORIGINS (comma-separated, e.g. https://treellis.aid-lab.org).
+// A public deployment sets ALLOWED_ORIGINS (comma-separated, e.g. https://treellis.art).
 // Without it the server behaves as a local development server and accepts any origin.
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean);
 const PUBLIC_DEPLOY = ALLOWED_ORIGINS.length > 0;

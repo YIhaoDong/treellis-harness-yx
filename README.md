@@ -26,8 +26,8 @@ Each user supplies their own OpenAI API key through the application's Key contro
 
 The frontend and the generation server deploy separately (see `.env.example`):
 
-- **Frontend → Vercel** (`treellis.aid-lab.org`): import this repo as a Vite project and set `VITE_API_BASE=https://api.treellis.aid-lab.org`.
-- **Generation server → Render** (`api.treellis.aid-lab.org`): create a Blueprint from `render.yaml`. `ALLOWED_ORIGINS` puts the server in public mode: CORS is limited to the site, and the local key and the draft/commit endpoints are disabled.
+- **Frontend → Vercel** (`treellis.art`): import this repo as a Vite project and set `VITE_API_BASE=https://api.treellis.art`.
+- **Generation server → Render** (`api.treellis.art`): create a Blueprint from `render.yaml`. `ALLOWED_ORIGINS` puts the server in public mode: CORS is limited to the site, and the local key and the draft/commit endpoints are disabled.
 
 No API key is configured on either service; each user enters their own key, which the server forwards to OpenAI without storing it.
 
