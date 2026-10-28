@@ -1,0 +1,16 @@
+# Render Blueprint for the generation server (server.js).
+# The frontend is deployed separately on Vercel; see README.md "Deploy".
+services:
+  - type: web
+    name: treellis-api
+    runtime: node
+    # Generation jobs live in memory, so use an always-on plan; the free plan sleeps and drops them.
+    plan: starter
+    buildCommand: npm ci
+    startCommand: npm run server
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: ALLOWED_ORIGINS
+        value: https://treellis.aid-lab.org

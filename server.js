@@ -8,18 +8,19 @@ const { createGenerationJobs, publicError } = require('./src/generation/jobs.cjs
 const app = express();
 const port = process.env.PORT || 3001;
 
-// ---------- 基础中间件 ----------
-app.use(cors({ origin: true }));                 // 允许跨域（来自 Vite 5173）
-app.use(express.json({ limit: '10mb' }));        // 接大一点的 JSON
+// A public deployment sets ALLOWED_ORIGINS (comma-separated, e.g. https://treellis.aid-lab.org).
+// Without it the server behaves as a local development server and accepts any origin.
+const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean);
+const PUBLIC_DEPLOY = ALLOWED_ORIGINS.length > 0;
 
-// 预检 OPTIONS（有的环境里必须显式返回 204 才不会报 Failed to fetch）
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Generation-Id,X-Generation-Token');
-  if (req.method === 'OPTIONS') return res.sendStatus(204);
-  next();
-});
+// ---------- 基础中间件 ----------
+// 预检 OPTIONS 由 cors 直接返回 204（有的环境里必须显式返回 204 才不会报 Failed to fetch）
+app.use(cors({
+  origin: PUBLIC_DEPLOY ? ALLOWED_ORIGINS : true,  // 本地允许跨域（来自 Vite 5173）
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Generation-Id', 'X-Generation-Token'],
+}));
+app.use(express.json({ limit: '10mb' }));        // 接大一点的 JSON
 
 // 简易日志（定位问题很好用）
 app.use((req, _res, next) => {
@@ -53,6 +54,7 @@ const generationModules = Promise.all([
   import('./src/generation/config.mjs'),
 ]);
 function trustedLocalRequest(req) {
+  if (PUBLIC_DEPLOY) return false;
   const remote = req.socket.remoteAddress || '';
   if (!['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(remote)) return false;
   if (!req.headers.origin) return true;
@@ -163,17 +165,9 @@ app.post('/api/generate', async (req, res) => {
   }
 });
 
-// ---------- write a component file（你原来就有的） ----------
-app.post('/write-component', (req, res) => {
-  const { filename, code } = req.body || {};
-  if (!filename || !code) {
-    return res.status(400).send('Missing filename or code.');
-  }
-  const filePath = path.resolve(__dirname, 'src', 'components', filename);
-  fs.writeFileSync(filePath, code, 'utf8');
-  res.send(`✅ ${filename} written successfully.`);
-});
-
+// The draft and commit channels share one scene across every connected client and write
+// into public/, so they exist only on a local development server.
+if (!PUBLIC_DEPLOY) {
 // ---------- 校验 & 工具 ----------
 function validateSceneObject(obj) {
   if (!obj || typeof obj !== 'object') return 'scene must be an object';
@@ -288,8 +282,10 @@ app.post('/api/commit', (req, res) => {
     return res.status(500).json({ ok: false, error: String(e) });
   }
 });
+}
 
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
+  if (PUBLIC_DEPLOY) console.log(`🌐 Public deployment for ${ALLOWED_ORIGINS.join(', ')}`);
   console.log(`📁 Static from ${PUBLIC_DIR}`);
 });

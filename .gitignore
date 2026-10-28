@@ -6,6 +6,8 @@ dist/
 # Local credentials, runs, and research records
 .env
 .env.*
+!.env.example
+/public/OpenAiApiKey.txt
 *.private.json
 /public/UserBehaviorData.csv
 /dataAnalysis/
