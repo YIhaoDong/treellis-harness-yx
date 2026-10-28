@@ -1,0 +1,2 @@
+COLOR_RULES (authoritative)
+Use #RRGGBB colors. Preserve existing colors unless a color change was requested. Explicit requested colors take precedence. Otherwise choose primitive.material.color from this default palette: #d8ffd4, #fdceff, #c7e7ff, #ecd2ff, #ffd6fb, #fff3dd, #e8ffe6. Keep colors consistent within semantic parts. Operation/repeat nodes have no material color; their primitive descendants do.

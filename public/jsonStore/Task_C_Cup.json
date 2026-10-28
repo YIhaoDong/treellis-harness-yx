@@ -1,0 +1,209 @@
+{
+  "name": "Cup Scene",
+  "operation": "union",
+  "transform": {
+    "t": [
+      0,
+      0,
+      0
+    ],
+    "r": [
+      0,
+      0,
+      0
+    ],
+    "s": [
+      1,
+      1,
+      1
+    ]
+  },
+  "children": [
+    {
+      "name": "Cup",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          1.5,
+          0
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1,
+          1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Cup Body",
+          "operation": "subtract",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Outer",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.5,
+                "h": 1,
+                "radialSegments": 16,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0.5,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Inner",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.4,
+                "h": 0.92,
+                "radialSegments": 16,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0.54,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Handle",
+          "operation": "subtract",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Handle Ring",
+              "primitive": {
+                "type": "torus",
+                "r": 0.28,
+                "t": 0.08,
+                "radialSegments": 10,
+                "tubularSegments": 24,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0.5,
+                  0.6,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "cutCube",
+              "primitive": {
+                "type": "cube",
+                "material": {
+                  "color": "#eceeff"
+                },
+                "w": 1,
+                "h": 1,
+                "d": 1
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0.5,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

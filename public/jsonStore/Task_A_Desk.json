@@ -1,0 +1,214 @@
+{
+  "name": "Desk Scene",
+  "operation": "union",
+  "transform": {
+    "t": [
+      0,
+      0,
+      0
+    ],
+    "r": [
+      0,
+      0,
+      0
+    ],
+    "s": [
+      1,
+      1,
+      1
+    ]
+  },
+  "children": [
+    {
+      "name": "Desk",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          0,
+          0
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1,
+          1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Desk Top",
+          "primitive": {
+            "type": "cube",
+            "w": 6,
+            "h": 0.3,
+            "d": 3,
+            "material": {
+              "color": "#c7e7ff"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              3,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Desk Legs",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Leg FL",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.15,
+                "h": 3,
+                "radialSegments": 12,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  -2.7,
+                  1.5,
+                  -1.2
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Leg FR",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.15,
+                "h": 3,
+                "radialSegments": 12,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  2.7,
+                  1.5,
+                  -1.2
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Leg BL",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.15,
+                "h": 3,
+                "radialSegments": 12,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  -2.7,
+                  1.5,
+                  1.2
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Leg BR",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.15,
+                "h": 3,
+                "radialSegments": 12,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  2.7,
+                  1.5,
+                  1.2
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

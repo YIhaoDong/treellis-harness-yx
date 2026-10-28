@@ -1,0 +1,15 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="linear repeat icon v4 (arrowhead outside)">
+  <!-- Uses currentColor so the UI can theme the icon -->
+  <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- three instances -->
+    <rect x="32" y="32" width="16" height="64" rx="4"/>
+    <rect x="58" y="32" width="16" height="64" rx="4"/>
+    <rect x="84" y="32" width="16" height="64" rx="4"/>
+
+    <!-- arrow shaft (ends before arrowhead to avoid overlap) -->
+    <line x1="18" y1="64" x2="108" y2="64"/>
+  </g>
+
+  <!-- arrowhead (fully outside the rightmost instance; instance ends at x=100) -->
+  <path d="M120 64 L108 56 L108 72 Z" fill="currentColor"/>
+</svg>

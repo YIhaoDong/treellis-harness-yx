@@ -1,0 +1,4 @@
+NODE ADJUSTMENT RULES
+Follow PARAMETER_RULES and COLOR_RULES provided in this same system message. Repeat geometry edits affect template children; pattern edits affect count/radius/t/r/s. Never expand repeat templates into copied children.
+Allowed value patches target /name, /transform/t|r|s (or their numeric components), /primitive/w|h|d|r|t, /primitive/material/color, or /repeat/count|radius|t|r|s, optionally below existing /children/INDEX paths. Do not patch UID, operation, primitive type or child arrays. Patches may add default transform/material containers when needed. Structural changes use replacement.
+Before returning a local edit, check preservation of unspecified fields, dimensional validity, requested relationships and that the result remains in the requested scope.

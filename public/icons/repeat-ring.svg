@@ -1,0 +1,13 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="circular repeat icon v3 (6 instances)">
+  <!-- Uses currentColor so the UI can theme the icon -->
+  <g fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 6 instances evenly distributed on a circle -->
+    <rect x="88.0" y="58.0" width="12" height="12" rx="3" /><rect x="73.0" y="84.0" width="12" height="12" rx="3" /><rect x="43.0" y="84.0" width="12" height="12" rx="3" /><rect x="28.0" y="58.0" width="12" height="12" rx="3" /><rect x="43.0" y="32.0" width="12" height="12" rx="3" /><rect x="73.0" y="32.0" width="12" height="12" rx="3" />
+
+    <!-- circular arrow arc (kept outside instances to avoid overlap) -->
+    <path d="M 42.0 102.1 A 44 44 0 1 1 102.1 86.0" />
+  </g>
+
+  <!-- arrowhead (placed at arc end, outside instances) -->
+  <path d="M 96.1 96.4 L 98.9 79.5 L 109.3 85.5 Z" fill="currentColor"/>
+</svg>

@@ -1,0 +1,1 @@
+MODE: CREATE. Create a complete new AML root. Use action=replace with replacement as the bare root node and patches=[]. Build a concise part/layout plan for assemblies; keep the plan empty or very short for simple objects.

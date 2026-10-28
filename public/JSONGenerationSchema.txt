@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/ttcs-scene.schema.json",
+  "title": "TTCS Scene JSON",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["root"],
+  "properties": {
+    "version": { "type": "string", "default": "1.0" },
+    "root": { "$ref": "#/$defs/node" },
+    "meta": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "optional metadata (author, createdAt, etc.)"
+    }
+  },
+
+  "$defs": {
+    "vec3": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3
+    },
+
+    "transform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["t", "r"],
+      "properties": {
+        "t": {
+          "description": "translation [x, y, z] in scene units",
+          "$ref": "#/$defs/vec3"
+        },
+        "r": {
+          "description": "rotation [rx, ry, rz] in DEGREES",
+          "$ref": "#/$defs/vec3"
+        }
+      }
+    },
+
+    "baseNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "transform"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Recommended format: `Readable Name (Type)`",
+          "minLength": 1
+          /* Optional strict pattern (enable if you want to enforce '(Type)' suffix):
+          ,"pattern": ".*\\([A-Za-z]+\\).*"
+          */
+        },
+        "type": { "type": "string" },
+        "transform": { "$ref": "#/$defs/transform" },
+        "children": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/node" }
+        }
+      }
+    },
+
+    "cylinder": {
+      "allOf": [
+        { "$ref": "#/$defs/baseNode" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "Cylinder" },
+            "radius": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "required": ["radius", "height"],
+          "additionalProperties": false
+        }
+      ]
+    },
+
+    "torus": {
+      "allOf": [
+        { "$ref": "#/$defs/baseNode" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "Torus" },
+            "radius": { "type": "number", "exclusiveMinimum": 0, "description": "major radius" },
+            "tube":   { "type": "number", "exclusiveMinimum": 0, "description": "minor radius" }
+          },
+          "required": ["radius", "tube"],
+          "additionalProperties": false
+        }
+      ]
+    },
+
+    "box": {
+      "allOf": [
+        { "$ref": "#/$defs/baseNode" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "Box" },
+            "width":  { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 },
+            "depth":  { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "required": ["width", "height", "depth"],
+          "additionalProperties": false
+        }
+      ]
+    },
+
+    "sphere": {
+      "allOf": [
+        { "$ref": "#/$defs/baseNode" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "Sphere" },
+            "radius": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "required": ["radius"],
+          "additionalProperties": false
+        }
+      ]
+    },
+
+    "csg": {
+      "allOf": [
+        { "$ref": "#/$defs/baseNode" },
+        {
+          "type": "object",
+          "properties": {
+            "type": { "const": "CSG" },
+            "op": { "type": "string", "enum": ["union", "subtract", "intersect"] },
+            "children": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/node" },
+              "minItems": 2
+            }
+          },
+          "required": ["op", "children"],
+          "additionalProperties": false
+        }
+      ]
+    },
+
+    "node": {
+      "oneOf": [
+        { "$ref": "#/$defs/cylinder" },
+        { "$ref": "#/$defs/torus" },
+        { "$ref": "#/$defs/box" },
+        { "$ref": "#/$defs/sphere" },
+        { "$ref": "#/$defs/csg" }
+      ]
+    }
+  }
+}

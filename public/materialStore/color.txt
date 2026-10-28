@@ -1,0 +1,7 @@
+#d8ffd4,
+#fdceff,
+#c7e7ff,
+#ecd2ff,
+#ffd6fb,
+#fff3dd,
+#e8ffe6,

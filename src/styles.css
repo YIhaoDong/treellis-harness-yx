@@ -1,0 +1,907 @@
+/* =========================
+   全局变量（统一控制输入框/按钮样式）
+   ========================= */
+:root {
+  --ttcs-input-h: 28px;   /* 输入框统一高度：影响 translate/scale/max/min/primitive 的输入框高度 */
+  --ttcs-input-w: 64px;   /* 输入框统一宽度：主要用于 Min/Max 等小数字框 */
+  --ttcs-btn-h: 28px;     /* Reset 按钮高度：所有 Reset 同步 */
+  --ttcs-color-w: 32px;   /* 颜色选择框宽度 */
+  --ttcs-color-h: 32px;   /* 颜色选择框高度 */
+
+  /* Hover/Flash 高亮主题色 */
+  --ttcs-hl-fill: #FFE46B;      /* 悬停填充色 */
+  --ttcs-hl-stroke: #D4A500;    /* 悬停描边色 */
+  --ttcs-flash-fill: #ffef99;   /* 程序化聚焦时的闪烁填充 */
+  --ttcs-flash-stroke: #caa300; /* 程序化聚焦时的闪烁描边 */
+}
+
+/* 统一盒模型，避免宽度计算误差 */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* =========================
+   App layout & controls
+   ========================= */
+.app-grid{ display:grid; grid-template-rows:1fr auto; height:100vh; } /* 整体两行布局：主区 + 工具栏 */
+
+.split-root{ display:flex; width:100%; height:100%; overflow:hidden; } /* 三列 split 容器 */
+
+.split-left{
+  flex: 0 0 calc(var(--left-pct, 40%) - 4px);  /* 左侧宽度（可通过变量 left-pct 控制） */
+  width: calc(var(--left-pct, 40%) - 4px);      /* 同上 */
+  min-width: 0;                                 /* 防止撑开 */
+  display:flex; flex-direction:column;          /* 纵向排列 */
+  border-right:1px solid #e5e7eb;               /* 右侧分割线 */
+}
+.split-toolbar{ padding:8px; display:flex; gap:8px; align-items:center; border-bottom:1px solid #e5e7eb; } /* 左栏顶部工具条 */
+.split-content{ flex:1; min-height:0; }         /* 左栏内容区可滚动 */
+
+.split-divider{
+  width:8px;
+  cursor:col-resize;
+  background:transparent;
+  position: relative;
+}
+.split-divider::after{
+  content:'';
+  position:absolute; inset:0;
+  border-left:2px dashed #e5e7eb;
+  opacity:.8;
+}
+.split-divider:hover{ background: #f8fafc; }
+
+.split-middle{ flex:1 1 auto; min-width:0; position:relative; } /* 中间 3D 画布区 */
+
+.split-right-panel{
+  flex: 0 0 var(--right-w, 340px);   /* 右侧面板固定宽度，通过变量 right-w 控制 */
+  width: var(--right-w, 340px);      /* 同上 */
+  border-left:1px solid #e5e7eb;     /* 左侧分割线 */
+  background:#fff;                   /* 白底 */
+  display:flex; flex-direction:column; /* 纵向布局 */
+}
+
+/* panel bars & body */
+.panel-bar{ padding:12px; border-bottom:1px solid #e5e7eb; } /* 面板标题栏 */
+.panel-bar--row{ display:flex; align-items:center; justify-content:space-between; } /* 标题栏两端对齐 */
+.panel-title{ font-weight:700; font-size: 36px }         /* 标题字体加粗 */
+.panel-body{ padding:12px; overflow:auto; flex:1; } /* 面板主体可滚动，占满剩余空间 */
+
+.path-muted{ color:#64748b; font-size:12px; margin-bottom:10px; } /* 路径轻描 */
+.muted{ color:#94a3b8; }                /* 次级文字颜色 */
+.hint{ font-size:12px; color:#9ca3af; margin-top:6px; } /* 小提示风格 */
+
+.label-strong{ display:block; font-weight:700; margin-bottom:6px; } /* 强提示标签 */
+
+/* buttons */
+.btn{
+  height:44px;                          /* 常规大按钮高度 */
+  padding:0 12px;                       /* 左右内边距 */
+  border:1px solid #e5e7eb;             /* 边框 */
+  border-radius:12px;                   /* 圆角 */
+  box-shadow:0 1px 3px rgba(0,0,0,.08); /* 轻阴影 */
+  cursor:pointer;                       /* 指针样式 */
+  font-weight:700;                      /* 加粗 */
+  background:#fff;                      /* 白底 */
+  color:#111827;                        /* 深文字 */
+}
+.btn:hover{ background:#f8fafc; }
+.btn--dark{ background:#111827; color:#fff; }
+.btn--dark:hover{ filter: brightness(1.05); }
+.btn--blue{ background:#2563eb; color:#fff; }
+.btn--blue:hover{ filter: brightness(1.05); }
+.btn--ghost{ background:#fff; }
+.btn--sm{ height:30px; padding:0 10px; border-radius:8px; font-weight:600; } /* 小号按钮 */
+.btn--grow{ flex:1; }                          /* 自动拉伸 */
+.btn:disabled{ background:#f3f4f6; color:#9ca3af; cursor:not-allowed; } /* 禁用态 */
+
+.btn-row{ display:flex; gap:12px; }           /* 按钮横排 */
+
+/* =========================
+   表单控件（右侧面板）
+   ========================= */
+.text-input{
+  width:90%;                         /* 通用文本输入：默认占父 90% 宽（通用场景） */
+  height: var(--ttcs-input-h);       /* 高度用统一变量 */
+  padding:6px 10px;                  /* 上下/左右内边距 */
+  border-radius:6px;                 /* 圆角 */
+  border:1px solid #e5e7eb;          /* 边框 */
+  box-sizing: border-box;            /* ✅ 宽度包含 padding/border，避免撑破布局 */
+  outline: none;
+}
+.text-input:focus,
+.param-number:focus,
+.ttcs-input-compact:focus{
+  border-color:#2563eb;
+  box-shadow:0 0 0 3px rgba(37,99,235,.12);
+}
+.text-input--sm{ height:calc(var(--ttcs-input-h) - 4px); } /* 小号高度（少 4px） */
+.input--error{ border-color:#ef4444 !important; }         /* 错误态边框红色 */
+
+/* —— 让参数卡片标题行里的数值输入（右上角）固定小宽度，并靠右 —— */
+.param-head .text-input{
+  width: var(--ttcs-input-w);        /* ✅ 顶部数值输入改为小宽度（与 Min/Max 一致） */
+  margin-left: auto;                 /* ✅ 推向最右侧，保证右对齐 */
+}
+
+/* Color 颜色输入 */
+.color-input{
+  width: var(--ttcs-color-w);        /* 颜色框宽度变量 */
+  height: var(--ttcs-color-h);       /* 颜色框高度变量 */
+  border:1px solid #e5e7eb;          /* 边框 */
+  border-radius:5px;                 /* 圆角 */
+  padding:0;                         /* 无内边距 */
+  box-sizing: border-box;            /* ✅ 同步 box-sizing，避免宽高被 padding 影响 */
+}
+.hidden-color-input{
+  position:absolute; opacity:0; width:0; height:0; pointer-events:auto; /* 隐藏真实 color input */
+}
+
+/* param cards */
+.param-card{ margin-bottom:12px; padding:10px; border:1px solid #f1f5f9; border-radius:10px; } /* 参数卡片容器 */
+.param-head{ display:flex; justify-content:space-between; margin-bottom:6px; } /* 标题行：左标题 + 右输入 */
+.param-number{
+  width: var(--ttcs-input-w);        /* Min/Max 框宽度变量 */
+  height: var(--ttcs-input-h);       /* Min/Max 框高度变量 */
+  padding:4px 6px;                   /* 内边距 */
+  border-radius:8px;                 /* 圆角 */
+  border:1px solid #e5e7eb;          /* 边框 */
+  box-sizing: border-box;            /* ✅ 包含 padding/border，解决“穿模/挤压” */
+  outline: none;
+}
+.param-number::-webkit-outer-spin-button,
+.param-number::-webkit-inner-spin-button{ -webkit-appearance: none; margin:0; }
+/* 去掉 WebKit 的 number 旋钮 */
+.param-number::-webkit-outer-spin-button,
+.param-number::-webkit-inner-spin_button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* 统一用无前缀的 appearance，避免 VS Code 黄线 */
+.param-number[type="number"] {
+  appearance: textfield;  /* Chrome / Safari / Firefox (modern) */
+}
+
+.param-slider{ width:100%; }         /* 滑杆宽度占满 */
+
+/* tiny grids */
+.grid-2{ display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; } /* 两列小栅格 */
+
+ /* ===== Right panel controls (JSX 调用处) ===== */
+.ttcs-row { display: grid; gap: 8px; align-items: center; margin-top: 8px; } /* 每一行的基础网格 */
+
+/* Translate 行列宽： [Min标签] [Min输入] [Max标签] [Max输入] [余量/Reset] */
+.ttcs-row-translate {
+  grid-template-columns: 24px var(--ttcs-input-w) 32px var(--ttcs-input-w) auto; /* ✅ 标签列略放大更稳 */
+}
+
+/* Scale/Primitive 行： [Label] [Max输入] [Slider占满] [Reset] */
+.ttcs-row-maxonly  { grid-template-columns: 56px var(--ttcs-input-w) 1fr auto; } /* 1fr 推动 Reset 到最右侧 */
+
+/* 标签样式 */
+.ttcs-label {
+  font-size: 12px;                   /* 字号 */
+  color: #64748b;                    /* 颜色 */
+  white-space: nowrap;               /* ✅ 不换行，防止 “Max” 折行挤乱网格 */
+}
+
+/* 紧凑输入（备用类，某些行使用） */
+.ttcs-input-compact{
+  height: var(--ttcs-input-h);       /* 高度统一变量 */
+  width: var(--ttcs-input-w);        /* 宽度统一变量 */
+  padding: 4px 6px;                  /* 内边距 */
+  border-radius: 8px;                /* 圆角 */
+  border: 1px solid #e5e7eb;         /* 边框 */
+  box-sizing: border-box;            /* ✅ 同样防止超宽 */
+  outline: none;
+}
+
+/* Reset 按钮 */
+.ttcs-btn-reset {
+  justify-self: end;                 /* ✅ 在网格单元内靠右（与卡片右边对齐） */
+  height: var(--ttcs-btn-h);         /* 高度变量 */
+  line-height: var(--ttcs-btn-h);    /* 文字垂直居中 */
+  padding: 0 10px;                   /* 左右内边距 */
+  margin-right: 0;
+  border-radius: 8px;                /* 圆角 */
+  border: 1px solid #e5e7eb;         /* 边框 */
+  background: #fff;                  /* 背景白 */
+  cursor: pointer;                   /* 指针 */
+  font-size: 12px;                   /* 字号 */
+}
+.ttcs-btn-reset:hover { background: #f3f4f6; } /* 悬停浅灰 */
+
+/* =========================
+   (Original) Tree & Legend
+   ========================= */
+
+/* ========== React-d3-tree link style (soft, clean) ========== */
+.ttcs-tree .rd3t-link path {
+  stroke: #cdd5df;                   /* 树线颜色 */
+  stroke-width: 2;                   /* 线宽 */
+  stroke-linecap: round;             /* 圆角端点 */
+  fill: none;                        /* 无填充 */
+}
+
+/* Optional accent when active/hover path */
+.ttcs-tree .rd3t-link.is-active path {
+  stroke: #9fb3c8;                   /* 激活线颜色 */
+  stroke-width: 3;                   /* 激活线更粗 */
+  filter: drop-shadow(0 0 1px rgba(0,0,0,.15)); /* 轻阴影 */
+}
+
+/* ========== Node SVG background (outline shapes) ========== */
+.ttcs-node__bg {
+  vector-effect: non-scaling-stroke; /* 缩放不影响线宽 */
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.08)); /* 阴影 */
+  transition: filter 160ms ease, stroke-width 160ms ease, fill-opacity 160ms ease, stroke 160ms ease; /* 动效 */
+}
+.ttcs-node__bg--dash { stroke-dasharray: 6 4; } /* 虚线风格 */
+
+/* 让 Torus 的粗环与外轮廓在缩放时保持线宽稳定 */
+.ttcs-donut-ring,
+.ttcs-donut-outline { vector-effect: non-scaling-stroke; } /* 同步线宽策略 */
+
+/* ========== Node card (soft content overlay) ========== */
+.ttcs-tree-card {
+  position: relative;                /* 相对定位，便于内部绝对元素 */
+  display: grid;                     /* 网格布局 */
+
+  --accent-w: 0px;                   /* 左色条默认宽度为 0（关闭） */
+  grid-template-columns: var(--accent-w) 1fr; /* 左色条 + 内容 */
+
+  width: 220px;                      /* 卡片宽度 */
+  height: 115px;                     /* 卡片高度 */
+  border-radius: 1px;                /* 圆角（保持原样） */
+
+  background: transparent;           /* 透明背景 */
+  border: 0;                         /* 无边框 */
+  box-shadow: none;                  /* 无阴影 */
+
+  overflow: hidden;                  /* 超出裁剪 */
+  clip-path: inset(0 round 20px);    /* 裁剪圆角 */
+
+  will-change: transform, filter;    /* 提示浏览器优化 */
+  transition:
+    transform 140ms ease,            /* 放大动画 */
+    filter 140ms ease,               /* 滤镜动画 */
+    grid-template-columns 140ms ease;/* 左色条展开动画 */
+
+  cursor: pointer;                   /* 鼠标手型 */
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; /* 字体 */
+  color: #0f172a;                    /* 文字颜色 */
+}
+
+.ttcs-tree-card__accent {
+  grid-column: 1 / 2;                /* 放在第一列（色条） */
+  height: 100%;                      /* ✅ 默认显示全高色条（可点击折叠/展开） */
+  border-top-left-radius: 1px;       /* 左上圆角 */
+  border-bottom-left-radius: 1px;    /* 左下圆角 */
+  opacity: 0.35;                     /* 微透明，避免喧宾夺主 */
+}
+
+/* 移除 grid-column 的类级强制，改由 JSX 内联控制，避免与内联冲突 */
+.ttcs-tree-card__content {
+  display: flex;                     /* 纵向排版 */
+  flex-direction: column;            /* 方向：列 */
+  justify-content: center;           /* 垂直居中 */
+  padding: 0px 8px;                  /* 内边距 */
+  gap: 4px;                          /* 元素间距 */
+  text-align: left;                  /* 左对齐 */
+}
+
+.ttcs-tree-card__title {
+  font-weight: 800;                  /* 标题加粗 */
+  font-size: 18px;                   /* 标题字号 */
+  letter-spacing: 0.1px;             /* 字距 */
+  white-space: normal;               /* 正常换行 */
+  overflow: hidden;                  /* 溢出隐藏 */
+  text-overflow: ellipsis;           /* 省略号 */
+  word-break: break-word;            /* 长词断开 */
+  line-height: 1.18;                 /* 行高 */
+}
+.ttcs-tree-sub {
+  font-size: 18px;                   /* 副标题字号 */
+  font-weight: 400;                  /* 常规字重 */
+  color: #64748b;                    /* 副标题颜色 */
+  line-height: 1.2;                  /* 行高 */
+}
+
+/* Depth-aware sizing */
+.ttcs-tree-card {
+  --card-scale: 1.00;                /* 基础缩放 */
+  --title-fs: 28px;                  /* 基础标题字号 */
+  --sub-fs: 20px;                    /* 基础副标题字号 */
+  --accent-w: 12px;                  /* 左色条宽度 */
+  --radius: 1px;                     /* 圆角 */
+
+  transform-origin: 50% 50%;         /* 变换原点中心 */
+  transform: scale(var(--card-scale)); /* 按深度缩放 */
+  border-radius: var(--radius);        /* 圆角应用 */
+}
+.ttcs-depth-0.ttcs-tree-card { --card-scale: 1.4; --title-fs: 19.5px; --sub-fs: 14.5px; --accent-w: 14px; } /* 根层更大 */
+.ttcs-depth-1.ttcs-tree-card { --card-scale: 1.25; } /* 深度1 */
+.ttcs-depth-2.ttcs-tree-card { --card-scale: 1.12; } /* 深度2 */
+.ttcs-depth-3.ttcs-tree-card { --card-scale: 1.02; } /* 深度3 */
+.ttcs-depth-4.ttcs-tree-card { --card-scale: 0.95; } /* 深度4 */
+
+.ttcs-tree-card__title { font-size: var(--title-fs); } /* 标题字号跟随变量 */
+.ttcs-tree-sub        { font-size: var(--sub-fs); }    /* 副标题字号跟随变量 */
+.ttcs-tree-card       { grid-template-columns: var(--accent-w) 1fr; } /* 左色条开合 */
+.ttcs-tree-card__accent {
+  border-top-left-radius: var(--radius);   /* 色条圆角跟随变量 */
+  border-bottom-left-radius: var(--radius);
+}
+
+/* 针对 Torus：标题略小、文本居中，减少溢出概率 */
+.ttcs-node.ttcs-prim--torus .ttcs-tree-card { --title-fs: 16px; --sub-fs: 12.5px; } /* 甜甜圈节点标题缩小 */
+.ttcs-node.ttcs-prim--torus .ttcs-tree-card__content { align-items: center; text-align: center; } /* 内容居中 */
+
+/* ========== Unified hover behavior ========== */
+/* 禁止卡片自身的放大，避免“两个 hover 动画打架” */
+.ttcs-tree .ttcs-tree-card:hover { transform: none !important; filter: none !important; } /* 悬停不再二次放大 */
+
+/* 整个节点 hover：文字/卡片轻微放大 */
+.ttcs-tree .ttcs-node:hover .ttcs-tree-card {
+  transform: scale(calc(var(--card-scale) + 0.012)) !important; /* 整体轻微放大 */
+  filter: none !important;                                       /* 不叠加滤镜 */
+}
+
+/* === TTCS: Hover Highlight === */
+.ttcs-tree .ttcs-node:hover .ttcs-node__bg {
+  fill: var(--ttcs-hl-fill) !important;     /* 高亮填充 */
+  stroke: var(--ttcs-hl-stroke) !important; /* 高亮描边 */
+  fill-opacity: 1 !important;               /* 完全不透明 */
+  stroke-width: 3.5 !important;             /* 加粗描边 */
+  filter:
+    drop-shadow(0 4px 14px rgba(0,0,0,.16)) /* 外阴影 1 */
+    drop-shadow(0 0 12px rgba(255, 228, 107, .55)); /* 外辉光 */
+}
+
+/* Torus 专属：环与外描边一起高亮，厚度更有存在感 */
+.ttcs-tree .ttcs-node:hover .ttcs-donut-ring {
+  stroke: var(--ttcs-hl-fill) !important;   /* 环用高亮色 */
+  stroke-width: 18px !important;            /* 环厚度 */
+  filter:
+    drop-shadow(0 4px 14px rgba(0,0,0,.16)) /* 阴影 */
+    drop-shadow(0 0 12px rgba(255, 228, 107, .55)); /* 辉光 */
+}
+.ttcs-tree .ttcs-node:hover .ttcs-donut-outline {
+  stroke: var(--ttcs-hl-stroke) !important; /* 外轮廓高亮描边 */
+}
+/* 内圆遮罩保持白色，保证文字清晰；同时完全阻断“树线穿透” */
+.ttcs-tree .ttcs-node:hover .ttcs-donut-cover { fill: #fff; fill-opacity: 1; } /* 中心白色遮罩 */
+
+/* hover 时左侧色条淡出，突出形状 */
+.ttcs-tree .ttcs-node:hover .ttcs-tree-card__accent { opacity: 0 !important; } /* 色条隐藏 */
+.ttcs-tree .ttcs-node:hover .ttcs-tree-card__title { color: #0b0f19; }         /* 标题深色 */
+.ttcs-tree .ttcs-node:hover .ttcs-tree-sub        { color: #334155; }          /* 副标题深色 */
+
+/* === TTCS: Programmatic focus flash (Tree scroll-into-view) === */
+@keyframes ttcsFlash {
+  0%   { filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+  20%  { filter:
+          drop-shadow(0 4px 14px rgba(0,0,0,.16))
+          drop-shadow(0 0 14px rgba(255, 228, 107, .65)); }
+  55%  { filter:
+          drop-shadow(0 2px 10px rgba(0,0,0,.12))
+          drop-shadow(0 0 10px rgba(255, 228, 107, .45)); }
+  100% { filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+}
+.ttcs-tree .ttcs-node--flash .ttcs-node__bg {
+  fill: var(--ttcs-flash-fill) !important;
+  stroke: var(--ttcs-flash-stroke) !important;
+  stroke-width: 3.5 !important;
+  animation: ttcsFlash 1.1s ease-out;
+}
+.ttcs-tree .ttcs-node--flash .ttcs-donut-ring {
+  stroke: var(--ttcs-flash-fill) !important;
+  stroke-width: 18px !important;
+  animation: ttcsFlash 1.1s ease-out;
+}
+.ttcs-tree .ttcs-node--flash .ttcs-donut-outline {
+  stroke: var(--ttcs-flash-stroke) !important;
+  animation: ttcsFlash 1.1s ease-out;
+}
+
+/* ================== TTCS Legend ================== */
+.ttcs-legend {
+  position: absolute;                /* 绝对定位在画布上 */
+  top: 12px;                         /* 顶部距离 */
+  left: 12px;                        /* 左侧距离 */
+  z-index: 10;                       /* 图层在上 */
+  pointer-events: auto;              /* 可交互 */
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; /* 字体 */
+}
+.ttcs-legend__toggle {
+  appearance: none;                  /* 移除默认样式 */
+  border: 1px solid #e5e7eb;         /* 边框 */
+  background: #fff;                  /* 背景白 */
+  color: #111827;                    /* 文字深色 */
+  font-size: 13px;                   /* 字号 */
+  padding: 6px 10px;                 /* 内边距 */
+  border-radius: 1px;                /* 圆角 */
+  cursor: pointer;                   /* 指针样式 */
+  box-shadow: 0 6px 16px rgba(0,0,0,.08); /* 阴影 */
+  display: inline-flex;              /* 内联弹性布局 */
+  align-items: center;               /* 垂直居中 */
+  gap: 6px;                          /* 图标与文字间距 */
+}
+.ttcs-legend__toggle:hover { background: #f8fafc; } /* 悬停浅灰 */
+.ttcs-legend__toggle-text { opacity: .9; }          /* 文字透明度 */
+
+.ttcs-legend__panel {
+  margin-top: 8px;                   /* 与按钮的间距 */
+  width: 320px;                      /* 面板宽度 */
+  background: rgba(255,255,255,.96); /* 半透明白底 */
+  backdrop-filter: blur(6px);        /* 背景模糊 */
+  border: 1px solid #e5e7eb;         /* 边框 */
+  border-radius: 14px;               /* 圆角 */
+  box-shadow: 0 12px 28px rgba(0,0,0,.12); /* 阴影 */
+  padding: 10px 12px 12px;           /* 内边距 */
+}
+.ttcs-legend__title {
+  font-weight: 600;                  /* 标题加粗 */
+  font-size: 13px;                   /* 标题字号 */
+  color: #0f172a;                    /* 标题颜色 */
+  margin-bottom: 8px;                /* 底部间距 */
+}
+.ttcs-legend__grid { display: grid; grid-template-columns: 1fr; gap: 8px; } /* 单列网格，元素间距 8px */
+.ttcs-legend__item {
+  display: grid;                     /* 网格布局 */
+  grid-template-columns: 56px 1fr;   /* 左预览 56px + 右文本自适应 */
+  gap: 8px;                          /* 列间距 */
+  align-items: center;               /* 垂直居中 */
+  padding: 6px 4px;                  /* 内边距 */
+  border-radius: 10px;               /* 圆角 */
+  transition: background-color .15s ease; /* 背景过渡 */
+}
+.ttcs-legend__item:hover { background: #f8fafc; } /* 悬停浅灰背景 */
+.ttcs-legend__meta { display: flex; flex-direction: column; gap: 2px; } /* 右侧文字竖排 */
+.ttcs-legend__name { font-size: 13px; font-weight: 600; color: #0f172a; display:inline-flex; align-items:center; gap:6px; } /* 名称样式 + 内联芯片容器 */
+.ttcs-legend__sub  { font-size: 12px; color: #475569; line-height: 1.25; } /* 子标题样式 */
+.ttcs-legend svg { display: block; } /* SVG 去掉基线空隙 */
+.ttcs-legend__chip { width: 30px; height: 30px; display: inline-block; opacity: .9; vertical-align: middle; } /* 芯片图标 */
+
+/* ===== Node small type chip (placed centered below) ===== */
+.ttcs-chip {
+  position: absolute;                /* 芯片绝对定位 */
+  left: 50%;                         /* 水平居中基于父 */
+  bottom: -3px;                      /* 底部对齐 */
+  transform: translateX(-50%);       /* 水平中心修正 */
+  width: 70px;                       /* 宽度 */
+  height: 34px;                      /* 高度 */
+  background: transparent;           /* 透明背景 */
+  border: 0;                         /* 无边框 */
+  box-shadow: none;                  /* 无阴影 */
+  pointer-events: none;              /* 不可交互 */
+}
+.ttcs-chip__img { width: 100%; height: 100%; display: block; opacity: .95; } /* 芯片图片铺满 */
+
+/* === TTCS: Programmatic active highlight (from App.highlightPath) === */
+.ttcs-tree .ttcs-node--active .ttcs-node__bg {
+  fill: var(--ttcs-hl-fill) !important;
+  stroke: var(--ttcs-hl-stroke) !important;
+  fill-opacity: 1 !important;
+  stroke-width: 3.5 !important;
+  filter:
+    drop-shadow(0 4px 14px rgba(0,0,0,.16))
+    drop-shadow(0 0 12px rgba(255, 228, 107, .55));
+}
+.ttcs-tree .ttcs-node--active .ttcs-donut-ring {
+  stroke: var(--ttcs-hl-fill) !important;
+  stroke-width: 18px !important;
+  filter:
+    drop-shadow(0 4px 14px rgba(0,0,0,.16))
+    drop-shadow(0 0 12px rgba(255, 228, 107, .55));
+}
+.ttcs-tree .ttcs-node--active .ttcs-donut-outline {
+  stroke: var(--ttcs-hl-stroke) !important;
+}
+.ttcs-tree .ttcs-node--active .ttcs-donut-cover {
+  fill: #fff;
+  fill-opacity: 1;
+}
+.ttcs-tree .ttcs-node--active .ttcs-tree-card__accent { opacity: 0 !important; }
+.ttcs-tree .ttcs-node--active .ttcs-tree-card__title { color: #0b0f19; }
+.ttcs-tree .ttcs-node--active .ttcs-tree-sub        { color: #334155; }
+
+/* ========== 可选：滚动条微样式（大树更易用） ========== */
+.ttcs-tree::-webkit-scrollbar { width: 10px; height:10px; }
+.ttcs-tree::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 8px; }
+.ttcs-tree::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
+.ttcs-tree { scrollbar-color: #e5e7eb transparent; scrollbar-width: thin; }
+
+
+/* === Node Action Stack (top-right vertical buttons) === */
+:root {
+  /* 控制按钮点击热区；改这里即可整体放大/缩小 */
+  --ttcs-node-action: 32px;
+}
+
+.ttcs-nodebtn-stack {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  pointer-events: auto;
+
+  /* 桌面端默认轻隐藏，hover/active 时显现 */
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+/* 显示条件：悬停该节点、该节点被设为 active、或栈内获得焦点 */
+.ttcs-node:hover .ttcs-nodebtn-stack,
+.ttcs-node--active .ttcs-nodebtn-stack,
+.ttcs-nodebtn-stack:focus-within {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 触屏设备（无 hover）下常显 */
+@media (hover: none) {
+  .ttcs-nodebtn-stack { opacity: 1; transform: none; }
+}
+
+/* 基础按钮样式（方形命中区 + 居中） */
+.ttcs-nodebtn {
+  width: var(--ttcs-node-action);
+  height: var(--ttcs-node-action);
+  display: inline-grid;
+  place-items: center;
+
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  cursor: pointer;
+  pointer-events: auto;
+
+  line-height: 1;
+  font-weight: 700;
+  user-select: none;
+  transition: transform .12s ease, background-color .12s ease, opacity .12s ease;
+}
+
+.ttcs-nodebtn:hover { background: #f8fafc; transform: scale(1.1); }
+.ttcs-nodebtn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.ttcs-nodebtn[disabled] { opacity: .45; cursor: not-allowed; pointer-events: none; }
+
+/* 语义变体：颜色 + 图标尺寸 */
+.ttcs-nodebtn--del { color: #ef4444; font-size: 20px; }
+.ttcs-nodebtn--add { color: #059669; font-size: 28px; }
+.ttcs-nodebtn--ai  { color: #111827; font-size: 20px; }
+
+.ttcs-nodebtn--del:hover  { background: #ffc3c3; }  /* 浅红 */
+.ttcs-nodebtn--add:hover  { background: #c3ffd8; }  /* 浅绿 */
+.ttcs-nodebtn--ai:hover   { background: #b1d4ff; }  /* 浅蓝紫 */
+
+
+/* =========================================================
+   Clipboard (Copy / Paste) stack — 中部偏右，避免与右上角栈重叠
+   ========================================================= */
+:root {
+  /* 将复制/粘贴整体向左错开一个“右上角按钮”的宽度，避免重叠 */
+  --ttcs-clip-xshift: calc(var(--ttcs-node-action) + 10px);
+}
+
+.ttcs-clipstack{
+  position: absolute;
+  left: 6px;          /* ✅ 改：贴左 */
+  bottom: 6px;        /* ✅ 改：贴下 */
+  top: auto;          /* ✅ 取消 top */
+  right: auto;        /* ✅ 取消 right */
+  transform: none;    /* ✅ 不再做垂直居中 */
+  /* 下面这行决定顺序：要“粘贴在上、复制在下”就用 column-reverse；反之用 column */
+  flex-direction: column-reverse;
+}
+
+
+/* 显示：节点 hover/active 或栈内获得焦点 */
+.ttcs-node:hover .ttcs-clipstack,
+.ttcs-node--active .ttcs-clipstack,
+.ttcs-clipstack:focus-within {
+  opacity: 1;
+}
+
+/* 触屏常显 */
+@media (hover: none) {
+  .ttcs-clipstack { opacity: 1; transform: translateY(-50%); }
+}
+
+/* 按钮样式复用 nodebtn 的视觉体系 */
+.ttcs-clipbtn {
+  width: var(--ttcs-node-action);
+  height: var(--ttcs-node-action);
+  display: inline-grid;
+  place-items: center;
+  padding: 0;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  cursor: pointer;
+  pointer-events: auto;
+  line-height: 1;
+  font-weight: 700;
+  user-select: none;
+  transition: transform .12s ease, background-color .12s ease, opacity .12s ease;
+}
+
+.ttcs-clipbtn:hover { background: #f8fafc; transform: scale(1.1); }
+.ttcs-clipbtn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+.ttcs-clipbtn[disabled] { opacity: .45; cursor: not-allowed; pointer-events: none; }
+
+/* 语义配色（可按需调整） */
+.ttcs-clipbtn--copy  { color: #0f172a; font-size: 18px; }
+.ttcs-clipbtn--paste { color: #2563eb; font-size: 18px; }
+
+.ttcs-clipbtn--copy:hover  { background: #eef2ff; }
+.ttcs-clipbtn--paste:hover { background: #dbeafe; }
+
+
+/* =========================
+   Overlay stack: Legend + InstanceLibrary
+   ========================= */
+.ttcs-overlays{
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+/* 在 overlays 里，Legend 不再自己 absolute 定位（避免与 Library 互相覆盖） */
+.ttcs-overlays .ttcs-legend{
+  position: relative !important;
+  top: 0 !important;
+  left: 0 !important;
+  z-index: auto !important;
+}
+
+
+/* =========================================================
+   TTCS: Unify Floating Buttons (Legend / Library) to match .btn
+   Paste this BLOCK at the END of styles.css
+   ========================================================= */
+
+/* 让 Legend / Library 的 toggle 按钮“长得像”你系统里现有的 .btn（例如 Live Scene） */
+.ttcs-legend__toggle{
+  appearance: none;
+  height: 44px;                          /* ✅ 对齐 .btn 高度 */
+  padding: 0 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;                   /* ✅ 对齐 .btn 圆角 */
+  box-shadow: 0 1px 3px rgba(0,0,0,.08); /* ✅ 对齐 .btn 阴影 */
+  background: #fff;
+  color: #111827;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1;
+}
+
+.ttcs-legend__toggle:hover{
+  background: #f8fafc;
+}
+
+.ttcs-legend__toggle:focus-visible{
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* 让 Legend / Library 两个按钮上下间距更像 toolbar */
+.ttcs-legend{
+  gap: 10px; /* 原本就有，这里兜底：Legend toggle 和 panel 的间距更舒服 */
+}
+
+/* 小字透明度微调（和 .btn 的字重更协调） */
+.ttcs-legend__toggle-text{ opacity: .9; }
+
+/* （可选）让 Library 按钮在 open 状态的反色也保持 hover 手感 */
+.ttcs-legend__toggle[aria-expanded="true"]:hover{
+  filter: brightness(1.03);
+}
+
+
+/* =========================================================
+   TTCS: Top-left aligned buttons + centered modals
+   Append this BLOCK at the END of styles.css
+   ========================================================= */
+
+/* Hide old in-tree overlays (Legend / Library) to avoid layering issues */
+.ttcs-overlays { display: none !important; }
+
+/* Allow absolute top-left tool stack inside left pane */
+.split-left { position: relative; }
+
+/* Top-left aligned button stack (Legend / Library / Live Scene) */
+.ttcs-global-tools{
+  position: absolute;
+  top: 72px; /* 12 + 60 */
+  left: 12px;
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: auto;
+}
+
+/* Make the 3 buttons visually aligned */
+.ttcs-global-tools .btn{
+  width: 150px;
+  justify-content: flex-start;
+}
+
+/* Centered modal overlay */
+.ttcs-modal-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(15, 23, 42, 0.18);
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+/* Modal container */
+.ttcs-modal{
+  width: min(720px, 92vw);
+  max-height: 82vh;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  box-shadow: 0 18px 40px rgba(0,0,0,.18);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.ttcs-modal__bar{
+  padding: 12px 12px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ttcs-modal__title{
+  font-weight: 800;
+  font-size: 18px;
+  color: #0f172a;
+}
+
+.ttcs-modal__close{
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+.ttcs-modal__close:hover{ background: #f8fafc; }
+
+.ttcs-modal__body{
+  padding: 12px;
+  overflow: auto;
+}
+
+/* Legend list */
+.ttcs-legendlist{
+  display: grid;
+  gap: 10px;
+}
+.ttcs-legenditem{
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.ttcs-legenditem__name{
+  font-weight: 700;
+  color: #0f172a;
+}
+.ttcs-legenditem__sub{
+  margin-top: 2px;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* Library modal */
+.ttcs-libhint{
+  font-size: 12px;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+.ttcs-liblist{
+  display: grid;
+  gap: 10px;
+}
+.ttcs-librow{
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+.ttcs-librow__name{
+  font-weight: 700;
+  color: #0f172a;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.ttcs-librow__actions{
+  display: flex;
+  gap: 8px;
+}
+
+/* Live scene modal */
+.ttcs-live-actions{
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.ttcs-json{
+  margin: 0;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #0b1220;
+  color: #e5e7eb;
+  overflow: auto;
+  max-height: 60vh;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+
+
+/* Legend modal: card + icon chips */
+.ttcs-legendlist{
+  display: grid;
+  gap: 10px;
+}
+
+.ttcs-legenditem{
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 10px;
+  align-items: center;
+
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 10px 12px;
+}
+
+.ttcs-legenditem__chip{
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  color: #0f172a; /* SVG uses currentColor */
+}
+
+.ttcs-legenditem__meta{ display: grid; gap: 2px; }
+.ttcs-legenditem__name{ font-weight: 800; color: #0f172a; }
+.ttcs-legenditem__sub{ font-size: 12px; color: #64748b; line-height: 1.25; }

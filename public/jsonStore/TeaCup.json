@@ -1,0 +1,124 @@
+{
+  "scene": {
+    "name": "Classic Teapot Set",
+    "operation": "union",
+    "transform": { "t": [0, 0, 0], "r": [0, 0, 0] },
+    "children": [
+      {
+        "name": "Tray",
+        "operation": "union",
+        "transform": { "t": [0, 0, 0], "r": [0, 0, 0] },
+        "children": [
+          { "name": "Board", "primitive": { "type": "cube", "w": 12.0, "h": 0.2, "d": 8.0 }, "transform": { "t": [0, 0.1, 0], "r": [0, 0, 0] } },
+          { "name": "Rim Front", "primitive": { "type": "cube", "w": 12.2, "h": 0.25, "d": 0.2 }, "transform": { "t": [0, 0.325, 4.1], "r": [0, 0, 0] } },
+          { "name": "Rim Back", "primitive": { "type": "cube", "w": 12.2, "h": 0.25, "d": 0.2 }, "transform": { "t": [0, 0.325, -4.1], "r": [0, 0, 0] } },
+          { "name": "Rim Left", "primitive": { "type": "cube", "w": 0.2, "h": 0.25, "d": 8.2 }, "transform": { "t": [-6.1, 0.325, 0], "r": [0, 0, 0] } },
+          { "name": "Rim Right", "primitive": { "type": "cube", "w": 0.2, "h": 0.25, "d": 8.2 }, "transform": { "t": [6.1, 0.325, 0], "r": [0, 0, 0] } }
+        ]
+      },
+
+      {
+        "name": "Teapot",
+        "operation": "union",
+        "transform": { "t": [-2.0, 0, 0], "r": [0, 0, 0] },
+        "children": [
+          {
+            "name": "Body Hollow",
+            "operation": "subtract",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0] },
+            "children": [
+              { "name": "Outer Sphere", "primitive": { "type": "sphere", "r": 1.6, "widthSegments": 24, "heightSegments": 16 }, "transform": { "t": [0, 1.6, 0], "r": [0, 0, 0] } },
+              { "name": "Inner Sphere", "primitive": { "type": "sphere", "r": 1.45, "widthSegments": 24, "heightSegments": 16 }, "transform": { "t": [0, 1.6, 0.0], "r": [0, 0, 0] } },
+              { "name": "Top Opening Cutter", "primitive": { "type": "cylinder", "r": 0.6, "h": 1.2, "radialSegments": 24 }, "transform": { "t": [0, 2.2, 0], "r": [0, 0, 0] } },
+              { "name": "Spout Join Cutter", "primitive": { "type": "cylinder", "r": 0.22, "h": 1.7, "radialSegments": 16 }, "transform": { "t": [0.9, 1.6, 0], "r": [0, 0, 90] } }
+            ]
+          },
+          {
+            "name": "Spout",
+            "operation": "subtract",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0] },
+            "children": [
+              { "name": "Spout Outer", "primitive": { "type": "cylinder", "r": 0.35, "h": 2.4, "radialSegments": 20 }, "transform": { "t": [1.9, 1.6, 0], "r": [0, 0, 90] } },
+              { "name": "Spout Inner", "primitive": { "type": "cylinder", "r": 0.22, "h": 2.5, "radialSegments": 16 }, "transform": { "t": [1.9, 1.6, 0], "r": [0, 0, 90] } }
+            ]
+          },
+          {
+            "name": "Handle (Segment)",
+            "operation": "intersection",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0] },
+            "children": [
+              { "name": "Handle Torus", "primitive": { "type": "torus", "r": 1.2, "t": 0.18, "radialSegments": 14, "tubularSegments": 60 }, "transform": { "t": [-1.6, 1.6, 0], "r": [0, 0, 0] } }
+            ]
+          },
+          {
+            "name": "Lid",
+            "operation": "union",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0] },
+            "children": [
+              {
+                "name": "Lid Cap",
+                "operation": "intersection",
+                "transform": { "t": [0, 0, 0], "r": [0, 0, 0] },
+                "children": [
+                  { "name": "Lid Sphere", "primitive": { "type": "sphere", "r": 1.3, "widthSegments": 20, "heightSegments": 14 }, "transform": { "t": [0, 2.5, 0], "r": [0, 0, 0] } },
+                  { "name": "Slice Box", "primitive": { "type": "cube", "w": 3.0, "h": 0.8, "d": 3.0 }, "transform": { "t": [0, 2.9, 0], "r": [0, 0, 0] } }
+                ]
+              },
+              { "name": "Knob", "primitive": { "type": "sphere", "r": 0.25, "widthSegments": 16, "heightSegments": 12 }, "transform": { "t": [0, 3.1, 0], "r": [0, 0, 0] } }
+            ]
+          }
+        ]
+      },
+
+      {
+        "name": "Cup A",
+        "operation": "union",
+        "transform": { "t": [1.8, 0, 1.4], "r": [0, 0, 0] },
+        "children": [
+          {
+            "name": "Cup Body",
+            "operation": "subtract",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0] },
+            "children": [
+              { "name": "Outer", "primitive": { "type": "cylinder", "r": 0.6, "h": 1.2, "radialSegments": 16 }, "transform": { "t": [0, 0.6, 0], "r": [0, 0, 0] } },
+              { "name": "Inner", "primitive": { "type": "cylinder", "r": 0.5, "h": 1.1, "radialSegments": 16 }, "transform": { "t": [0, 0.65, 0], "r": [0, 0, 0] } }
+            ]
+          },
+          {
+            "name": "Handle (Segment)",
+            "operation": "intersection",
+            "transform": { "t": [0.0, 0.0, 0.0], "r": [0, 0, 0] },
+            "children": [
+              { "name": "Handle Torus", "primitive": { "type": "torus", "r": 0.45, "t": 0.10, "radialSegments": 12, "tubularSegments": 40 }, "transform": { "t": [0.6, 0.75, 0], "r": [0, 0, 0] } }
+            ]
+          }
+        ]
+      },
+
+      {
+        "name": "Cup B",
+        "operation": "union",
+        "transform": { "t": [2.8, 0, -0.8], "r": [0, 15, 0] },
+        "children": [
+          {
+            "name": "Cup Body",
+            "operation": "subtract",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0] },
+            "children": [
+              { "name": "Outer", "primitive": { "type": "cylinder", "r": 0.6, "h": 1.2, "radialSegments": 16 }, "transform": { "t": [0, 0.6, 0], "r": [0, 0, 0] } },
+              { "name": "Inner", "primitive": { "type": "cylinder", "r": 0.5, "h": 1.1, "radialSegments": 16 }, "transform": { "t": [0, 0.65, 0], "r": [0, 0, 0] } }
+            ]
+          },
+          {
+            "name": "Handle (Segment)",
+            "operation": "intersection",
+            "transform": { "t": [0.0, 0.0, 0.0], "r": [0, 0, 0] },
+            "children": [
+              { "name": "Handle Torus", "primitive": { "type": "torus", "r": 0.45, "t": 0.10, "radialSegments": 12, "tubularSegments": 40 }, "transform": { "t": [0.6, 0.75, 0], "r": [0, 0, 0] } }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

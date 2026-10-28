@@ -1,0 +1,15 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="torus icon">
+  <defs>
+    <pattern id="hatch-torus" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#000" stroke-width="2"/>
+    </pattern>
+    <mask id="ring-mask">
+      <rect width="128" height="128" fill="black"/>
+      <circle cx="64" cy="64" r="36" fill="white"/>
+      <circle cx="64" cy="64" r="20" fill="black"/>
+    </mask>
+  </defs>
+  <rect x="16" y="16" width="96" height="96" fill="url(#hatch-torus)" mask="url(#ring-mask)"/>
+  <circle cx="64" cy="64" r="36" fill="none" stroke="#000" stroke-width="4"/>
+  <circle cx="64" cy="64" r="20" fill="none" stroke="#000" stroke-width="4"/>
+</svg>

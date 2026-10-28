@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="140" viewBox="0 0 200 140">
+  <defs>
+    <!-- 斜线条填充 -->
+    <pattern id="hatchUnion" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#000" stroke-width="4"/>
+    </pattern>
+    <circle id="UA" cx="70" cy="70" r="50"/>
+    <circle id="UB" cx="130" cy="70" r="50"/>
+  </defs>
+
+  <!-- 并集: 两圆都填充 -->
+  <g fill="url(#hatchUnion)">
+    <use href="#UA"/><use href="#UB"/>
+  </g>
+
+  <!-- 粗外轮廓 -->
+  <g fill="none" stroke="#000" stroke-width="6">
+    <use href="#UA"/><use href="#UB"/>
+  </g>
+</svg>

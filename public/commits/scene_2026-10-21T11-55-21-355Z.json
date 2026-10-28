@@ -1,0 +1,3451 @@
+{
+  "scene": {
+    "name": "Toy Biplane (Stylized)",
+    "transform": {
+      "t": [
+        0,
+        0.1,
+        0
+      ],
+      "r": [
+        0,
+        0,
+        -13
+      ],
+      "s": [
+        1,
+        1,
+        1
+      ]
+    },
+    "operation": "union",
+    "children": [
+      {
+        "name": "Fuselage",
+        "transform": {
+          "t": [
+            0,
+            2.6,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "operation": "union",
+        "children": [
+          {
+            "name": "Body",
+            "operation": "subtract",
+            "children": [
+              {
+                "name": "Streamlined Fuselage Skin",
+                "operation": "union",
+                "children": [
+                  {
+                    "name": "Forward Fuselage",
+                    "transform": {
+                      "t": [
+                        -3,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1.27
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 1.1,
+                      "h": 6,
+                      "material": {
+                        "color": "#c7e7ff"
+                      }
+                    },
+                    "uid": "gen_f00a226e-3478-4104-8c8a-40212688c812"
+                  },
+                  {
+                    "name": "Tail Cone",
+                    "transform": {
+                      "t": [
+                        4.15,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        -90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1.27
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cone",
+                      "r": 1.1,
+                      "h": 8.5,
+                      "material": {
+                        "color": "#c7e7ff"
+                      }
+                    },
+                    "uid": "gen_361e33a9-e567-427e-9e2d-82d44c1a17ac"
+                  }
+                ],
+                "uid": "gen_7d26481e-3c7d-478e-9b6b-8a63504fc5c9"
+              },
+              {
+                "name": "Open Cockpit Recess",
+                "transform": {
+                  "t": [
+                    1.6,
+                    0.96,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    -7.5
+                  ],
+                  "s": [
+                    0.95,
+                    0.72,
+                    0.61
+                  ]
+                },
+                "primitive": {
+                  "type": "sphere",
+                  "r": 1,
+                  "material": {
+                    "color": "#c7e7ff"
+                  }
+                },
+                "uid": "gen_5d3f010e-b2df-488b-9869-f106cccbfac7"
+              }
+            ],
+            "uid": "gen_2b5e00ac-328c-4774-9e6b-8ca2513966f4"
+          },
+          {
+            "name": "Nose Cowl",
+            "transform": {
+              "t": [
+                -6.6,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cylinder",
+              "r": 1.4,
+              "h": 1.2,
+              "material": {
+                "color": "#fdceff"
+              },
+              "radialSegments": 48
+            },
+            "uid": "gen_fc23fd6b-114e-45bf-993c-1d09a3e0cb2a"
+          },
+          {
+            "name": "Cowling Front Lip",
+            "transform": {
+              "t": [
+                -7.19,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "torus",
+              "r": 1.33,
+              "t": 0.08,
+              "material": {
+                "color": "#c7e7ff"
+              }
+            },
+            "uid": "gen_563335de-d124-4447-b3fe-21a30e2bace4"
+          },
+          {
+            "name": "Cowling Rear Band",
+            "transform": {
+              "t": [
+                -6.01,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "torus",
+              "r": 1.34,
+              "t": 0.055,
+              "material": {
+                "color": "#ecd2ff"
+              }
+            },
+            "uid": "gen_0a1f9b88-902f-4bbb-8d85-b0d87c7dd8fa"
+          },
+          {
+            "name": "Cowling Fasteners",
+            "transform": {
+              "t": [
+                -7.22,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "repeat": {
+              "type": "circular",
+              "count": 12,
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ],
+              "radius": 1.18
+            },
+            "children": [
+              {
+                "name": "Cowling Bolt Head",
+                "primitive": {
+                  "type": "sphere",
+                  "r": 0.055,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_d63a0fa9-9948-4a5e-a038-d008dd3d8e76"
+              }
+            ],
+            "uid": "gen_08ef1cba-8a24-4e8a-a8ee-245f2e940649"
+          },
+          {
+            "name": "Fuselage Panel Joints",
+            "transform": {
+              "t": [
+                -5.65,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "repeat": {
+              "type": "linear",
+              "count": 3,
+              "t": [
+                3.6,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "Panel Joint",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1.27
+                  ]
+                },
+                "primitive": {
+                  "type": "torus",
+                  "r": 1.103,
+                  "t": 0.018,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_36b54c97-05e7-4d5d-8fef-de1f38f3104c"
+              }
+            ],
+            "uid": "gen_bf1670b6-0a9f-4826-b1f9-ee1a65e9caae"
+          },
+          {
+            "name": "Paired Cooling Louvres",
+            "transform": {
+              "t": [
+                -5.35,
+                0.1,
+                -1.397
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "repeat": {
+              "type": "linear",
+              "count": 2,
+              "t": [
+                0,
+                0,
+                2.794
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "Louvre Bank",
+                "repeat": {
+                  "type": "linear",
+                  "count": 7,
+                  "t": [
+                    2.1,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Cooling Louvre",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        -12
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.095,
+                      "h": 0.48,
+                      "d": 0.055,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_7592a8bd-ac6f-4a3d-a6c4-38762e8e3842"
+                  }
+                ],
+                "uid": "gen_7aa42df2-6d50-4ec6-af91-7014e2c8c7f5"
+              }
+            ],
+            "uid": "gen_5b8c7ff8-8e91-4df0-a2de-3978d7ddf8fb"
+          },
+          {
+            "name": "Exhaust Banks",
+            "transform": {
+              "t": [
+                -5.1,
+                -0.52,
+                -1.29
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "repeat": {
+              "type": "linear",
+              "count": 2,
+              "t": [
+                0,
+                0,
+                2.58
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "Exhaust Stacks",
+                "repeat": {
+                  "type": "linear",
+                  "count": 5,
+                  "t": [
+                    2.2,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Hollow Exhaust Stub",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        90,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "operation": "subtract",
+                    "children": [
+                      {
+                        "name": "Exhaust Pipe",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.115,
+                          "h": 0.42,
+                          "material": {
+                            "color": "#fdceff"
+                          }
+                        },
+                        "uid": "gen_25cfb402-0ac9-4692-bdaa-43cc3afd6bd2"
+                      },
+                      {
+                        "name": "Exhaust Bore",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.071,
+                          "h": 0.46,
+                          "material": {
+                            "color": "#fdceff"
+                          }
+                        },
+                        "uid": "gen_c66014dd-efb2-4ccb-85e7-28e7623066fc"
+                      }
+                    ],
+                    "uid": "gen_438b279d-1b87-445a-9445-deb60e078288"
+                  }
+                ],
+                "uid": "gen_36f47df1-b8ef-441a-bde1-2728baf73930"
+              }
+            ],
+            "uid": "gen_265c9b62-ed8d-4cc2-aeb2-b54d2d7c946c"
+          },
+          {
+            "name": "Paired Rivet Rows",
+            "transform": {
+              "t": [
+                -5.4,
+                0.5,
+                -1.25
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "repeat": {
+              "type": "linear",
+              "count": 2,
+              "t": [
+                0,
+                0,
+                2.5
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "Rivet Row",
+                "repeat": {
+                  "type": "linear",
+                  "count": 16,
+                  "t": [
+                    4.8,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Skin Rivet",
+                    "primitive": {
+                      "type": "sphere",
+                      "r": 0.035,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_83e8e377-cf20-4476-9ccc-a71bc1024bef"
+                  }
+                ],
+                "uid": "gen_11579654-269a-4514-a7c7-8706b7906edf"
+              }
+            ],
+            "uid": "gen_5c8bea9d-613b-43af-91f1-c2b4d39adb8c"
+          },
+          {
+            "name": "Cockpit",
+            "operation": "union",
+            "children": [
+              {
+                "name": "Cockpit Coaming",
+                "transform": {
+                  "t": [
+                    1.6,
+                    0.98,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    -7.5
+                  ],
+                  "s": [
+                    1.43,
+                    1,
+                    0.91
+                  ]
+                },
+                "primitive": {
+                  "type": "torus",
+                  "r": 0.65,
+                  "t": 0.065,
+                  "material": {
+                    "color": "#fdceff"
+                  }
+                },
+                "uid": "gen_76fbb984-41fc-4172-9ff0-512733ef5232"
+              },
+              {
+                "name": "Seat Cushion",
+                "transform": {
+                  "t": [
+                    1.77,
+                    0.36,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.65,
+                  "h": 0.14,
+                  "d": 0.72,
+                  "material": {
+                    "color": "#fdceff"
+                  }
+                },
+                "uid": "gen_d68d3444-c205-4d46-8fbb-498a13cc40bd"
+              },
+              {
+                "name": "Seat Back",
+                "transform": {
+                  "t": [
+                    2.08,
+                    0.59,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    10
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.14,
+                  "h": 0.65,
+                  "d": 0.67,
+                  "material": {
+                    "color": "#fdceff"
+                  }
+                },
+                "uid": "gen_1477b613-0e5f-46fa-98b2-f673c4ea8f97"
+              },
+              {
+                "name": "Headrest",
+                "transform": {
+                  "t": [
+                    2.54,
+                    0.84,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    -8
+                  ],
+                  "s": [
+                    0.42,
+                    0.28,
+                    0.34
+                  ]
+                },
+                "primitive": {
+                  "type": "sphere",
+                  "r": 1,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_2601571a-4c73-466b-b943-315720121665"
+              },
+              {
+                "name": "Instrument Panel",
+                "transform": {
+                  "t": [
+                    0.92,
+                    0.61,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.12,
+                  "h": 0.33,
+                  "d": 0.85,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_6bb45c19-bfef-48a6-ab40-91c55b405660"
+              },
+              {
+                "name": "Instrument Dials",
+                "transform": {
+                  "t": [
+                    0.992,
+                    0.65,
+                    -0.24
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "linear",
+                  "count": 3,
+                  "t": [
+                    0,
+                    0,
+                    0.48
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Dial Face",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.085,
+                      "h": 0.025,
+                      "material": {
+                        "color": "#fff3dd"
+                      }
+                    },
+                    "uid": "gen_6199d131-408b-4fc3-a345-0f187368b782"
+                  }
+                ],
+                "uid": "gen_70e1965b-9243-4f0d-868d-deb101a7b621"
+              },
+              {
+                "name": "Control Stick",
+                "transform": {
+                  "t": [
+                    1.48,
+                    0.49,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    -12
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.035,
+                  "h": 0.39,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_9f9880a8-fce2-450c-868c-8744f037a859"
+              },
+              {
+                "name": "Cockpit Bump",
+                "operation": "intersection",
+                "children": [
+                  {
+                    "name": "Curved Windscreen",
+                    "transform": {
+                      "t": [
+                        0.86,
+                        1.02,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        0.65,
+                        0.6,
+                        0.66
+                      ]
+                    },
+                    "primitive": {
+                      "type": "sphere",
+                      "r": 1,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_fbdd51be-e284-4b5d-a197-abb255d65ece"
+                  },
+                  {
+                    "name": "Windscreen Trim Volume",
+                    "transform": {
+                      "t": [
+                        0.43,
+                        1.52,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.86,
+                      "h": 1,
+                      "d": 1.5,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_5ee48de8-c37b-47fb-8d13-fd7e9d8cee9e"
+                  }
+                ],
+                "uid": "gen_d3949a82-59cb-4204-81d8-2895fe2189ea"
+              },
+              {
+                "name": "Windscreen Arch",
+                "operation": "intersection",
+                "children": [
+                  {
+                    "name": "Windscreen Frame Ring",
+                    "transform": {
+                      "t": [
+                        0.86,
+                        1.02,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        0.91,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "torus",
+                      "r": 0.66,
+                      "t": 0.027,
+                      "material": {
+                        "color": "#fdceff"
+                      }
+                    },
+                    "uid": "gen_71a6231f-183d-4388-9cd8-f2332a27b3bb"
+                  },
+                  {
+                    "name": "Upper Frame Trim",
+                    "transform": {
+                      "t": [
+                        0.86,
+                        1.55,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.2,
+                      "h": 1.06,
+                      "d": 1.5,
+                      "material": {
+                        "color": "#fdceff"
+                      }
+                    },
+                    "uid": "gen_285e41e8-cf40-4b4f-bd58-9021f010c86b"
+                  }
+                ],
+                "uid": "gen_74feb11b-7fa5-4d5a-9757-397cffc567a8"
+              }
+            ],
+            "uid": "gen_8621f42d-6591-4676-add7-22bca7455eb2"
+          },
+          {
+            "name": "Twin Synchronized Guns",
+            "transform": {
+              "t": [
+                -2.2,
+                1.2,
+                -0.38
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "repeat": {
+              "type": "linear",
+              "count": 2,
+              "t": [
+                0,
+                0,
+                0.76
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "Gun Receiver",
+                "transform": {
+                  "t": [
+                    0.78,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.9,
+                  "h": 0.18,
+                  "d": 0.2,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_c38c1cd2-82df-42bc-abac-d02e25280405"
+              },
+              {
+                "name": "Barrel",
+                "transform": {
+                  "t": [
+                    -0.5,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "operation": "subtract",
+                "children": [
+                  {
+                    "name": "Barrel Jacket",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.09,
+                      "h": 1.8,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_9f9a1332-818c-439b-b24a-1a892afa77d4"
+                  },
+                  {
+                    "name": "Muzzle Bore",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.048,
+                      "h": 1.84,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_32ea2327-83dd-4ac2-9f92-8349eec807fc"
+                  }
+                ],
+                "uid": "gen_a961e61a-9be3-4872-8e55-1b5ebdd80c24"
+              },
+              {
+                "name": "Barrel Cooling Rings",
+                "transform": {
+                  "t": [
+                    -1.25,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "linear",
+                  "count": 7,
+                  "t": [
+                    1.35,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Cooling Ring",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "torus",
+                      "r": 0.09,
+                      "t": 0.018,
+                      "material": {
+                        "color": "#fdceff"
+                      }
+                    },
+                    "uid": "gen_0e90b919-1a2a-4606-970c-46ce83c55644"
+                  }
+                ],
+                "uid": "gen_b066b67b-4d4b-4840-ad2f-065c2da748ce"
+              },
+              {
+                "name": "Gun Mount",
+                "transform": {
+                  "t": [
+                    0.55,
+                    -0.12,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.42,
+                  "h": 0.17,
+                  "d": 0.25,
+                  "material": {
+                    "color": "#c7e7ff"
+                  }
+                },
+                "uid": "gen_721bbdc3-dfe6-494e-88d6-1cfa0f339f84"
+              }
+            ],
+            "uid": "gen_a8daf5b7-fb53-4f5d-8f5c-e508c8756d4b"
+          }
+        ],
+        "uid": "gen_358a4c16-f84c-4776-b9a0-c14c38e18e39"
+      },
+      {
+        "name": "Wing Assembly",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "operation": "union",
+        "children": [
+          {
+            "name": "Upper Wing",
+            "transform": {
+              "t": [
+                -0.2,
+                5.1,
+                0
+              ],
+              "r": [
+                0,
+                90,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "operation": "union",
+            "children": [
+              {
+                "name": "Plate",
+                "operation": "union",
+                "children": [
+                  {
+                    "name": "Thin Main Wing",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 13.2,
+                      "h": 0.24,
+                      "d": 4,
+                      "material": {
+                        "color": "#d8ffd4"
+                      }
+                    },
+                    "uid": "gen_bd2ed317-6bc9-4d6c-8cc9-4b41e1bc2f5d"
+                  },
+                  {
+                    "name": "Rounded Wingtips",
+                    "transform": {
+                      "t": [
+                        -6.6,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "repeat": {
+                      "type": "linear",
+                      "count": 2,
+                      "t": [
+                        13.2,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "Elliptical Tip",
+                        "transform": {
+                          "t": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "s": [
+                            0.45,
+                            1,
+                            1
+                          ]
+                        },
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 2,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#d8ffd4"
+                          }
+                        },
+                        "uid": "gen_ef337a7f-784e-41f2-b124-1f905fe62392"
+                      }
+                    ],
+                    "uid": "gen_c2b78885-52e9-406a-87b9-92fc30aea2ed"
+                  }
+                ],
+                "uid": "gen_09094f41-b395-437f-b1a8-27e58e4fb47d"
+              },
+              {
+                "name": "Rounded Leading Edge",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    -1.94
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.12,
+                  "h": 13.2,
+                  "material": {
+                    "color": "#d8ffd4"
+                  }
+                },
+                "uid": "gen_cc67629d-1905-4327-a1d9-a6f2863942c3"
+              },
+              {
+                "name": "Upper Fabric Rib Tapes",
+                "transform": {
+                  "t": [
+                    -6,
+                    0.127,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "linear",
+                  "count": 17,
+                  "t": [
+                    12,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Raised Rib Tape",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.035,
+                      "h": 0.018,
+                      "d": 3.75,
+                      "material": {
+                        "color": "#e8ffe6"
+                      }
+                    },
+                    "uid": "gen_2763db1a-ed5a-402b-884a-4ce52ddbe9c3"
+                  }
+                ],
+                "uid": "gen_063dd78c-6161-4326-aa58-18e7a7f53f53"
+              },
+              {
+                "name": "Tip Mark L",
+                "transform": {
+                  "t": [
+                    -6.2,
+                    0.162,
+                    -0.9
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.9,
+                  "h": 0.08,
+                  "d": 0.6,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_e5412f5d-f7cb-462f-98f0-378c7b9fca3c"
+              },
+              {
+                "name": "Tip Mark R",
+                "transform": {
+                  "t": [
+                    6.2,
+                    0.162,
+                    -0.9
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.9,
+                  "h": 0.08,
+                  "d": 0.6,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_c8a6c52a-848e-4ff3-ac44-5fdbfe3b73f1"
+              },
+              {
+                "name": "Upper Wing Roundels",
+                "transform": {
+                  "t": [
+                    -4.9,
+                    0.153,
+                    -0.3
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "linear",
+                  "count": 2,
+                  "t": [
+                    9.8,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Roundel Outer Disc",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.68,
+                      "h": 0.025,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_58dd9b79-3d61-4b57-8de3-0729cf03ff43"
+                  },
+                  {
+                    "name": "Roundel Middle Disc",
+                    "transform": {
+                      "t": [
+                        0,
+                        0.016,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.46,
+                      "h": 0.025,
+                      "material": {
+                        "color": "#fff3dd"
+                      }
+                    },
+                    "uid": "gen_c099eeb1-b029-438c-8015-d255f93c9980"
+                  },
+                  {
+                    "name": "Roundel Center Disc",
+                    "transform": {
+                      "t": [
+                        0,
+                        0.032,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.23,
+                      "h": 0.025,
+                      "material": {
+                        "color": "#fdceff"
+                      }
+                    },
+                    "uid": "gen_c4445b7a-dd00-4af6-b252-62a7da9085e5"
+                  }
+                ],
+                "uid": "gen_29e0587e-81cc-435c-a0ba-6511db945950"
+              },
+              {
+                "name": "Aileron Hinge Lines",
+                "transform": {
+                  "t": [
+                    -4.5,
+                    0.133,
+                    1.14
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "linear",
+                  "count": 2,
+                  "t": [
+                    9,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Aileron Seam",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 4.4,
+                      "h": 0.014,
+                      "d": 0.035,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_3f04cf22-a096-4111-8e57-cf0790bcf489"
+                  },
+                  {
+                    "name": "Aileron Hinges",
+                    "transform": {
+                      "t": [
+                        -1.7,
+                        0.02,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "repeat": {
+                      "type": "linear",
+                      "count": 3,
+                      "t": [
+                        3.4,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "Hinge Strap",
+                        "primitive": {
+                          "type": "cube",
+                          "w": 0.15,
+                          "h": 0.025,
+                          "d": 0.27,
+                          "material": {
+                            "color": "#fdceff"
+                          }
+                        },
+                        "uid": "gen_9e706982-08d9-4b0f-b9e7-2c02af831d8d"
+                      }
+                    ],
+                    "uid": "gen_9d003c8a-1c4a-4c77-a343-a497929d50f6"
+                  }
+                ],
+                "uid": "gen_932b9f99-a314-4cfc-adff-be486021af0d"
+              }
+            ],
+            "uid": "gen_43bdb347-57f6-4acc-9fb9-dff22f8e471c"
+          },
+          {
+            "name": "Lower Wing",
+            "transform": {
+              "t": [
+                -0.2,
+                2.4,
+                0
+              ],
+              "r": [
+                0,
+                90,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "operation": "union",
+            "children": [
+              {
+                "name": "Plate",
+                "operation": "union",
+                "children": [
+                  {
+                    "name": "Thin Lower Wing",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 15.2,
+                      "h": 0.24,
+                      "d": 3.4,
+                      "material": {
+                        "color": "#dbffd7"
+                      }
+                    },
+                    "uid": "gen_d05fbd4d-96d1-4efe-9111-274b3164d8aa"
+                  },
+                  {
+                    "name": "Lower Rounded Wingtips",
+                    "transform": {
+                      "t": [
+                        -7.6,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "repeat": {
+                      "type": "linear",
+                      "count": 2,
+                      "t": [
+                        15.2,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "Lower Elliptical Tip",
+                        "transform": {
+                          "t": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "s": [
+                            0.5294117647,
+                            1,
+                            1
+                          ]
+                        },
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 1.7,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#dbffd7"
+                          }
+                        },
+                        "uid": "gen_5c47ec1b-d405-4c3d-bee5-2d4bb8a1dc63"
+                      }
+                    ],
+                    "uid": "gen_acd5e38e-d892-41f4-b79e-7ce719db184c"
+                  }
+                ],
+                "uid": "gen_410c6c9d-0eaa-466c-8f8c-41f3ea78ce1f"
+              },
+              {
+                "name": "Lower Fabric Rib Tapes",
+                "transform": {
+                  "t": [
+                    -7,
+                    0.127,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "linear",
+                  "count": 19,
+                  "t": [
+                    14,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Lower Raised Rib Tape",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.035,
+                      "h": 0.018,
+                      "d": 3.18,
+                      "material": {
+                        "color": "#e8ffe6"
+                      }
+                    },
+                    "uid": "gen_5728f281-bc7c-4c7c-9107-32e6b99e7842"
+                  }
+                ],
+                "uid": "gen_b374434e-182a-4080-aef6-8b902afa531b"
+              },
+              {
+                "name": "Lower Leading Edge",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    -1.64
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.11,
+                  "h": 15.2,
+                  "material": {
+                    "color": "#dbffd7"
+                  }
+                },
+                "uid": "gen_e8e64d85-f593-46c0-af18-61e6dd9b06f2"
+              },
+              {
+                "name": "Lower Control Surface Seams",
+                "transform": {
+                  "t": [
+                    -5.3,
+                    0.132,
+                    1.03
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "linear",
+                  "count": 2,
+                  "t": [
+                    10.6,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Lower Aileron Seam",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 4.2,
+                      "h": 0.014,
+                      "d": 0.035,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_11c645c9-8507-4bb9-9a13-05c90e3ccc9b"
+                  }
+                ],
+                "uid": "gen_922368e8-04f0-4d88-b375-3c79719eb8e0"
+              }
+            ],
+            "uid": "gen_759adccf-0f85-43ec-90e8-ec65f233753e"
+          },
+          {
+            "name": "Interplane Struts",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "operation": "union",
+            "children": [
+              {
+                "name": "Strut FL",
+                "transform": {
+                  "t": [
+                    -1.05,
+                    3.75,
+                    -5.7
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    16.5
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.07,
+                  "h": 2.82,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_d832cd72-fec9-43d9-af4c-22bb6a429ca1"
+              },
+              {
+                "name": "Strut FR",
+                "transform": {
+                  "t": [
+                    -1.05,
+                    3.75,
+                    5.7
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    16.5
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.07,
+                  "h": 2.82,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_45a3b914-b871-4bf7-a9e3-e981dc51ad01"
+              },
+              {
+                "name": "Strut RL",
+                "transform": {
+                  "t": [
+                    0.65,
+                    3.75,
+                    -5.7
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    -16.5
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.07,
+                  "h": 2.82,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_973bb4a4-966f-4f87-a426-4c03a67806c2"
+              },
+              {
+                "name": "Strut RR",
+                "transform": {
+                  "t": [
+                    0.65,
+                    3.75,
+                    5.7
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    -16.5
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.07,
+                  "h": 2.82,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_e7e8584d-4207-4b02-91d6-9ea105cff977"
+              },
+              {
+                "name": "Cabane L",
+                "transform": {
+                  "t": [
+                    -1.2,
+                    4.36,
+                    -0.85
+                  ],
+                  "r": [
+                    -20,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.06,
+                  "h": 1.6,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_168d90a5-fb67-4401-8f36-7931bfd8587c"
+              },
+              {
+                "name": "Cabane R",
+                "transform": {
+                  "t": [
+                    -1.2,
+                    4.36,
+                    0.85
+                  ],
+                  "r": [
+                    20,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.06,
+                  "h": 1.6,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_57883491-3b9c-4e29-8590-69507e873194"
+              },
+              {
+                "name": "Crossed Interplane Wires",
+                "transform": {
+                  "t": [
+                    -0.2,
+                    3.75,
+                    -5.7
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "linear",
+                  "count": 2,
+                  "t": [
+                    0,
+                    0,
+                    11.4
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Forward Diagonal Wire",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        32.2
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.018,
+                      "h": 3.2,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_7701fe5b-08fc-4fcd-a558-9158cac6e824"
+                  },
+                  {
+                    "name": "Rear Diagonal Wire",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        -32.2
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.018,
+                      "h": 3.2,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_67ff03e2-dc10-431c-bd23-4c3875132e24"
+                  }
+                ],
+                "uid": "gen_a8be4d86-be5f-489f-b9e9-a218bb42e4e1"
+              },
+              {
+                "name": "Flying Wire L",
+                "transform": {
+                  "t": [
+                    -0.2,
+                    3.75,
+                    -3.55
+                  ],
+                  "r": [
+                    -57.9,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.019,
+                  "h": 5.08,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_61e00c07-5e50-41d6-b725-60c75ac267f5"
+              },
+              {
+                "name": "Flying Wire R",
+                "transform": {
+                  "t": [
+                    -0.2,
+                    3.75,
+                    3.55
+                  ],
+                  "r": [
+                    57.9,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.019,
+                  "h": 5.08,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_d922d0e4-f86c-4ebf-a458-afd1e2fbcbad"
+              }
+            ],
+            "uid": "gen_f7e0d417-23ae-4a20-865d-44e9ce65e6da"
+          }
+        ],
+        "uid": "gen_06437e11-ab66-420b-a4ea-1b324eb90306"
+      },
+      {
+        "name": "Tailplane",
+        "transform": {
+          "t": [
+            7.1,
+            2.6,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "operation": "union",
+        "children": [
+          {
+            "name": "Horizontal Stabilizer",
+            "transform": {
+              "t": [
+                0.1,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1.25,
+                0.145,
+                2.6
+              ]
+            },
+            "primitive": {
+              "type": "sphere",
+              "r": 1,
+              "material": {
+                "color": "#c7e7ff"
+              }
+            },
+            "uid": "gen_dd8710d9-1083-4bb7-b8a7-1c209c1ab995"
+          },
+          {
+            "name": "Vertical Fin",
+            "operation": "intersection",
+            "children": [
+              {
+                "name": "Rounded Fin Profile",
+                "transform": {
+                  "t": [
+                    -0.15,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1.25,
+                    1.8,
+                    0.14
+                  ]
+                },
+                "primitive": {
+                  "type": "sphere",
+                  "r": 1,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_6154544d-bc98-45ee-9bd4-d8baf3e7193b"
+              },
+              {
+                "name": "Fin Upper Half",
+                "transform": {
+                  "t": [
+                    -0.15,
+                    0.9,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cube",
+                  "w": 2.8,
+                  "h": 1.9,
+                  "d": 0.5,
+                  "material": {
+                    "color": "#ecd2ff"
+                  }
+                },
+                "uid": "gen_9bf56c8d-2230-4b61-8f9b-cf2c94bd4607"
+              }
+            ],
+            "uid": "gen_b81e1dd9-b9bc-4481-b4c3-b4aa0acf929e"
+          },
+          {
+            "name": "Elevator Hinge Line",
+            "transform": {
+              "t": [
+                0.6,
+                0.105,
+                0
+              ],
+              "r": [
+                90,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.018,
+              "h": 4.45,
+              "material": {
+                "color": "#ecd2ff"
+              }
+            },
+            "uid": "gen_0c913ce5-2c2b-4944-a71c-5412e193401b"
+          },
+          {
+            "name": "Rudder Hinge Lines",
+            "transform": {
+              "t": [
+                0.65,
+                0.65,
+                -0.105
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "repeat": {
+              "type": "linear",
+              "count": 2,
+              "t": [
+                0,
+                0,
+                0.21
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "Rudder Seam",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.016,
+                  "h": 1.14,
+                  "material": {
+                    "color": "#fdceff"
+                  }
+                },
+                "uid": "gen_770b5126-58c2-4e86-925c-8cb6db9371ca"
+              }
+            ],
+            "uid": "gen_fc1a350e-e50a-4eed-8b49-c5e5726a841e"
+          },
+          {
+            "name": "Tail Bracing L",
+            "transform": {
+              "t": [
+                -0.08,
+                -0.17,
+                -1.12
+              ],
+              "r": [
+                79,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.024,
+              "h": 2.04,
+              "material": {
+                "color": "#ffd6fb"
+              }
+            },
+            "uid": "gen_bd87f0ae-d337-4b02-b18a-a83907bb1e86"
+          },
+          {
+            "name": "Tail Bracing R",
+            "transform": {
+              "t": [
+                -0.08,
+                -0.17,
+                1.12
+              ],
+              "r": [
+                -79,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.024,
+              "h": 2.04,
+              "material": {
+                "color": "#ffd6fb"
+              }
+            },
+            "uid": "gen_5b4c86a2-d4af-40e7-848d-5a7de3acc671"
+          }
+        ],
+        "uid": "gen_9a6068c2-58bb-4b0a-aed7-53a812d83356"
+      },
+      {
+        "name": "Propeller Assembly",
+        "transform": {
+          "t": [
+            -7.4,
+            2.6,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1.43,
+            1,
+            1
+          ]
+        },
+        "operation": "union",
+        "children": [
+          {
+            "name": "Backplate",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cylinder",
+              "r": 1.35,
+              "h": 0.14,
+              "material": {
+                "color": "#c7e7ff"
+              },
+              "radialSegments": 48
+            },
+            "uid": "gen_2dc79672-6a52-400c-b860-3cbb79d49a78"
+          },
+          {
+            "name": "Spinner",
+            "transform": {
+              "t": [
+                -0.52,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cone",
+              "r": 0.67,
+              "h": 1.05,
+              "material": {
+                "color": "#fdceff"
+              }
+            },
+            "uid": "gen_0805704a-552f-469b-bf0f-988cf948d65c"
+          },
+          {
+            "name": "Blade A",
+            "transform": {
+              "t": [
+                -0.2,
+                0,
+                0
+              ],
+              "r": [
+                65,
+                0,
+                0
+              ],
+              "s": [
+                0.085,
+                0.29,
+                2.7
+              ]
+            },
+            "primitive": {
+              "type": "sphere",
+              "r": 1,
+              "material": {
+                "color": "#ffd6fb"
+              }
+            },
+            "uid": "gen_19887928-e22c-4491-a39b-c1fc3921b3c2"
+          },
+          {
+            "name": "Blade B",
+            "transform": {
+              "t": [
+                -0.2,
+                0,
+                0
+              ],
+              "r": [
+                155,
+                0,
+                0
+              ],
+              "s": [
+                0.085,
+                0.29,
+                2.7
+              ]
+            },
+            "primitive": {
+              "type": "sphere",
+              "r": 1,
+              "material": {
+                "color": "#ffd6fb"
+              }
+            },
+            "uid": "gen_d149bf0e-e708-4196-94f8-1231761f6e17"
+          },
+          {
+            "name": "Propeller Hub Collar",
+            "transform": {
+              "t": [
+                -0.18,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "torus",
+              "r": 0.57,
+              "t": 0.06,
+              "material": {
+                "color": "#ecd2ff"
+              }
+            },
+            "uid": "gen_1e7ae569-58e8-4f18-b017-f441463fc646"
+          }
+        ],
+        "uid": "gen_6bf93f59-5655-4c30-9f89-8a9ce4c455dd"
+      },
+      {
+        "name": "Landing Gear",
+        "transform": {
+          "t": [
+            -2.6,
+            0.7,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "operation": "union",
+        "children": [
+          {
+            "name": "Axle",
+            "transform": {
+              "t": [
+                0,
+                -0.7,
+                0
+              ],
+              "r": [
+                90,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.1,
+              "h": 3.8,
+              "material": {
+                "color": "#ffd6fb"
+              }
+            },
+            "uid": "gen_eaa92258-0c06-4572-9d1d-9625c1610fc4"
+          },
+          {
+            "name": "Strut L",
+            "transform": {
+              "t": [
+                0,
+                0,
+                -1.18
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "operation": "union",
+            "children": [
+              {
+                "name": "Forward Gear Leg",
+                "transform": {
+                  "t": [
+                    -0.55,
+                    0.1,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    34.5
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.085,
+                  "h": 1.95,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_59e8a253-22d4-4a9d-a984-36cb58a316e8"
+              },
+              {
+                "name": "Rear Gear Leg",
+                "transform": {
+                  "t": [
+                    0.55,
+                    0.1,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    -34.5
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.085,
+                  "h": 1.95,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_fbcfae0f-f49f-4298-90a8-ea9fc4cf154c"
+              }
+            ],
+            "uid": "gen_69010b0e-922c-4638-98cc-bac610eef231"
+          },
+          {
+            "name": "Strut R",
+            "transform": {
+              "t": [
+                0,
+                0,
+                1.18
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "operation": "union",
+            "children": [
+              {
+                "name": "Forward Gear Leg",
+                "transform": {
+                  "t": [
+                    -0.55,
+                    0.1,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    34.5
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.085,
+                  "h": 1.95,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_937c29ea-02ff-4e5f-a422-997c2eb16fb8"
+              },
+              {
+                "name": "Rear Gear Leg",
+                "transform": {
+                  "t": [
+                    0.55,
+                    0.1,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    -34.5
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.085,
+                  "h": 1.95,
+                  "material": {
+                    "color": "#ffd6fb"
+                  }
+                },
+                "uid": "gen_b3368bc9-603b-4e69-9456-9a680eb40a76"
+              }
+            ],
+            "uid": "gen_338a41b2-2a15-4d83-8cfa-10b473d0fdf8"
+          },
+          {
+            "name": "Wheel L",
+            "transform": {
+              "t": [
+                0,
+                -0.7,
+                -1.65
+              ],
+              "r": [
+                90,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.87,
+              "h": 0.42,
+              "material": {
+                "color": "#c7e7ff"
+              },
+              "radialSegments": 36
+            },
+            "uid": "gen_ca7c2455-89cd-449a-82fe-88353f99714c"
+          },
+          {
+            "name": "Wheel R",
+            "transform": {
+              "t": [
+                0,
+                -0.7,
+                1.65
+              ],
+              "r": [
+                90,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.87,
+              "h": 0.42,
+              "material": {
+                "color": "#c7e7ff"
+              },
+              "radialSegments": 36
+            },
+            "uid": "gen_298b8db4-dc30-4ad3-a2a5-23beae62879c"
+          },
+          {
+            "name": "Rounded Tires",
+            "transform": {
+              "t": [
+                0,
+                -0.7,
+                -1.65
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "repeat": {
+              "type": "linear",
+              "count": 2,
+              "t": [
+                0,
+                0,
+                3.3
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "Tire Sidewall",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    90,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "torus",
+                  "r": 0.8,
+                  "t": 0.2,
+                  "material": {
+                    "color": "#c7e7ff"
+                  }
+                },
+                "uid": "gen_e6c15c81-5133-418b-85b0-69f7eb79ec18"
+              },
+              {
+                "name": "Tread Blocks",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    90,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "circular",
+                  "count": 20,
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    -342,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ],
+                  "radius": 0.99
+                },
+                "children": [
+                  {
+                    "name": "Tread Rib",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.055,
+                      "h": 0.26,
+                      "d": 0.1,
+                      "material": {
+                        "color": "#c7e7ff"
+                      }
+                    },
+                    "uid": "gen_225b57b0-d75a-414c-bee5-5834fd796d31"
+                  }
+                ],
+                "uid": "gen_d06262cc-a7ae-4984-add5-49a80a700ec9"
+              }
+            ],
+            "uid": "gen_e9ff37bf-f02c-4272-90d0-37102be83e58"
+          },
+          {
+            "name": "Wheel Hubs",
+            "transform": {
+              "t": [
+                0,
+                -0.7,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "operation": "union",
+            "children": [
+              {
+                "name": "Hub L",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    -1.9
+                  ],
+                  "r": [
+                    90,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.45,
+                  "h": 0.13,
+                  "material": {
+                    "color": "#fdceff"
+                  },
+                  "radialSegments": 24
+                },
+                "uid": "gen_2831a394-bf25-4993-984d-4248caac958a"
+              },
+              {
+                "name": "Hub R",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    1.9
+                  ],
+                  "r": [
+                    90,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.45,
+                  "h": 0.13,
+                  "material": {
+                    "color": "#fdceff"
+                  },
+                  "radialSegments": 24
+                },
+                "uid": "gen_dd212f80-d007-41af-a749-c6be2af21100"
+              },
+              {
+                "name": "Hub Caps",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    -1.975
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "repeat": {
+                  "type": "linear",
+                  "count": 2,
+                  "t": [
+                    0,
+                    0,
+                    3.95
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Axle Cap",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        90,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.17,
+                      "h": 0.08,
+                      "material": {
+                        "color": "#ecd2ff"
+                      }
+                    },
+                    "uid": "gen_b1fe3e7e-ad84-4152-b3e2-5c478625eeec"
+                  }
+                ],
+                "uid": "gen_e899a2b0-fcb8-493c-a166-77d6eda201a5"
+              }
+            ],
+            "uid": "gen_4ccdcee6-d0d3-4c28-b5a0-fe0190849c0a"
+          },
+          {
+            "name": "Axle Fairing",
+            "transform": {
+              "t": [
+                0,
+                -0.67,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                0.4,
+                0.15,
+                1.24
+              ]
+            },
+            "primitive": {
+              "type": "sphere",
+              "r": 1,
+              "material": {
+                "color": "#d8ffd4"
+              }
+            },
+            "uid": "gen_56800868-7b8c-4cc1-bc83-e1b227e76d5f"
+          }
+        ],
+        "uid": "gen_9c85cb73-0f4e-4dd5-8d5a-e35c7ddd5513"
+      },
+      {
+        "name": "Tail Skid",
+        "operation": "union",
+        "children": [
+          {
+            "name": "Tail Skid Leg",
+            "transform": {
+              "t": [
+                7.05,
+                1.94,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                22
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.075,
+              "h": 1.17,
+              "material": {
+                "color": "#ffd6fb"
+              }
+            },
+            "uid": "gen_cf832d52-9df9-465f-a463-204b199dc107"
+          },
+          {
+            "name": "Curved Skid Shoe",
+            "transform": {
+              "t": [
+                7.46,
+                1.39,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                8
+              ],
+              "s": [
+                0.56,
+                0.095,
+                0.14
+              ]
+            },
+            "primitive": {
+              "type": "sphere",
+              "r": 1,
+              "material": {
+                "color": "#fdceff"
+              }
+            },
+            "uid": "gen_00faa2b0-dbd5-48b7-b4f4-999f683d0f39"
+          }
+        ],
+        "uid": "gen_2b98b808-33bb-47bd-b672-1343cbbf527b"
+      }
+    ],
+    "uid": "gen_32338859-b055-49e5-902f-5490c11a8e23"
+  }
+}

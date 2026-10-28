@@ -1,0 +1,206 @@
+{
+  "scene": {
+    "name": "Table-Chair-Cup Scene",
+    "operation": "union",
+    "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+    "children": [
+      {
+        "name": "Table",
+        "operation": "union",
+        "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+        "children": [
+          {
+            "name": "Table Top",
+            "primitive": {
+              "type": "cube",
+              "w": 6.0,
+              "h": 0.3,
+              "d": 3.0,
+              "material": { "color": "#cdd2ff" }
+            },
+            "transform": { "t": [0, 3.0, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+          },
+          {
+            "name": "Table Legs",
+            "operation": "union",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+            "children": [
+              {
+                "name": "Leg FL",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.15,
+                  "h": 3.0,
+                  "radialSegments": 8,
+                  "material": { "color": "#f9bafc" }
+                },
+                "transform": { "t": [-2.7, 1.5, -1.2], "r": [0, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Leg FR",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.15,
+                  "h": 3.0,
+                  "radialSegments": 8,
+                  "material": { "color": "#ccd5ff" }
+                },
+                "transform": { "t": [2.7, 1.5, -1.2], "r": [0, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Leg BL",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.15,
+                  "h": 3.0,
+                  "radialSegments": 8,
+                  "material": { "color": "#c4c6ff" }
+                },
+                "transform": { "t": [-2.7, 1.5, 1.2], "r": [0, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Leg BR",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.15,
+                  "h": 3.0,
+                  "radialSegments": 8,
+                  "material": { "color": "#c7ffc2" }
+                },
+                "transform": { "t": [2.7, 1.5, 1.2], "r": [0, 0, 0], "s": [1, 1, 1] }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Chair",
+        "operation": "union",
+        "transform": { "t": [0, 0, -2.0], "r": [0, 0, 0], "s": [1, 1, 1] },
+        "children": [
+          {
+            "name": "Seat",
+            "primitive": {
+              "type": "cube",
+              "w": 2.0,
+              "h": 0.3,
+              "d": 2.0,
+              "material": { "color": "#a8cbe7" }
+            },
+            "transform": { "t": [0, 1.5, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+          },
+          {
+            "name": "Chair Legs",
+            "operation": "union",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+            "children": [
+              {
+                "name": "Leg FL",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.1,
+                  "h": 1.5,
+                  "radialSegments": 8,
+                  "material": { "color": "#e7c7ff" }
+                },
+                "transform": { "t": [-0.9, 0.75, -0.9], "r": [0, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Leg FR",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.1,
+                  "h": 1.5,
+                  "radialSegments": 8,
+                  "material": { "color": "#c7e8ff" }
+                },
+                "transform": { "t": [0.9, 0.75, -0.9], "r": [0, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Leg BL",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.1,
+                  "h": 1.5,
+                  "radialSegments": 8,
+                  "material": { "color": "#ffbcf7" }
+                },
+                "transform": { "t": [-0.9, 0.75, 0.9], "r": [0, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Leg BR",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.1,
+                  "h": 1.5,
+                  "radialSegments": 8,
+                  "material": { "color": "#ffe5b9" }
+                },
+                "transform": { "t": [0.9, 0.75, 0.9], "r": [0, 0, 0], "s": [1, 1, 1] }
+              }
+            ]
+          },
+          {
+            "name": "Backrest",
+            "primitive": {
+              "type": "cube",
+              "w": 2.0,
+              "h": 2.0,
+              "d": 0.2,
+              "material": { "color": "#c8f9c5" }
+            },
+            "transform": { "t": [0, 2.5, -0.9], "r": [0, 0, 0], "s": [1, 1, 1] }
+          }
+        ]
+      },
+      {
+        "name": "Cup",
+        "operation": "union",
+        "transform": { "t": [2.0, 3.15, 0.0], "r": [0, 0, 0], "s": [1, 1, 1] },
+        "children": [
+          {
+            "name": "Cup Body",
+            "operation": "subtract",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+            "children": [
+              {
+                "name": "Outer",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.5,
+                  "h": 1.0,
+                  "radialSegments": 12,
+                  "material": { "color": "#fbe3c5" }
+                },
+                "transform": { "t": [0, 0.5, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Inner",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.4,
+                  "h": 0.9,
+                  "radialSegments": 12,
+                  "material": { "color": "#cdd2ff" }
+                },
+                "transform": { "t": [0, 0.55, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+              }
+            ]
+          },
+          {
+            "name": "Handle",
+            "primitive": {
+              "type": "torus",
+              "r": 0.25,
+              "t": 0.07,
+              "radialSegments": 8,
+              "tubularSegments": 16,
+              "material": { "color": "#f9bafc" }
+            },
+            "transform": { "t": [0.5, 0.6, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+          }
+        ]
+      }
+    ]
+  }
+}

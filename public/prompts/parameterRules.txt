@@ -1,0 +1,3 @@
+PARAMETER_RULES (authoritative)
+Supported exact primitive parameter keys: cube w,h,d; sphere r; cylinder r,h; torus r,t; cone r,h. All geometry dimensions >0. Do not use width/height/depth/radius/tube aliases, angle fields or tessellation segment fields on NEW nodes.
+repeat.type is linear or circular; count integer 1..64; repeat.t/r/s are numeric vec3; repeat.r uses degrees. circular radius >0; linear radius is omitted/null. Existing baseline metadata and renderer settings must be preserved in edits, not regenerated.

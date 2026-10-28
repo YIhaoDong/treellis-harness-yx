@@ -1,0 +1,283 @@
+{
+  "scene": {
+    "name": "TerracottaWarriorStatue",
+    "operation": "union",
+    "transform": {
+      "t": [
+        0,
+        0,
+        0
+      ],
+      "r": [
+        0,
+        0,
+        0
+      ],
+      "s": [
+        1,
+        1,
+        1
+      ]
+    },
+    "children": [
+      {
+        "name": "StoneBase",
+        "primitive": {
+          "type": "cube",
+          "w": 4,
+          "h": 0.6,
+          "d": 4,
+          "material": {
+            "color": "#8c6f5a"
+          }
+        },
+        "transform": {
+          "t": [
+            0,
+            -0.3,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "Torso",
+        "primitive": {
+          "type": "cube",
+          "w": 1.8,
+          "h": 2.2,
+          "d": 1,
+          "material": {
+            "color": "#b87333"
+          }
+        },
+        "transform": {
+          "t": [
+            0,
+            1.6,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "LeftLeg",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.35,
+          "h": 1.6,
+          "material": {
+            "color": "#b87333"
+          }
+        },
+        "transform": {
+          "t": [
+            -0.45,
+            0.8,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "RightLeg",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.35,
+          "h": 1.6,
+          "material": {
+            "color": "#b87333"
+          }
+        },
+        "transform": {
+          "t": [
+            0.45,
+            0.8,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "LeftArm",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.22,
+          "h": 1.6,
+          "material": {
+            "color": "#b87333"
+          }
+        },
+        "transform": {
+          "t": [
+            -1.2,
+            1.9,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            90
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "RightArm",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.22,
+          "h": 1.6,
+          "material": {
+            "color": "#b87333"
+          }
+        },
+        "transform": {
+          "t": [
+            1.2,
+            1.9,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            90
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "Head",
+        "primitive": {
+          "type": "sphere",
+          "r": 0.55,
+          "material": {
+            "color": "#b87333"
+          }
+        },
+        "transform": {
+          "t": [
+            0,
+            3.1,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "WarriorHelmet",
+        "primitive": {
+          "type": "cone",
+          "r": 0.5,
+          "h": 0.8,
+          "material": {
+            "color": "#a8642a"
+          }
+        },
+        "transform": {
+          "t": [
+            0,
+            3.7,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      }
+    ]
+  },
+  "_meta": {
+    "run_tag": "20260313_145840",
+    "condition": "few_shot_constraints",
+    "mode": "instant",
+    "effective_model": "gpt-5.3-chat-latest",
+    "reasoning_effort": null,
+    "temperature_requested": "",
+    "max_output_tokens": 3000,
+    "request_chars": 5641,
+    "retry_count": 0,
+    "generation_time_s": 6.9881,
+    "prompt_id": "002",
+    "prompt_hash": "64be127206",
+    "prompt_snippet": "塑造一个秦始皇陵兵马俑雕像",
+    "response_status": "completed",
+    "usage": {
+      "usage_input_tokens": 1629,
+      "usage_output_tokens": 987,
+      "usage_reasoning_tokens": 64,
+      "usage_total_tokens": 2616
+    },
+    "rate_limits": {
+      "x_request_id": "req_791728d55e1c473b9d071eb75c8c4112",
+      "x_ratelimit_limit_requests": "500",
+      "x_ratelimit_limit_tokens": "500000",
+      "x_ratelimit_remaining_requests": "499",
+      "x_ratelimit_remaining_tokens": "499491",
+      "x_ratelimit_reset_requests": "120ms",
+      "x_ratelimit_reset_tokens": "61ms",
+      "retry_after": ""
+    },
+    "timestamp": "2026-03-13T15:29:48"
+  }
+}

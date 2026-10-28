@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="140" viewBox="0 0 200 140">
+  <defs>
+    <pattern id="hatchAminusB" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#000" stroke-width="4"/>
+    </pattern>
+    <circle id="AA" cx="70" cy="70" r="50"/>
+    <circle id="AB" cx="130" cy="70" r="50"/>
+    <mask id="m_AminusB" maskUnits="userSpaceOnUse">
+      <rect width="200" height="140" fill="white"/>
+      <use href="#AB" fill="black"/>
+    </mask>
+  </defs>
+
+  <!-- A\B -->
+  <use href="#AA" fill="url(#hatchAminusB)" mask="url(#m_AminusB)"/>
+
+  <!-- 粗外轮廓 -->
+  <g fill="none" stroke="#000" stroke-width="6">
+    <use href="#AA"/><use href="#AB"/>
+  </g>
+</svg>

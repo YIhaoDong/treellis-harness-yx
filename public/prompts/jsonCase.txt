@@ -1,0 +1,135 @@
+{
+  "examples": [
+    {
+      "tags": [
+        "box",
+        "cube",
+        "盒",
+        "立方"
+      ],
+      "description": "One named primitive with dimensions and material.",
+      "aml": {
+        "name": "Body",
+        "primitive": {
+          "type": "cube",
+          "w": 4,
+          "h": 2,
+          "d": 3,
+          "material": {
+            "color": "#c7e7ff"
+          }
+        }
+      }
+    },
+    {
+      "tags": [
+        "hole",
+        "subtract",
+        "孔",
+        "挖",
+        "cut"
+      ],
+      "description": "A through-hole: cylinder cuts the positive box along Y.",
+      "aml": {
+        "name": "Plate with Hole",
+        "operation": "subtract",
+        "children": [
+          {
+            "name": "Plate",
+            "primitive": {
+              "type": "cube",
+              "w": 4,
+              "h": 1,
+              "d": 4,
+              "material": {
+                "color": "#c7e7ff"
+              }
+            }
+          },
+          {
+            "name": "Through Hole",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.6,
+              "h": 2,
+              "material": {
+                "color": "#c7e7ff"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tags": [
+        "radial",
+        "circular",
+        "blade",
+        "fan",
+        "propeller",
+        "repeat",
+        "桨",
+        "叶片",
+        "圆周",
+        "重复"
+      ],
+      "description": "Four radial templates in repeat-local XZ (normal Y), with fixed +theta positions and correct outward +X end yaw -270 degrees. To change the circle plane, rotate the repeat container; template yaw alone does not change that plane.",
+      "aml": {
+        "name": "Radial Blades",
+        "repeat": {
+          "type": "circular",
+          "count": 4,
+          "radius": 2,
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            -270,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "Blade",
+            "primitive": {
+              "type": "cube",
+              "w": 2,
+              "h": 0.2,
+              "d": 0.5,
+              "material": {
+                "color": "#c7e7ff"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "tags": ["coaxial", "axis", "torus", "ring", "wheel", "engine", "同轴", "圆环", "轮胎", "发动机"],
+      "description": "Coaxial parts along world Z with identity ancestors: cylinder native Y is rotated by X=90 degrees, while torus native Z stays unrotated. Different primitive types need different Euler values. Applicable primitive-path checks are axis_direction(z)=1 for each, axis_parallel=1 and axis_distance=0 for their pair.",
+      "aml": {
+        "name": "Coaxial Z Cylinder and Ring",
+        "operation": "union",
+        "children": [
+          {
+            "name": "Axial Body",
+            "transform": { "r": [90, 0, 0] },
+            "primitive": { "type": "cylinder", "r": 0.7, "h": 1.2, "material": { "color": "#c7e7ff" } }
+          },
+          {
+            "name": "Coaxial Ring",
+            "primitive": { "type": "torus", "r": 0.8, "t": 0.15, "material": { "color": "#ecd2ff" } }
+          }
+        ]
+      }
+    }
+  ]
+}

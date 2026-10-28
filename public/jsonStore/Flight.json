@@ -1,0 +1,49 @@
+{
+  "name": "Toy Biplane (Stylized)", "operation": "union", "transform": { "t": [0, 0.1, 0], "r": [0, 0, -13], "s": [1, 1, 1] }, "children": [
+    { "name": "Fuselage", "operation": "union", "transform": { "t": [0, 2.6, 0], "r": [0, 0, 0], "s": [1, 1, 1] }, "children": [
+      { "name": "Body", "primitive": { "type": "cube", "w": 12, "h": 2.2, "d": 2.8, "material": { "color": "#c7e7ff" } }, "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] } },
+      { "name": "Nose Cowl", "primitive": { "type": "cylinder", "r": 1.7, "h": 1.2, "radialSegments": 48, "material": { "color": "#fdceff" } }, "transform": { "t": [-6.6, 0, 0], "r": [0, 0, 90], "s": [1, 1, 1] } },
+      { "name": "Tail Cone", "primitive": { "type": "cylinder", "r": 1.2, "h": 2.2, "radialSegments": 48, "material": { "color": "#c7e7ff" } }, "transform": { "t": [7.1, 0, 0], "r": [0, 0, 90], "s": [0.85, 1, 0.85] } },
+      { "name": "Cockpit Bump", "primitive": { "type": "sphere", "r": 1, "material": { "color": "#ecd2ff" } }, "transform": { "t": [-2.4, 1.2, 0], "r": [0, 0, 0], "s": [2.17, 0.75, 1] } }
+    ] },
+    { "name": "Wing Assembly", "operation": "union", "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] }, "children": [
+      { "name": "Upper Wing", "operation": "union", "transform": { "t": [-0.2, 5.1, 0], "r": [0, 90, 0], "s": [1, 1, 1] }, "children": [
+        { "name": "Plate", "primitive": { "type": "cube", "w": 15, "h": 0.6, "d": 4, "material": { "color": "#d8ffd4" } }, "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] } },
+        { "name": "Tip Mark L", "primitive": { "type": "cube", "w": 0.9, "h": 0.08, "d": 0.6, "material": { "color": "#ecd2ff" } }, "transform": { "t": [-6.2, 0.36, -0.9], "r": [0, 0, 0], "s": [1, 1, 1] } },
+        { "name": "Tip Mark R", "primitive": { "type": "cube", "w": 0.9, "h": 0.08, "d": 0.6, "material": { "color": "#ecd2ff" } }, "transform": { "t": [6.2, 0.36, -0.9], "r": [0, 0, 0], "s": [1, 1, 1] } }
+      ] },
+      { "name": "Lower Wing", "operation": "union", "transform": { "t": [-0.2, 2.4, 0], "r": [0, 90, 0], "s": [1, 1, 1] }, "children": [
+        { "name": "Plate", "primitive": { "type": "cube", "w": 11.8, "h": 0.6, "d": 3.4, "material": { "color": "#dbffd7" } }, "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] } }
+      ] },
+      { "name": "Interplane Struts", "operation": "union", "transform": { "t": [0, -1.9, 0], "r": [0, 0, 0], "s": [0.15, 1.56, 0.5] }, "children": [
+        { "name": "Strut FL", "primitive": { "type": "cube", "w": 0.5, "h": 2.1, "d": 0.5, "material": { "color": "#ffd6fb" } }, "transform": { "t": [-4.8, 3.5, -7], "r": [0, 0, -18], "s": [1, 1, 1] } },
+        { "name": "Strut FR", "primitive": { "type": "cube", "w": 0.5, "h": 2.1, "d": 0.5, "material": { "color": "#ffd6fb" } }, "transform": { "t": [-4.8, 3.5, 7], "r": [0, 0, -18], "s": [1, 1, 1] } },
+        { "name": "Strut RL", "primitive": { "type": "cube", "w": 0.5, "h": 2.1, "d": 0.5, "material": { "color": "#ffd6fb" } }, "transform": { "t": [3.6, 3.5, -3], "r": [0, 0, 18], "s": [1, 1, 1] } },
+        { "name": "Strut RR", "primitive": { "type": "cube", "w": 0.5, "h": 2.1, "d": 0.5, "material": { "color": "#ffd6fb" } }, "transform": { "t": [3.6, 3.5, 3], "r": [0, 0, 18], "s": [1, 1, 1] } },
+        { "name": "Cabane L", "primitive": { "type": "cube", "w": 0.4, "h": 1.8, "d": 0.5, "material": { "color": "#ffd6fb" } }, "transform": { "t": [-1.4, 3.8, -10], "r": [0, 0, 10], "s": [1, 1, 1] } },
+        { "name": "Cabane R", "primitive": { "type": "cube", "w": 0.4, "h": 1.8, "d": 0.5, "material": { "color": "#ffd6fb" } }, "transform": { "t": [-1.4, 3.8, 10], "r": [0, 0, 10], "s": [1, 1, 1] } }
+      ] }
+    ] },
+    { "name": "Tailplane", "operation": "union", "transform": { "t": [7.8, 5.4, 0], "r": [0, 0, -180], "s": [1, 1, 1] }, "children": [
+      { "name": "Horizontal Stabilizer", "primitive": { "type": "cube", "w": 4.6, "h": 0.5, "d": 1.8, "material": { "color": "#c7e7ff" } }, "transform": { "t": [0.5, 0, 0], "r": [0, 0, 0], "s": [0.49, 0.58, 2.89] } },
+      { "name": "Vertical Fin", "primitive": { "type": "cube", "w": 0.8, "h": 2.2, "d": 1, "material": { "color": "#ecd2ff" } }, "transform": { "t": [0.9, 1.1, 0], "r": [0, 0, 0], "s": [2.07, 1, 0.31] } }
+    ] },
+    { "name": "Propeller Assembly", "operation": "union", "transform": { "t": [-7.4, 2.6, 0], "r": [0, 0, 0], "s": [1.43, 1, 1] }, "children": [
+      { "name": "Backplate", "primitive": { "type": "cylinder", "r": 1.55, "h": 0.18, "radialSegments": 48, "material": { "color": "#c7e7ff" } }, "transform": { "t": [0, 0, 0], "r": [0, 0, 90], "s": [1, 1, 1] } },
+      { "name": "Spinner", "primitive": { "type": "cylinder", "r": 0.85, "h": 0.9, "radialSegments": 48, "material": { "color": "#fdceff" } }, "transform": { "t": [-0.5, 0, 0], "r": [0, 0, 90], "s": [1, 1, 1] } },
+      { "name": "Blade A", "primitive": { "type": "cube", "w": 0.3, "h": 0.35, "d": 2.8, "material": { "color": "#ffd6fb" } }, "transform": { "t": [-0.6, 0, 0], "r": [65, 0, 0], "s": [0.5, 1, 1.6] } },
+      { "name": "Blade B", "primitive": { "type": "cube", "w": 0.3, "h": 0.35, "d": 2.8, "material": { "color": "#ffd6fb" } }, "transform": { "t": [-0.7, 0, 0], "r": [155, 0, 0], "s": [0.5, 1, 1.6] } }
+    ] },
+    { "name": "Landing Gear", "operation": "union", "transform": { "t": [-2.6, 0.7, 0], "r": [0, 0, 0], "s": [1, 1, 1] }, "children": [
+      { "name": "Axle", "primitive": { "type": "cube", "w": 0.2, "h": 0.2, "d": 3.2, "material": { "color": "#ffd6fb" } }, "transform": { "t": [0, -0.7, 0], "r": [0, 0, 0], "s": [1, 1, 1] } },
+      { "name": "Strut L", "primitive": { "type": "cube", "w": 2, "h": 0.25, "d": 0.3, "material": { "color": "#ffd6fb" } }, "transform": { "t": [0, 0.3, -1], "r": [0, 0, 90], "s": [1, 1, 1] } },
+      { "name": "Strut R", "primitive": { "type": "cube", "w": 2, "h": 0.25, "d": 0.3, "material": { "color": "#ffd6fb" } }, "transform": { "t": [0, 0.3, 1], "r": [0, 0, 90], "s": [1, 1, 1] } },
+      { "name": "Wheel L", "primitive": { "type": "cylinder", "r": 1, "h": 0.6, "radialSegments": 36, "material": { "color": "#c7e7ff" } }, "transform": { "t": [0, -0.7, -1.6], "r": [0, 90, 90], "s": [1, 1, 1] } },
+      { "name": "Wheel R", "primitive": { "type": "cylinder", "r": 1, "h": 0.6, "radialSegments": 36, "material": { "color": "#c7e7ff" } }, "transform": { "t": [0, -0.7, 1.6], "r": [0, 90, 90], "s": [1, 1, 1] } },
+      { "name": "Wheel Hubs", "operation": "union", "transform": { "t": [0.2, -0.7, 0], "r": [0, 0, 0], "s": [1, 1, 1.26] }, "children": [
+        { "name": "Hub L", "primitive": { "type": "cylinder", "r": 0.45, "h": 0.25, "radialSegments": 24, "material": { "color": "#fdceff" } }, "transform": { "t": [0, 0, -1.6], "r": [0, 90, 90], "s": [1, 1, 1] } },
+        { "name": "Hub R", "primitive": { "type": "cylinder", "r": 0.45, "h": 0.25, "radialSegments": 24, "material": { "color": "#fdceff" } }, "transform": { "t": [0, 0, 1.6], "r": [0, 90, 90], "s": [1, 1, 1] } }
+      ] }
+    ] }
+  ]
+}

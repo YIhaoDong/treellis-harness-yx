@@ -1,0 +1,1 @@
+MODE: EDIT. CURRENT_SCENE is the baseline. Prefer action=patch for parameter, transform, count, color, or name changes. Return only changed leaf values as JSON pointer patches relative to the scene root. Use action=replace only for explicitly requested structural changes. Preserve existing IDs and all unspecified fields.

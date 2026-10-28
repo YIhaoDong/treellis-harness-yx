@@ -1,0 +1,403 @@
+{
+  "name": "Computer Monitor Scene",
+  "operation": "union",
+  "transform": {
+    "t": [
+      0,
+      0,
+      0
+    ],
+    "r": [
+      0,
+      0,
+      0
+    ],
+    "s": [
+      1,
+      1,
+      1
+    ]
+  },
+  "children": [
+    {
+      "name": "Computer Monitor",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          0,
+          0
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1,
+          1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Stand",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Base Plate",
+              "primitive": {
+                "type": "cylinder",
+                "r": 2.2,
+                "h": 0.3,
+                "radialSegments": 24,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0.15,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Stand Neck",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.3,
+                "h": 3,
+                "radialSegments": 16,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  1.8,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Neck Cap",
+              "primitive": {
+                "type": "cube",
+                "w": 1,
+                "h": 0.5,
+                "d": 0.6,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  3.3,
+                  -0.3
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Screen",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0.4
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Bezel",
+              "operation": "subtract",
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "children": [
+                {
+                  "name": "Bezel Outer",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 8,
+                    "h": 5,
+                    "d": 0.6,
+                    "material": {
+                      "color": "#ecd2ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      4.5,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Bezel Inner Cut",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 7.4,
+                    "h": 4.4,
+                    "d": 0.5,
+                    "material": {
+                      "color": "#ecd2ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      4.5,
+                      0.05
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Display Panel",
+              "primitive": {
+                "type": "cube",
+                "w": 7.2,
+                "h": 4.2,
+                "d": 0.08,
+                "material": {
+                  "color": "#dbffd7"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  4.5,
+                  0.12
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Logo Plate",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.2,
+                "h": 0.06,
+                "radialSegments": 12,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  2.15,
+                  0.31
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Power LED",
+              "primitive": {
+                "type": "sphere",
+                "r": 0.06,
+                "material": {
+                  "color": "#ffd6fb"
+                }
+              },
+              "transform": {
+                "t": [
+                  3.2,
+                  2.15,
+                  0.32
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "VESA Mount",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.6,
+                "h": 0.08,
+                "radialSegments": 12,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  4.5,
+                  -0.31
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Mount Bracket",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 0.6,
+                "d": 0.6,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  3.3,
+                  -0.33
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

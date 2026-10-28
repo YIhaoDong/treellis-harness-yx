@@ -1,0 +1,26 @@
+{
+  "version": "baseline-v1",
+  "originalSourceManifestSha256": "85fe574916334b73ed63f62bf6ed191242d2c72783b222a6f9ccb5b00e9aba49",
+  "frozenAt": "2026-10-21T16:08:07.279Z",
+  "functionalSourceAndPromptsUnchanged": true,
+  "changesForPublication": [
+    {
+      "path": "README-Treellis.txt",
+      "reason": "Remove private local development configuration paths and clarify user-supplied API keys."
+    },
+    {
+      "path": ".gitignore",
+      "reason": "Protect credentials and private study/run data from accidental future inclusion."
+    },
+    {
+      "path": "public/UserBehaviorData.csv",
+      "reason": "Exclude private user-behavior observations from the repository."
+    },
+    {
+      "path": "README.md",
+      "reason": "Add repository setup/version/data-exclusion guidance."
+    }
+  ],
+  "dependencies": "npm ci restores package-lock.json; node_modules and dist are not published.",
+  "credentials": "No API key or .local configuration is included."
+}

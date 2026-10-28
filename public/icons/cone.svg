@@ -1,0 +1,16 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="cone icon">
+  <defs>
+    <pattern id="hatch-cone" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#000" stroke-width="2"/>
+    </pattern>
+    <clipPath id="clip-cone">
+      <polygon points="64,28 36,92 92,92"/>
+    </clipPath>
+  </defs>
+  <g clip-path="url(#clip-cone)">
+    <rect x="24" y="20" width="80" height="80" fill="url(#hatch-cone)"/>
+  </g>
+  <line x1="64" y1="28" x2="36" y2="92" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  <line x1="64" y1="28" x2="92" y2="92" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  <ellipse cx="64" cy="92" rx="28" ry="10" fill="none" stroke="#000" stroke-width="4"/>
+</svg>

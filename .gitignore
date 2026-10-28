@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.local/
+*.log
+
+# Local credentials, runs, and research records
+.env
+.env.*
+*.private.json
+/public/UserBehaviorData.csv
+/dataAnalysis/
+/EvaluationTest/
+/US2-records/
+/UserStudyTypicalCasesAML/
+/ShowCase/
+/jsonStore/

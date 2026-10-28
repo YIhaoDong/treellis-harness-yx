@@ -1,0 +1,148 @@
+{
+  "scene": {
+    "name": "Kirby Fan",
+    "operation": "union",
+    "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+    "children": [
+      {
+        "name": "Body With Mouth",
+        "operation": "subtract",
+        "transform": { "t": [0, 0.4, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+        "children": [
+          {
+            "name": "Pink Body",
+            "primitive": {
+              "type": "sphere",
+              "r": 3.0,
+              "widthSegments": 32,
+              "heightSegments": 20,
+              "material": { "color": "#FFB9D8" }
+            },
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+          },
+          {
+            "name": "Mouth Cavity",
+            "primitive": {
+              "type": "cylinder",
+              "r": 1.75,
+              "h": 4.2,
+              "radialSegments": 48,
+              "material": { "color": "#000000" }
+            },
+            "transform": { "t": [0, 0.2, 1.2], "r": [90, 0, 0], "s": [1, 1, 1] }
+          }
+        ]
+      },
+      {
+        "name": "Mouth Bezel",
+        "primitive": {
+          "type": "torus",
+          "r": 1.95,
+          "t": 0.22,
+          "radialSegments": 24,
+          "tubularSegments": 100,
+          "material": { "color": "#FF8FB9" }
+        },
+        "transform": { "t": [0, 0.6, 2.0], "r": [0, 0, 0], "s": [1, 1, 1] }
+      },
+      {
+        "name": "Fan Rotor",
+        "operation": "union",
+        "transform": { "t": [0, 0.6, 1.2], "r": [0, 0, 0], "s": [1, 1, 1] },
+        "children": [
+          {
+            "name": "Hub",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.28,
+              "h": 0.25,
+              "radialSegments": 24,
+              "material": { "color": "#DADADA" }
+            },
+            "transform": { "t": [0, 0, 0], "r": [90, 0, 0], "s": [1, 1, 1] }
+          },
+          {
+            "name": "Blades",
+            "operation": "union",
+            "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+            "children": [
+              { "name": "Blade 0", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 0, 0], "s": [1, 1, 1] } },
+              { "name": "Blade 1", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 36, 0], "s": [1, 1, 1] } },
+              { "name": "Blade 2", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 72, 0], "s": [1, 1, 1] } },
+              { "name": "Blade 3", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 108, 0], "s": [1, 1, 1] } },
+              { "name": "Blade 4", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 144, 0], "s": [1, 1, 1] } },
+              { "name": "Blade 5", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 180, 0], "s": [1, 1, 1] } },
+              { "name": "Blade 6", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 216, 0], "s": [1, 1, 1] } },
+              { "name": "Blade 7", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 252, 0], "s": [1, 1, 1] } },
+              { "name": "Blade 8", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 288, 0], "s": [1, 1, 1] } },
+              { "name": "Blade 9", "primitive": { "type": "cube", "w": 0.25, "h": 0.05, "d": 1.5, "material": { "color": "#F0F0F0" } }, "transform": { "t": [0, 0, 0.75], "r": [0, 324, 0], "s": [1, 1, 1] } }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Arms",
+        "operation": "union",
+        "transform": { "t": [0, 0.2, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+        "children": [
+          {
+            "name": "Left Arm",
+            "primitive": {
+              "type": "sphere",
+              "r": 1.0,
+              "widthSegments": 24,
+              "heightSegments": 16,
+              "material": { "color": "#FFB9D8" }
+            },
+            "transform": { "t": [-2.9, 0.3, 0.2], "r": [0, 0, -20], "s": [0.9, 0.85, 0.9] }
+          },
+          {
+            "name": "Right Arm",
+            "primitive": {
+              "type": "sphere",
+              "r": 1.0,
+              "widthSegments": 24,
+              "heightSegments": 16,
+              "material": { "color": "#FFB9D8" }
+            },
+            "transform": { "t": [2.9, 0.3, 0.2], "r": [0, 0, 20], "s": [0.9, 0.85, 0.9] }
+          }
+        ]
+      },
+      {
+        "name": "Feet",
+        "operation": "union",
+        "transform": { "t": [0, -2.0, 0.2], "r": [0, 0, 0], "s": [1, 1, 1] },
+        "children": [
+          {
+            "name": "Left Foot",
+            "primitive": { "type": "sphere", "r": 1.15, "material": { "color": "#E63B3B" } },
+            "transform": { "t": [-1.7, 0, 0.9], "r": [0, -10, 0], "s": [1.4, 0.7, 1.0] }
+          },
+          {
+            "name": "Right Foot",
+            "primitive": { "type": "sphere", "r": 1.15, "material": { "color": "#E63B3B" } },
+            "transform": { "t": [1.7, 0, 0.9], "r": [0, 10, 0], "s": [1.4, 0.7, 1.0] }
+          }
+        ]
+      },
+      {
+        "name": "Eyes & Cheeks",
+        "operation": "union",
+        "transform": { "t": [0, 0.9, 2.25], "r": [0, 0, 0], "s": [1, 1, 1] },
+        "children": [
+          { "name": "Left Eye White", "primitive": { "type": "cylinder", "r": 0.42, "h": 0.12, "radialSegments": 24, "material": { "color": "#FFFFFF" } }, "transform": { "t": [-0.7, 0.5, 0], "r": [90, 0, -8], "s": [0.7, 1, 1] } },
+          { "name": "Left Eye Blue", "primitive": { "type": "cylinder", "r": 0.28, "h": 0.14, "radialSegments": 24, "material": { "color": "#2AA0FF" } }, "transform": { "t": [-0.7, 0.48, 0.02], "r": [90, 0, -8], "s": [0.7, 1, 1] } },
+          { "name": "Left Pupil", "primitive": { "type": "cylinder", "r": 0.18, "h": 0.16, "radialSegments": 24, "material": { "color": "#111111" } }, "transform": { "t": [-0.7, 0.46, 0.035], "r": [90, 0, -8], "s": [0.7, 1, 1] } },
+          { "name": "Left Shine", "primitive": { "type": "sphere", "r": 0.07, "material": { "color": "#FFFFFF" } }, "transform": { "t": [-0.58, 0.63, 0.08], "r": [0, 0, 0], "s": [1, 1, 1] } },
+          { "name": "Right Eye White", "primitive": { "type": "cylinder", "r": 0.42, "h": 0.12, "radialSegments": 24, "material": { "color": "#FFFFFF" } }, "transform": { "t": [0.7, 0.5, 0], "r": [90, 0, 8], "s": [0.7, 1, 1] } },
+          { "name": "Right Eye Blue", "primitive": { "type": "cylinder", "r": 0.28, "h": 0.14, "radialSegments": 24, "material": { "color": "#2AA0FF" } }, "transform": { "t": [0.7, 0.48, 0.02], "r": [90, 0, 8], "s": [0.7, 1, 1] } },
+          { "name": "Right Pupil", "primitive": { "type": "cylinder", "r": 0.18, "h": 0.16, "radialSegments": 24, "material": { "color": "#111111" } }, "transform": { "t": [0.7, 0.46, 0.035], "r": [90, 0, 8], "s": [0.7, 1, 1] } },
+          { "name": "Right Shine", "primitive": { "type": "sphere", "r": 0.07, "material": { "color": "#FFFFFF" } }, "transform": { "t": [0.58, 0.63, 0.08], "r": [0, 0, 0], "s": [1, 1, 1] } },
+          { "name": "Left Cheek", "primitive": { "type": "cylinder", "r": 0.45, "h": 0.12, "radialSegments": 24, "material": { "color": "#FF6FA1" } }, "transform": { "t": [-1.4, -0.1, 0.02], "r": [90, 0, 0], "s": [1.15, 1, 0.9] } },
+          { "name": "Right Cheek", "primitive": { "type": "cylinder", "r": 0.45, "h": 0.12, "radialSegments": 24, "material": { "color": "#FF6FA1" } }, "transform": { "t": [1.4, -0.1, 0.02], "r": [90, 0, 0], "s": [1.15, 1, 0.9] } }
+        ]
+      }
+    ]
+  }
+}

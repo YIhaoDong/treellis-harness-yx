@@ -1,0 +1,188 @@
+{
+  "scene": {
+    "name": "Pedestrian Button Unit (Approx.)",
+    "operation": "union",
+    "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] },
+    "children": [
+      {
+        "name": "Pole",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.55,
+          "h": 6.0,
+          "radialSegments": 64,
+          "material": { "color": "#eceeff" }
+        },
+        "transform": { "t": [0, 3.0, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+      },
+      {
+        "name": "Button Housing",
+        "operation": "union",
+        "transform": { "t": [0, 3.0, 0.0], "r": [0, 0, 0], "s": [1, 1, 1] },
+        "children": [
+          {
+            "name": "Backplate",
+            "operation": "union",
+            "transform": { "t": [0, 0.0, 0.7], "r": [0, 0, 0], "s": [1, 1, 1] },
+            "children": [
+              {
+                "name": "Top Cap",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.95,
+                  "h": 0.10,
+                  "radialSegments": 48,
+                  "material": { "color": "#ecf7ff" }
+                },
+                "transform": { "t": [0, 0.95, 0], "r": [90, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Bottom Cap",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.95,
+                  "h": 0.10,
+                  "radialSegments": 48,
+                  "material": { "color": "#ecf7ff" }
+                },
+                "transform": { "t": [0, -0.95, 0], "r": [90, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Mid Plate",
+                "primitive": {
+                  "type": "cube",
+                  "w": 1.9,
+                  "h": 1.9,
+                  "d": 0.18,
+                  "material": { "color": "#ecf7ff" }
+                },
+                "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+              }
+            ]
+          },
+          {
+            "name": "Top Indicator Disc",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.72,
+              "h": 0.06,
+              "radialSegments": 64,
+              "material": { "color": "#f1f9ff" }
+            },
+            "transform": { "t": [0, 0.35, 0.82], "r": [90, 0, 0], "s": [1, 1, 1] }
+          },
+          {
+            "name": "Arrow",
+            "operation": "union",
+            "transform": { "t": [0, 0.35, 0.85], "r": [0, 0, 0], "s": [1, 1, 1] },
+            "children": [
+              {
+                "name": "Arrow Stem",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.18,
+                  "h": 0.9,
+                  "d": 0.06,
+                  "material": { "color": "#fff6ec" }
+                },
+                "transform": { "t": [0, -0.05, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Arrow Head Left",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.18,
+                  "h": 0.55,
+                  "d": 0.06,
+                  "material": { "color": "#fff6ec" }
+                },
+                "transform": { "t": [-0.19, 0.25, 0], "r": [0, 0, 45], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Arrow Head Right",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.18,
+                  "h": 0.55,
+                  "d": 0.06,
+                  "material": { "color": "#fff6ec" }
+                },
+                "transform": { "t": [0.19, 0.25, 0], "r": [0, 0, -45], "s": [1, 1, 1] }
+              }
+            ]
+          },
+          {
+            "name": "Front Screws",
+            "operation": "union",
+            "transform": { "t": [0, 0.0, 0.88], "r": [0, 0, 0], "s": [1, 1, 1] },
+            "children": [
+              {
+                "name": "Screw L",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.045,
+                  "h": 0.06,
+                  "radialSegments": 16,
+                  "material": { "color": "#eceeff" }
+                },
+                "transform": { "t": [-0.78, -0.15, 0], "r": [90, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Screw R",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.045,
+                  "h": 0.06,
+                  "radialSegments": 16,
+                  "material": { "color": "#eceeff" }
+                },
+                "transform": { "t": [0.78, -0.15, 0], "r": [90, 0, 0], "s": [1, 1, 1] }
+              }
+            ]
+          },
+          {
+            "name": "Push Button Assembly",
+            "operation": "union",
+            "transform": { "t": [0, -0.65, 0.86], "r": [0, 0, 0], "s": [1, 1, 1] },
+            "children": [
+              {
+                "name": "Button Rim",
+                "primitive": {
+                  "type": "torus",
+                  "r": 0.48,
+                  "t": 0.06,
+                  "radialSegments": 36,
+                  "tubularSegments": 100,
+                  "material": { "color": "#fff4e1" }
+                },
+                "transform": { "t": [0, 0, 0], "r": [0, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Button Face",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.38,
+                  "h": 0.08,
+                  "radialSegments": 48,
+                  "material": { "color": "#f3fff2" }
+                },
+                "transform": { "t": [0, 0, 0.02], "r": [90, 0, 0], "s": [1, 1, 1] }
+              },
+              {
+                "name": "Button Core",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.34,
+                  "h": 0.05,
+                  "radialSegments": 48,
+                  "material": { "color": "#fee8ff" }
+                },
+                "transform": { "t": [0, 0, 0.06], "r": [90, 0, 0], "s": [1, 1, 1] }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg" aria-label="cube icon">
+  <defs>
+    <pattern id="hatch-cube" patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+      <line x1="0" y1="0" x2="0" y2="8" stroke="#000" stroke-width="2"/>
+    </pattern>
+  </defs>
+  <!-- front face hatch -->
+  <rect x="36" y="52" width="56" height="56" fill="url(#hatch-cube)"/>
+  <!-- outlines -->
+  <polygon points="36,52 92,52 92,108 36,108" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="36,52 52,36 108,36 92,52" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <polygon points="92,52 108,36 108,92 92,108" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
