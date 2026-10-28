@@ -1,0 +1,9 @@
+# Caddy reverse proxy for the generation server. Caddy obtains and renews the
+# HTTPS certificate for api.treellis.art automatically once DNS points here.
+# Install: sudo cp deploy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
+api.treellis.art {
+	reverse_proxy 127.0.0.1:3001 {
+		# Generation progress is streamed as NDJSON; pass each line through immediately.
+		flush_interval -1
+	}
+}

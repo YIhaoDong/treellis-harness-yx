@@ -27,7 +27,20 @@ Each user supplies their own OpenAI API key through the application's Key contro
 The frontend and the generation server deploy separately (see `.env.example`):
 
 - **Frontend → Vercel** (`treellis.art`): import this repo as a Vite project and set `VITE_API_BASE=https://api.treellis.art`.
-- **Generation server → Render** (`api.treellis.art`): create a Blueprint from `render.yaml`. `ALLOWED_ORIGINS` puts the server in public mode: CORS is limited to the site, and the local key and the draft/commit endpoints are disabled.
+- **Generation server → AWS** (`api.treellis.art`): `server.js` runs under systemd (`deploy/treellis-api.service`) behind Caddy (`deploy/Caddyfile`) or nginx (`deploy/nginx.conf`), which terminates HTTPS. `ALLOWED_ORIGINS` puts the server in public mode: CORS is limited to the site, and the local key and the draft/commit endpoints are disabled.
+
+First-time server setup (Ubuntu shown; on Amazon Linux use `dnf install nodejs22` and install Caddy from its COPR):
+
+```sh
+curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash - && sudo apt install -y nodejs caddy git
+sudo useradd --system --create-home --home-dir /opt/treellis treellis
+sudo -u treellis git clone https://github.com/YIhaoDong/treellis-harness-yx.git /opt/treellis
+cd /opt/treellis && sudo -u treellis npm ci --omit=dev
+sudo cp deploy/treellis-api.service /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now treellis-api
+sudo cp deploy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
+```
+
+Update: `cd /opt/treellis && sudo -u treellis git pull && sudo -u treellis npm ci --omit=dev && sudo systemctl restart treellis-api`.
 
 No API key is configured on either service; each user enters their own key, which the server forwards to OpenAI without storing it.
 

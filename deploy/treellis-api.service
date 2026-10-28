@@ -1,0 +1,32 @@
+# systemd unit for the generation server (server.js).
+# Install: sudo cp deploy/treellis-api.service /etc/systemd/system/
+#          sudo systemctl daemon-reload && sudo systemctl enable --now treellis-api
+[Unit]
+Description=Treellis generation server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=treellis
+WorkingDirectory=/opt/treellis
+Environment=NODE_ENV=production
+Environment=PORT=3001
+# Only the reverse proxy on this machine can reach the port.
+Environment=HOST=127.0.0.1
+# Public mode: CORS limited to the site, local key and draft/commit endpoints disabled.
+Environment=ALLOWED_ORIGINS=https://treellis.art,https://www.treellis.art
+# Do not set OPENAI_API_KEY here. Users enter their own key in the app.
+# Check the path with `which node` if Node was not installed from NodeSource or dnf.
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=5
+
+# Public mode never writes to disk, so the service gets a read-only view of the system.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

@@ -284,8 +284,9 @@ app.post('/api/commit', (req, res) => {
 });
 }
 
-app.listen(port, () => {
-  console.log(`🚀 Server running at http://localhost:${port}`);
+// HOST=127.0.0.1 keeps the port private behind a reverse proxy; unset listens on all interfaces.
+app.listen(port, process.env.HOST, () => {
+  console.log(`🚀 Server running at http://${process.env.HOST || 'localhost'}:${port}`);
   if (PUBLIC_DEPLOY) console.log(`🌐 Public deployment for ${ALLOWED_ORIGINS.join(', ')}`);
   console.log(`📁 Static from ${PUBLIC_DIR}`);
 });
