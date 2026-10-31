@@ -1,0 +1,2707 @@
+{
+  "scene": {
+    "name": "Heat Exchanger",
+    "operation": "union",
+    "transform": {
+      "t": [
+        0,
+        0,
+        0
+      ],
+      "r": [
+        0,
+        0,
+        0
+      ],
+      "s": [
+        1,
+        1,
+        1
+      ]
+    },
+    "children": [
+      {
+        "name": "Shell",
+        "operation": "subtract",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "ShellOuter",
+            "primitive": {
+              "type": "cylinder",
+              "r": 1.1,
+              "h": 8,
+              "material": {
+                "color": "#B8C2CC"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "ShellInner",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.96,
+              "h": 8.2,
+              "material": {
+                "color": "#B8C2CC"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "FrontHead",
+        "primitive": {
+          "type": "cylinder",
+          "r": 1,
+          "h": 1.2,
+          "material": {
+            "color": "#C7D0D9"
+          }
+        },
+        "transform": {
+          "t": [
+            -4.6,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            90
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "RearHead",
+        "primitive": {
+          "type": "cylinder",
+          "r": 1,
+          "h": 1.2,
+          "material": {
+            "color": "#C7D0D9"
+          }
+        },
+        "transform": {
+          "t": [
+            4.6,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            90
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "FrontFlange",
+        "primitive": {
+          "type": "cylinder",
+          "r": 1.24,
+          "h": 0.24,
+          "material": {
+            "color": "#9EA8B3"
+          }
+        },
+        "transform": {
+          "t": [
+            -4,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            90
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "RearFlange",
+        "primitive": {
+          "type": "cylinder",
+          "r": 1.24,
+          "h": 0.24,
+          "material": {
+            "color": "#9EA8B3"
+          }
+        },
+        "transform": {
+          "t": [
+            4,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            90
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "FrontTubeNozzle",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.16,
+          "h": 0.9,
+          "material": {
+            "color": "#7F8C99"
+          }
+        },
+        "transform": {
+          "t": [
+            -3.4,
+            1.45,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "RearTubeNozzle",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.16,
+          "h": 0.9,
+          "material": {
+            "color": "#7F8C99"
+          }
+        },
+        "transform": {
+          "t": [
+            4.6,
+            -1.45,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "ShellInlet",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.18,
+          "h": 0.9,
+          "material": {
+            "color": "#7F8C99"
+          }
+        },
+        "transform": {
+          "t": [
+            -4.6,
+            1.45,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "ShellOutlet",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.18,
+          "h": 0.9,
+          "material": {
+            "color": "#7F8C99"
+          }
+        },
+        "transform": {
+          "t": [
+            1.6,
+            -1.55,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        }
+      },
+      {
+        "name": "LeftSupport",
+        "operation": "union",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "LeftBase",
+            "primitive": {
+              "type": "cube",
+              "w": 1.2,
+              "h": 0.2,
+              "d": 1.8,
+              "material": {
+                "color": "#6E7781"
+              }
+            },
+            "transform": {
+              "t": [
+                -2.5,
+                -2.05,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "LeftWeb",
+            "primitive": {
+              "type": "cube",
+              "w": 0.5,
+              "h": 0.9,
+              "d": 1.4,
+              "material": {
+                "color": "#6E7781"
+              }
+            },
+            "transform": {
+              "t": [
+                -2.5,
+                -1.5,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "RightSupport",
+        "operation": "union",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "RightBase",
+            "primitive": {
+              "type": "cube",
+              "w": 1.2,
+              "h": 0.2,
+              "d": 1.8,
+              "material": {
+                "color": "#6E7781"
+              }
+            },
+            "transform": {
+              "t": [
+                2.5,
+                -2.05,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "RightWeb",
+            "primitive": {
+              "type": "cube",
+              "w": 0.5,
+              "h": 0.9,
+              "d": 1.4,
+              "material": {
+                "color": "#6E7781"
+              }
+            },
+            "transform": {
+              "t": [
+                2.5,
+                -1.5,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "InternalAssembly",
+        "operation": "union",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "FrontTubeSheet",
+            "operation": "subtract",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "FrontSheetDisk",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.94,
+                  "h": 0.18,
+                  "material": {
+                    "color": "#AEB8C2"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -3.78,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "FrontSheetHoles",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "FrontHoleRow1",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 4,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "FrontHole1",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -3.78,
+                            -0.52,
+                            -0.36
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "FrontHoleRow2",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 5,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "FrontHole2",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -3.78,
+                            -0.26,
+                            -0.48
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "FrontHoleRow3",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 6,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "FrontHole3",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -3.78,
+                            0,
+                            -0.6
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "FrontHoleRow4",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 5,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "FrontHole4",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -3.78,
+                            0.26,
+                            -0.48
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "FrontHoleRow5",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 4,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "FrontHole5",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -3.78,
+                            0.52,
+                            -0.36
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "RearTubeSheet",
+            "operation": "subtract",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "RearSheetDisk",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.94,
+                  "h": 0.18,
+                  "material": {
+                    "color": "#AEB8C2"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    3.78,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "RearSheetHoles",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "RearHoleRow1",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 4,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "RearHole1",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            3.78,
+                            -0.52,
+                            -0.36
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RearHoleRow2",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 5,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "RearHole2",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            3.78,
+                            -0.26,
+                            -0.48
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RearHoleRow3",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 6,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "RearHole3",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            3.78,
+                            0,
+                            -0.6
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RearHoleRow4",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 5,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "RearHole4",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            3.78,
+                            0.26,
+                            -0.48
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "RearHoleRow5",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 4,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "RearHole5",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.075,
+                          "h": 0.24,
+                          "material": {
+                            "color": "#AEB8C2"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            3.78,
+                            0.52,
+                            -0.36
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "TubeBundle",
+            "operation": "union",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "TubeRow1",
+                "repeat": {
+                  "type": "linear",
+                  "count": 4,
+                  "t": [
+                    0,
+                    0,
+                    0.24
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "BundleTube1",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.065,
+                      "h": 7.72,
+                      "material": {
+                        "color": "#D6DEE6"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        -0.52,
+                        -0.36
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TubeRow2",
+                "repeat": {
+                  "type": "linear",
+                  "count": 3,
+                  "t": [
+                    0,
+                    0,
+                    0.24
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "BundleTube2",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.065,
+                      "h": 7.72,
+                      "material": {
+                        "color": "#D6DEE6"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        -0.26,
+                        -0.48
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TubeRow3",
+                "repeat": {
+                  "type": "linear",
+                  "count": 6,
+                  "t": [
+                    0,
+                    0,
+                    0.24
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "BundleTube3",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.065,
+                      "h": 7.72,
+                      "material": {
+                        "color": "#D6DEE6"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        -0.6
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TubeRow4",
+                "repeat": {
+                  "type": "linear",
+                  "count": 5,
+                  "t": [
+                    0,
+                    0,
+                    0.24
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "BundleTube4",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.065,
+                      "h": 7.72,
+                      "material": {
+                        "color": "#D6DEE6"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0.26,
+                        -0.48
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "TubeRow5",
+                "repeat": {
+                  "type": "linear",
+                  "count": 4,
+                  "t": [
+                    0,
+                    0,
+                    0.24
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "BundleTube5",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.065,
+                      "h": 7.72,
+                      "material": {
+                        "color": "#D6DEE6"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0.52,
+                        -0.36
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "BaffleFront",
+            "operation": "subtract",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "BaffleFrontDisk",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.9,
+                  "h": 0.08,
+                  "material": {
+                    "color": "#98A3AD"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -1.5,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "BaffleFrontWindow",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.14,
+                  "h": 0.98,
+                  "d": 2,
+                  "material": {
+                    "color": "#98A3AD"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -1.5,
+                    0.55,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "BaffleFrontHoles",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "BaffleFrontRow1",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 4,
+                      "t": [
+                        0,
+                        0,
+                        1.5
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleFrontHole1",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.078,
+                          "h": 0.14,
+                          "material": {
+                            "color": "#98A3AD"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -1.5,
+                            -0.52,
+                            -0.36
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Union",
+                    "operation": "union",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleFrontRow2",
+                        "repeat": {
+                          "type": "linear",
+                          "count": 5,
+                          "t": [
+                            0,
+                            0,
+                            1.5
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        },
+                        "transform": {
+                          "t": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        },
+                        "children": [
+                          {
+                            "name": "BaffleFrontHole2",
+                            "primitive": {
+                              "type": "cylinder",
+                              "r": 0.078,
+                              "h": 0.14,
+                              "material": {
+                                "color": "#98A3AD"
+                              }
+                            },
+                            "transform": {
+                              "t": [
+                                -1.5,
+                                -0.26,
+                                -0.48
+                              ],
+                              "r": [
+                                0,
+                                0,
+                                90
+                              ],
+                              "s": [
+                                1,
+                                1,
+                                1
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "name": "BaffleFrontRow3",
+                        "repeat": {
+                          "type": "linear",
+                          "count": 6,
+                          "t": [
+                            0,
+                            0,
+                            1.5
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        },
+                        "transform": {
+                          "t": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            0
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        },
+                        "children": [
+                          {
+                            "name": "BaffleFrontHole3",
+                            "primitive": {
+                              "type": "cylinder",
+                              "r": 0.078,
+                              "h": 0.14,
+                              "material": {
+                                "color": "#98A3AD"
+                              }
+                            },
+                            "transform": {
+                              "t": [
+                                -1.5,
+                                0,
+                                -0.6
+                              ],
+                              "r": [
+                                0,
+                                0,
+                                90
+                              ],
+                              "s": [
+                                1,
+                                1,
+                                1
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BaffleFrontRow3",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 6,
+                      "t": [
+                        0,
+                        0,
+                        1.5
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleFrontHole3",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.078,
+                          "h": 0.14,
+                          "material": {
+                            "color": "#98A3AD"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -1.5,
+                            0,
+                            -0.6
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BaffleFrontRow4",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 5,
+                      "t": [
+                        0,
+                        0,
+                        1.5
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleFrontHole4",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.078,
+                          "h": 0.14,
+                          "material": {
+                            "color": "#98A3AD"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -1.5,
+                            0.26,
+                            -0.48
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BaffleFrontRow5",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 4,
+                      "t": [
+                        0,
+                        0,
+                        1.5
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleFrontHole5",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.078,
+                          "h": 0.14,
+                          "material": {
+                            "color": "#98A3AD"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -1.5,
+                            0.52,
+                            -0.36
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "BaffleRear",
+            "operation": "subtract",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "BaffleRearDisk",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.9,
+                  "h": 0.08,
+                  "material": {
+                    "color": "#98A3AD"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    1.5,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "BaffleRearWindow",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.14,
+                  "h": 0.98,
+                  "d": 2,
+                  "material": {
+                    "color": "#98A3AD"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    1.5,
+                    -0.55,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "BaffleRearHoles",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "BaffleRearRow1",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 4,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleRearHole1",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.078,
+                          "h": 0.14,
+                          "material": {
+                            "color": "#98A3AD"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            1.5,
+                            -0.52,
+                            -0.36
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BaffleRearRow2",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 5,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleRearHole2",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.078,
+                          "h": 0.14,
+                          "material": {
+                            "color": "#98A3AD"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            1.5,
+                            -0.26,
+                            -0.48
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BaffleRearRow3",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 6,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleRearHole3",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.078,
+                          "h": 0.14,
+                          "material": {
+                            "color": "#98A3AD"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            1.5,
+                            0,
+                            -0.6
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BaffleRearRow4",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 5,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleRearHole4",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.078,
+                          "h": 0.14,
+                          "material": {
+                            "color": "#98A3AD"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            1.5,
+                            0.26,
+                            -0.48
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "BaffleRearRow5",
+                    "repeat": {
+                      "type": "linear",
+                      "count": 4,
+                      "t": [
+                        0,
+                        0,
+                        0.24
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "BaffleRearHole5",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.078,
+                          "h": 0.14,
+                          "material": {
+                            "color": "#98A3AD"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            1.5,
+                            0.52,
+                            -0.36
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            90
+                          ],
+                          "s": [
+                            1,
+                            1,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

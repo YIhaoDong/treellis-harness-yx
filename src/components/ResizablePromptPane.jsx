@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ProgressOverlayContext } from './ProgressOverlayContext.jsx'
 
-export default function ResizablePromptPane({ children }) {
+export default function ResizablePromptPane({ children, compact = false }) {
   const paneRef = useRef(null)
   const separatorRef = useRef(null)
   const dragRef = useRef(null)
@@ -26,6 +26,7 @@ export default function ResizablePromptPane({ children }) {
 
   useEffect(() => {
     const measure = () => {
+      if (compact || paneRef.current.parentElement.clientHeight <= 0) return
       const limits = getBounds()
       setBounds(limits)
       setHeight((value) => Math.min(limits.max, Math.max(limits.min, value)))
@@ -46,7 +47,7 @@ export default function ResizablePromptPane({ children }) {
       observer.disconnect()
       window.removeEventListener('blur', cancel)
     }
-  }, [])
+  }, [compact])
 
   const finishDrag = (event) => {
     if (!dragRef.current || dragRef.current.pointerId !== event.pointerId) return

@@ -1,5 +1,6 @@
 // src/components/SaveScene.jsx
 import React, { useEffect, useRef, useState } from 'react'
+import { STATIC_DEMO } from '../staticDemo/mode.mjs'
 import { createPortal } from 'react-dom'
 import { normalizeSceneFilename, suggestSceneFilename } from '../utils/sceneFilename.mjs'
 
@@ -33,6 +34,7 @@ export default function SaveScene({ scene, filename, wrap = true }) {
 
   const close = () => setOpen(false)
   const handleOpen = () => {
+    if (STATIC_DEMO) return
     if (!scene) return
     previousFocusRef.current = document.activeElement
     setName(suggestSceneFilename(scene, filename))
@@ -41,6 +43,7 @@ export default function SaveScene({ scene, filename, wrap = true }) {
   }
   const handleSave = (event) => {
     event.preventDefault()
+    if (STATIC_DEMO) return
     if (!scene) return
     const result = normalizeSceneFilename(name)
     if (result.error) {

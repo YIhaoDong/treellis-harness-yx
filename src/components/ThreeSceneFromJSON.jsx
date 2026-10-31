@@ -429,7 +429,7 @@ function SceneRayPicker({ getPickables, onHoverPath, onClickPath }) {
   useEffect(() => bindViewportPicking(gl.domElement, {
     intersect: doIntersect,
     onHoverPath: (path) => callbacksRef.current.onHoverPath?.(path),
-    onClickPath: (path) => callbacksRef.current.onClickPath?.(path),
+    onClickPath: (path, options) => callbacksRef.current.onClickPath?.(path, options),
   }), [gl.domElement, doIntersect])
 
   return null
@@ -467,15 +467,68 @@ function NavigationGizmo({ children }) {
   return <group ref={groupRef}>{children}</group>
 }
 
+function ViewportGizmo({ controlsRef }) {
+  const { size } = useThree()
+  const shortestSide = Math.min(size.width, size.height)
+  if (shortestSide < 40) return null
+  const scale = Math.min(1, (shortestSide - 12) / 120)
+  return (
+    <GizmoHelper alignment="bottom-left" margin={[72 * scale, 72 * scale]}
+      onTarget={() => controlsRef.current?.target} renderPriority={1}>
+      <group scale={scale}>
+        <NavigationGizmo>
+          <GizmoViewport axisColors={['#ff3653', '#8adb00', '#2c8fff']}
+            hideNegativeAxes={false} labelColor="#ffffff" axisHeadScale={1.3} axisScale={[0.8, 0.05, 0.05]} />
+        </NavigationGizmo>
+      </group>
+    </GizmoHelper>
+  )
+}
+
+// Keep edits and panel changes from resetting the camera. On a compact size
+// change, only move back if necessary, preserving the user's target and angle.
+function FrameLoadedScene({ object, controlsRef, responsive = false }) {
+  const { camera, invalidate, size } = useThree()
+  const framedRef = useRef(null)
+  useEffect(() => {
+    if (!object || !controlsRef.current || size.width <= 0 || size.height <= 0) return
+    const previous = framedRef.current
+    if (previous && (!responsive || previous.width === size.width && previous.height === size.height)) return
+    const bounds = new THREE.Box3().setFromObject(object)
+    if (bounds.isEmpty()) return
+    const sphere = bounds.getBoundingSphere(new THREE.Sphere())
+    if (!Number.isFinite(sphere.radius) || sphere.radius <= 0) return
+    const halfFov = THREE.MathUtils.degToRad(camera.fov / 2)
+    const limitingFov = Math.min(halfFov, Math.atan(Math.tan(halfFov) * camera.aspect))
+    const target = previous ? controlsRef.current.target.clone() : sphere.center
+    const radius = sphere.radius + (previous ? target.distanceTo(sphere.center) : 0)
+    const requiredDistance = radius / Math.sin(limitingFov) * 1.15
+    const distance = previous ? Math.max(requiredDistance, camera.position.distanceTo(target)) : requiredDistance
+    const direction = camera.position.clone().sub(controlsRef.current.target).normalize()
+    camera.position.copy(target).addScaledVector(direction, distance)
+    camera.near = Math.max(distance / 1000, 0.01)
+    camera.far = Math.max(distance * 100, 1000)
+    camera.updateProjectionMatrix()
+    controlsRef.current.target.copy(target)
+    controlsRef.current.update()
+    framedRef.current = { width: size.width, height: size.height }
+    invalidate()
+  }, [object, camera, controlsRef, invalidate, responsive, size.width, size.height])
+  return null
+}
+
 /* ========== component ========== */
 export default function ThreeSceneFromJSON({
   scene,                 // in-memory scene (preferred)
   url = '/scene.json',   // fallback if scene is not provided
   highlightPath,
+  highlightPaths,
   unionHighlight = false,
   debug = false,
+  frameOnLoad = false,
+  responsiveFraming = false,
   onHoverPathFromScene,      // (path|null) => void
-  onClickPathFromScene       // (path|null) => void
+  onClickPathFromScene       // (path|null, { shiftKey, additive }) => void
 }) {
   const [sceneObj, setSceneObj] = useState(null)
 
@@ -545,7 +598,9 @@ export default function ThreeSceneFromJSON({
 
   // highlight update
   useEffect(() => {
-    if (!sceneObj || !highlightPath) {
+    // An explicitly provided array owns highlighting, including an empty set.
+    const paths = Array.isArray(highlightPaths) ? highlightPaths : highlightPath ? [highlightPath] : []
+    if (!sceneObj || paths.length === 0) {
       if (ghostRef.current) {
         ghostRef.current.traverse((o) => { if (o.isMesh) o.visible = false })
       }
@@ -553,30 +608,30 @@ export default function ThreeSceneFromJSON({
       return
     }
 
-    const entry = indexRef.current.get(String(highlightPath))
-    if (!entry) {
-      if (debug) console.warn('[Highlight] path not found:', highlightPath)
-      if (ghostRef.current) ghostRef.current.traverse((o) => { if (o.isMesh) o.visible = false })
-      setUnionMesh(null)
-      return
+    const selectedMeshes = new Set()
+    for (const path of paths) {
+      const entry = indexRef.current.get(String(path))
+      if (!entry && debug) console.warn('[Highlight] path not found:', path)
+      entry?.meshes.forEach(mesh => selectedMeshes.add(mesh))
     }
+    const meshes = [...selectedMeshes]
 
     if (!unionHighlight) {
       if (ghostRef.current) {
         ghostRef.current.traverse((o) => { if (o.isMesh) o.visible = false })
-        entry.meshes.forEach((m) => { m.visible = true })
+        meshes.forEach((m) => { m.visible = true })
       }
       setUnionMesh(null)
-      if (debug) console.log('[Highlight] toggle only, meshes:', entry.meshes.length)
+      if (debug) console.log('[Highlight] toggle only, meshes:', meshes.length)
     } else {
       if (ghostRef.current) {
         ghostRef.current.traverse((o) => { if (o.isMesh) o.visible = false })
       }
-      const m = unionMeshes(entry.meshes)
+      const m = unionMeshes(meshes)
       setUnionMesh(withViewportOffset(m))
-      if (debug) console.log('[Highlight] union overlay meshes:', entry.meshes.length, !!m)
+      if (debug) console.log('[Highlight] union overlay meshes:', meshes.length, !!m)
     }
-  }, [sceneObj, highlightPath, unionHighlight, debug])
+  }, [sceneObj, highlightPath, highlightPaths, unionHighlight, debug])
 
   return (
     <Canvas aria-label="3D viewport" shadows camera={{ position: [10, 10, 10], fov: 50 }}>
@@ -619,23 +674,9 @@ export default function ThreeSceneFromJSON({
 
       {/* Controls + Mini XYZ axis */}
       <OrbitControls ref={controlsRef} makeDefault enableDamping />
+      {(frameOnLoad || responsiveFraming) && sceneObj && <FrameLoadedScene object={mergedRef.current} controlsRef={controlsRef} responsive={responsiveFraming} />}
 
-      <GizmoHelper
-        alignment="bottom-left"
-        margin={[72, 72]}
-        onTarget={() => controlsRef.current?.target}
-        renderPriority={1}
-      >
-        <NavigationGizmo>
-          <GizmoViewport
-            axisColors={['#ff3653', '#8adb00', '#2c8fff']}
-            hideNegativeAxes={false}
-            labelColor="#ffffff"
-            axisHeadScale={1.3}
-            axisScale={[0.8, 0.05, 0.05]}
-          />
-        </NavigationGizmo>
-      </GizmoHelper>
+      <ViewportGizmo controlsRef={controlsRef} />
     </Canvas>
   )
 }

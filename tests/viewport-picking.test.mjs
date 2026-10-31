@@ -29,12 +29,13 @@ function setup() {
   const canvas = new EventSurface()
   canvas.ownerDocument = { defaultView: root }
   const clicks = []
+  const clickOptions = []
   const hovers = []
   let selected = '0.0'
   let intersectionCount = 0
   const dispose = bindViewportPicking(canvas, {
     intersect(x) { intersectionCount++; return x < 100 ? '0.0' : x < 200 ? '0.1' : null },
-    onClickPath(path) { selected = path; clicks.push(path) },
+    onClickPath(path, options) { selected = path; clicks.push(path); clickOptions.push(options) },
     onHoverPath(path) { hovers.push(path) },
   })
   function send(type, overrides = {}, outside = false) {
@@ -50,7 +51,7 @@ function setup() {
     }
     root.fire(type, event, false)
   }
-  return { canvas, root, clicks, hovers, send, dispose,
+  return { canvas, root, clicks, clickOptions, hovers, send, dispose,
     get selected() { return selected }, get intersectionCount() { return intersectionCount } }
 }
 
@@ -116,6 +117,24 @@ test('modifier-assisted pan and modifiers pressed during a tap preserve selectio
   f.send('pointerup', { clientX: 145 })
   assert.deepEqual(f.clicks, [])
   assert.equal(f.selected, '0.0')
+  f.dispose()
+})
+
+test('a held Shift tap forwards additive metadata while Shift panning never commits a pick', () => {
+  const f = setup()
+  f.send('pointerdown', { clientX: 145, shiftKey: true })
+  f.send('pointermove', { clientX: 147, shiftKey: true })
+  f.send('pointerup', { clientX: 147, shiftKey: true })
+  assert.deepEqual(f.clicks, ['0.1'])
+  assert.deepEqual(f.clickOptions, [{ shiftKey: true, additive: true }])
+  f.send('pointerdown', { clientX: 145, shiftKey: true })
+  f.send('pointermove', { clientX: 180, shiftKey: true })
+  f.send('pointerup', { clientX: 145, shiftKey: true })
+  assert.deepEqual(f.clicks, ['0.1'], 'returning to the start of a pan is still a drag')
+  f.send('pointerdown', { clientX: 250, shiftKey: true })
+  f.send('wheel', { deltaY: -10, shiftKey: true })
+  f.send('pointerup', { clientX: 250, shiftKey: true })
+  assert.deepEqual(f.clicks, ['0.1'], 'wheel cancels an additive tap')
   f.dispose()
 })
 

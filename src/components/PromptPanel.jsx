@@ -1,33 +1,43 @@
 import React, { useEffect, useState } from 'react'
+import { STATIC_DEMO } from '../staticDemo/mode.mjs'
 import { DEFAULT_RUN_MODE } from '../utils/llmConfig.js'
 import { GenerateButton, GenerationStrategySelect, ModelModeSelect } from './PromptControls.jsx'
 import GenerationProgressPopover from './GenerationProgressPopover.jsx'
 import { stageLabel, supportsStagedGeneration } from '../generation/progressState.mjs'
 import useGenerationService from '../hooks/useGenerationService.jsx'
 import useGenerationRun from '../hooks/useGenerationRun.jsx'
+import usePromptImages from '../hooks/usePromptImages.jsx'
+import PromptImageAttachments from './PromptImageAttachments.jsx'
 import '../prompt.css'
 
-export default function PromptPanel({ onGenerated, defaultModel = '', currentScene }) {
+export default function PromptPanel({ onGenerated, defaultModel = '', currentScene, disabled = false, onBusyChange }) {
   const [apiKey, setApiKey] = useState('')
   const [prompt, setPrompt] = useState('')
   const [showOptions, setShowOptions] = useState(false)
-  const [useCurrent, setUseCurrent] = useState(true)
+  const [useCurrent, setUseCurrent] = useState(false)
   const [runMode, setRunMode] = useState(DEFAULT_RUN_MODE)
   const [preferredStrategy, setPreferredStrategy] = useState('staged')
+  const attachments = usePromptImages({ disabled, isDisabled: () => busy || disabled })
   const detailed = supportsStagedGeneration(runMode)
   const strategy = detailed ? preferredStrategy : 'single'
-  const identity = JSON.stringify({ prompt, effort: runMode, strategy, useCurrent })
+  const identity = JSON.stringify({ prompt, effort: runMode, strategy, useCurrent, images: attachments.revision })
   const generation = useGenerationRun({ scene: currentScene, identity, onApply: onGenerated,
-    onComplete: (_reply, input) => setPrompt(current => current === input.prompt ? '' : current) })
+    onComplete: (_reply, input) => {
+      setPrompt(current => current === input.prompt ? '' : current)
+      attachments.clearIfCurrent(input.images)
+    } })
   const { busy, error, errorCode, setError } = generation
+  useEffect(() => { onBusyChange?.(busy); return () => onBusyChange?.(false) }, [busy, onBusyChange])
   const service = useGenerationService()
   useEffect(() => {
+    if (STATIC_DEMO) return
     try { setApiKey((localStorage.getItem('OPENAI_API_KEY') || '').trim()) } catch {}
   }, [])
   useEffect(() => { if (service.ready) setShowOptions(!apiKey && !service.localKeyAvailable) }, [service.ready, service.localKeyAvailable])
-  const canGenerate = service.ready && (!!apiKey.trim() || service.localKeyAvailable) && !!prompt.trim() && !busy
+  const canGenerate = service.ready && (!!apiKey.trim() || service.localKeyAvailable) && !!prompt.trim() && !busy && !disabled && !attachments.loading
   const displayError = error || service.error
   const saveKey = () => {
+    if (STATIC_DEMO) return
     try {
       const key = apiKey.trim()
       if (key) localStorage.setItem('OPENAI_API_KEY', key)
@@ -35,10 +45,11 @@ export default function PromptPanel({ onGenerated, defaultModel = '', currentSce
     } catch { setError('This browser cannot save the key. You can still use it for this session.') }
   }
   const generate = (resume = false) => {
+    if (STATIC_DEMO) return
     if (!canGenerate) return
     const hasContext = !!(useCurrent && currentScene)
     generation.run({ mode: hasContext ? 'edit' : 'create', prompt,
-      scene: hasContext ? currentScene : null, effort: runMode, strategy }, { apiKey, resume })
+      scene: hasContext ? currentScene : null, effort: runMode, strategy, images: attachments.images }, { apiKey, resume })
   }
   const handleKeyDown = (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); generate() }
@@ -46,7 +57,8 @@ export default function PromptPanel({ onGenerated, defaultModel = '', currentSce
 
   return (
     <div className="prompt-dock">
-      <div className="prompt-composer">
+      <div className="prompt-composer" {...attachments.composerProps}>
+        <PromptImageAttachments attachments={attachments} disabled={busy || disabled} />
         <textarea
           className="prompt-textarea"
           aria-label="Scene prompt"

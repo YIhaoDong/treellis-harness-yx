@@ -1,3 +1,5 @@
+import { STATIC_DEMO } from '../staticDemo/mode.mjs';
+
 export function generationBaseURL() {
   // A deployed frontend is built with VITE_API_BASE (e.g. https://api.treellis.art).
   const configured = import.meta.env?.VITE_API_BASE;
@@ -6,6 +8,7 @@ export function generationBaseURL() {
   return `http://${hostname === '::1' ? '[::1]' : hostname}:3001`;
 }
 export async function getGenerationConfig(signal) {
+  if (STATIC_DEMO) return { ready: true, localKeyAvailable: true };
   const response = await fetch(`${generationBaseURL()}/api/generation/config`, { cache: 'no-store', signal });
   const data = await response.json();
   if (!response.ok || !data.ready) throw new Error(data.error || 'The generation service is unavailable. Start npm run server and retry.');
@@ -29,6 +32,7 @@ function sessionId() {
 
 export async function requestGeneration(input, { apiKey = '', signal, onProgress = () => {}, onCheckpoint = () => {},
   fetchImpl = (...args) => fetch(...args), reconnectDelayMs = 1000, maxReconnects = 8, idleMs = 45000 } = {}) {
+  if (STATIC_DEMO) return;
   const id = sessionId(), token = sessionId(), base = generationBaseURL();
   const headers = { 'Content-Type': 'application/json', 'X-Generation-Id': id, 'X-Generation-Token': token };
   if (apiKey.trim()) headers.Authorization = `Bearer ${apiKey.trim()}`;

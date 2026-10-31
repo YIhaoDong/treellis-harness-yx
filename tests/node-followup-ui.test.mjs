@@ -191,6 +191,6 @@ test('a scene change between choosing a parent and committing the new scope prev
     h.props.scene = { ...scene, name: 'Changed before scope commit' }
   })
   assert.equal(h.requests.length, 0)
-  assert.match(h.text(), /scene or selection changed/i)
+  assert.match(h.text(), /scene, selection or reference images changed/i)
   h.unmount()
 })

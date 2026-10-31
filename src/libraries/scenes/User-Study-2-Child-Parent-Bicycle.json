@@ -1,0 +1,1554 @@
+{
+  "scene": {
+    "name": "Union",
+    "operation": "union",
+    "transform": {
+      "t": [
+        0,
+        0,
+        0
+      ],
+      "r": [
+        0,
+        0,
+        0
+      ],
+      "s": [
+        1,
+        1,
+        1
+      ]
+    },
+    "children": [
+      {
+        "name": "Union",
+        "operation": "union",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "Bicycle",
+            "operation": "union",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "RearWheel",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    -3,
+                    1.1,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "RearTire",
+                    "primitive": {
+                      "type": "torus",
+                      "r": 1,
+                      "t": 0.12,
+                      "material": {
+                        "color": "#1A1A1A"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "RearRim",
+                    "primitive": {
+                      "type": "torus",
+                      "r": 0.82,
+                      "t": 0.05,
+                      "material": {
+                        "color": "#BFC5CC"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "RearHub",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.08,
+                      "h": 0.28,
+                      "material": {
+                        "color": "#8E949B"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "RearSpokeV",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.04,
+                      "h": 1.55,
+                      "d": 0.03,
+                      "material": {
+                        "color": "#D9DEE3"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "RearSpokeH",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 1.55,
+                      "h": 0.04,
+                      "d": 0.03,
+                      "material": {
+                        "color": "#D9DEE3"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "RearSpokeD1",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 1.55,
+                      "h": 0.04,
+                      "d": 0.03,
+                      "material": {
+                        "color": "#D9DEE3"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        45
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "RearSpokeD2",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 1.55,
+                      "h": 0.04,
+                      "d": 0.03,
+                      "material": {
+                        "color": "#D9DEE3"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        -45
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "FrontWheel",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    3,
+                    1.1,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "FrontTire",
+                    "primitive": {
+                      "type": "torus",
+                      "r": 1,
+                      "t": 0.12,
+                      "material": {
+                        "color": "#1A1A1A"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "FrontRim",
+                    "primitive": {
+                      "type": "torus",
+                      "r": 0.82,
+                      "t": 0.05,
+                      "material": {
+                        "color": "#BFC5CC"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "FrontHub",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.08,
+                      "h": 0.28,
+                      "material": {
+                        "color": "#8E949B"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "FrontSpokeV",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.04,
+                      "h": 1.55,
+                      "d": 0.03,
+                      "material": {
+                        "color": "#D9DEE3"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "FrontSpokeH",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 1.55,
+                      "h": 0.04,
+                      "d": 0.03,
+                      "material": {
+                        "color": "#D9DEE3"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "FrontSpokeD1",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 1.55,
+                      "h": 0.04,
+                      "d": 0.03,
+                      "material": {
+                        "color": "#D9DEE3"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        45
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "FrontSpokeD2",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 1.55,
+                      "h": 0.04,
+                      "d": 0.03,
+                      "material": {
+                        "color": "#D9DEE3"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        -45
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Frame",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "TopTube",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.09,
+                      "h": 2.86,
+                      "material": {
+                        "color": "#D22C2C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0.15,
+                        2.55,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        92
+                      ],
+                      "s": [
+                        1,
+                        1.19,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "DownTube",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.09,
+                      "h": 2.06,
+                      "material": {
+                        "color": "#D22C2C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0.57,
+                        1.64,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        -74
+                      ],
+                      "s": [
+                        1,
+                        1.53,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "SeatTube",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.09,
+                      "h": 1.75,
+                      "material": {
+                        "color": "#D22C2C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        -1.25,
+                        1.9,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        23
+                      ],
+                      "s": [
+                        1,
+                        0.87,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "HeadTube",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.1,
+                      "h": 0.95,
+                      "material": {
+                        "color": "#D22C2C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        1.97,
+                        2.29,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        29
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "RearStays",
+                    "operation": "union",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "ChainStayL",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.05,
+                          "h": 2.75,
+                          "material": {
+                            "color": "#D22C2C"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -1.98,
+                            1.15,
+                            0.12
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            -87
+                          ],
+                          "s": [
+                            1,
+                            0.75,
+                            1
+                          ]
+                        }
+                      },
+                      {
+                        "name": "ChainStayR",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.05,
+                          "h": 2.75,
+                          "material": {
+                            "color": "#D22C2C"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -1.98,
+                            1.15,
+                            -0.12
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            -87
+                          ],
+                          "s": [
+                            1,
+                            0.75,
+                            1
+                          ]
+                        }
+                      },
+                      {
+                        "name": "SeatStayL",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.05,
+                          "h": 2.34,
+                          "material": {
+                            "color": "#D22C2C"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -2.28,
+                            1.85,
+                            0.12
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            -44
+                          ],
+                          "s": [
+                            1,
+                            0.89,
+                            1
+                          ]
+                        }
+                      },
+                      {
+                        "name": "SeatStayR",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.05,
+                          "h": 2.34,
+                          "material": {
+                            "color": "#D22C2C"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            -2.28,
+                            1.85,
+                            -0.12
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            -44
+                          ],
+                          "s": [
+                            1,
+                            0.89,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "name": "Fork",
+                    "operation": "union",
+                    "transform": {
+                      "t": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    },
+                    "children": [
+                      {
+                        "name": "ForkBladeL",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.05,
+                          "h": 1.8,
+                          "material": {
+                            "color": "#D22C2C"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            2.65,
+                            1.51,
+                            0.12
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            41
+                          ],
+                          "s": [
+                            1,
+                            0.6,
+                            1
+                          ]
+                        }
+                      },
+                      {
+                        "name": "ForkBladeR",
+                        "primitive": {
+                          "type": "cylinder",
+                          "r": 0.05,
+                          "h": 1.8,
+                          "material": {
+                            "color": "#D22C2C"
+                          }
+                        },
+                        "transform": {
+                          "t": [
+                            2.65,
+                            1.51,
+                            -0.12
+                          ],
+                          "r": [
+                            0,
+                            0,
+                            41
+                          ],
+                          "s": [
+                            1,
+                            0.6,
+                            1
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "name": "SeatAssembly",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "SeatPost",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.05,
+                      "h": 0.5,
+                      "material": {
+                        "color": "#6C747C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        -1.55,
+                        2.85,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "SaddleBase",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.8,
+                      "h": 0.08,
+                      "d": 0.4,
+                      "material": {
+                        "color": "#1C1C1C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        -1.4,
+                        3.15,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "SaddleNose",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.24,
+                      "h": 0.06,
+                      "d": 0.22,
+                      "material": {
+                        "color": "#1C1C1C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        -1.02,
+                        3.12,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "HandlebarAssembly",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "Stem",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.05,
+                      "h": 1.65,
+                      "material": {
+                        "color": "#6C747C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        2.05,
+                        2.72,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        -42
+                      ],
+                      "s": [
+                        1,
+                        0.52,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "Bar",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 1.15,
+                      "h": 0.08,
+                      "d": 0.08,
+                      "material": {
+                        "color": "#6C747C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        2.33,
+                        3.1,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        90,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "GripL",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.18,
+                      "h": 0.1,
+                      "d": 0.1,
+                      "material": {
+                        "color": "#1C1C1C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        2.33,
+                        3.1,
+                        -0.53
+                      ],
+                      "r": [
+                        0,
+                        90,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "GripR",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.18,
+                      "h": 0.1,
+                      "d": 0.1,
+                      "material": {
+                        "color": "#1C1C1C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        2.33,
+                        3.1,
+                        0.53
+                      ],
+                      "r": [
+                        0,
+                        90,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "name": "Drivetrain",
+                "operation": "union",
+                "transform": {
+                  "t": [
+                    1,
+                    0.6,
+                    -0.4
+                  ],
+                  "r": [
+                    0,
+                    90,
+                    0
+                  ],
+                  "s": [
+                    1.52,
+                    1,
+                    1
+                  ]
+                },
+                "children": [
+                  {
+                    "name": "BottomBracket",
+                    "primitive": {
+                      "type": "cylinder",
+                      "r": 0.06,
+                      "h": 0.28,
+                      "material": {
+                        "color": "#6C747C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        -0.25,
+                        1.15,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "Chainring",
+                    "primitive": {
+                      "type": "torus",
+                      "r": 0.34,
+                      "t": 0.04,
+                      "material": {
+                        "color": "#8E949B"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        -0.25,
+                        1.15,
+                        0
+                      ],
+                      "r": [
+                        90,
+                        90,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "Crank",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.95,
+                      "h": 0.05,
+                      "d": 0.05,
+                      "material": {
+                        "color": "#8E949B"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        -0.25,
+                        1.15,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        0
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "PedalFront",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.4,
+                      "h": 0.05,
+                      "d": 0.12,
+                      "material": {
+                        "color": "#1C1C1C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        0.19,
+                        1.31,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  },
+                  {
+                    "name": "PedalBack",
+                    "primitive": {
+                      "type": "cube",
+                      "w": 0.4,
+                      "h": 0.05,
+                      "d": 0.12,
+                      "material": {
+                        "color": "#1C1C1C"
+                      }
+                    },
+                    "transform": {
+                      "t": [
+                        -0.69,
+                        0.99,
+                        0
+                      ],
+                      "r": [
+                        0,
+                        0,
+                        90
+                      ],
+                      "s": [
+                        1,
+                        1,
+                        1
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "name": "Drivetrain",
+            "operation": "union",
+            "transform": {
+              "t": [
+                -1,
+                0,
+                -0.4
+              ],
+              "r": [
+                0,
+                90,
+                0
+              ],
+              "s": [
+                1.52,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "BottomBracket",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.06,
+                  "h": 0.28,
+                  "material": {
+                    "color": "#6C747C"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -0.25,
+                    1.15,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "Chainring",
+                "primitive": {
+                  "type": "torus",
+                  "r": 0.34,
+                  "t": 0.04,
+                  "material": {
+                    "color": "#8E949B"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -0.25,
+                    1.15,
+                    0
+                  ],
+                  "r": [
+                    90,
+                    90,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "Crank",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.95,
+                  "h": 0.05,
+                  "d": 0.05,
+                  "material": {
+                    "color": "#8E949B"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -0.25,
+                    1.15,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "PedalFront",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.4,
+                  "h": 0.05,
+                  "d": 0.12,
+                  "material": {
+                    "color": "#1C1C1C"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    0.19,
+                    1.31,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "PedalBack",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.4,
+                  "h": 0.05,
+                  "d": 0.12,
+                  "material": {
+                    "color": "#1C1C1C"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -0.69,
+                    0.99,
+                    0
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    90
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "SeatAssembly",
+        "operation": "union",
+        "transform": {
+          "t": [
+            1.9,
+            0.5,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            0.7,
+            0.79,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "SeatPost",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.05,
+              "h": 0.5,
+              "material": {
+                "color": "#6C747C"
+              }
+            },
+            "transform": {
+              "t": [
+                -1.55,
+                2.85,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "SaddleBase",
+            "primitive": {
+              "type": "cube",
+              "w": 0.8,
+              "h": 0.08,
+              "d": 0.4,
+              "material": {
+                "color": "#1C1C1C"
+              }
+            },
+            "transform": {
+              "t": [
+                -1.4,
+                3.15,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "SaddleNose",
+            "primitive": {
+              "type": "cube",
+              "w": 0.24,
+              "h": 0.06,
+              "d": 0.22,
+              "material": {
+                "color": "#1C1C1C"
+              }
+            },
+            "transform": {
+              "t": [
+                -1.02,
+                3.12,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

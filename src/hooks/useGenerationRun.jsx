@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
+import { STATIC_DEMO } from '../staticDemo/mode.mjs'
 import { requestGeneration } from '../generation/client.mjs'
 import { replaceScope, resumeIsCurrent, scopeAt, updateProgress } from '../generation/progressState.mjs'
 
@@ -14,7 +15,7 @@ function nextConversation(previous, prompt, answer) {
   return turns
 }
 
-export default function useGenerationRun({ scene, path = null, open = true, identity, onApply, onComplete }) {
+export default function useGenerationRun({ scene, path = null, open = true, identity, imageRevision = '', onApply, onComplete }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
   const [errorCode, setErrorCode] = useState('')
@@ -57,6 +58,7 @@ export default function useGenerationRun({ scene, path = null, open = true, iden
 
   const reset = () => { cancel(); keepTicket(null); setProgress(null); setError(''); setErrorCode(''); setClarification(null) }
   const run = async (input, { apiKey = '', resume = false } = {}) => {
+    if (STATIC_DEMO) return
     if (activeRef.current) return
     const previousTicket = ticketRef.current
     if (resume && !resumeIsCurrent(previousTicket, { identity, scene: sceneRef.current, path })) return
@@ -116,6 +118,7 @@ export default function useGenerationRun({ scene, path = null, open = true, iden
         if (asking) setClarification({ message: failure.message || String(failure),
           suggestions: Array.isArray(failure.suggestions) ? failure.suggestions : [],
           revision: active.revision, path, prompt: actualInput.prompt,
+          imageRevision,
           conversation: nextConversation(actualInput.conversation, actualInput.prompt, failure.message),
         })
         acceptResume(failure.resume)
@@ -128,6 +131,6 @@ export default function useGenerationRun({ scene, path = null, open = true, iden
     }
   }
   return { busy, error, errorCode, setError, progress, run, cancel, reset, clarification,
-    clarificationIsCurrent: !!clarification && !busy && open && clarification.path === path && clarification.revision === JSON.stringify(scene),
+    clarificationIsCurrent: !!clarification && !busy && open && clarification.path === path && clarification.revision === JSON.stringify(scene) && clarification.imageRevision === imageRevision,
     canResume: !busy && resumeIsCurrent(ticket, { identity, scene, path }) }
 }

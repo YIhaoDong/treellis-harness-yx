@@ -9,10 +9,12 @@ export default function RightPanelChrome({
   canUndo = false,
   canRedo = false,
   children,
+  onExpand,
+  ...panelProps
 }) {
   return (
-    <aside className="split-right-panel">
-      <div className="panel-bar">
+    <aside className="split-right-panel" {...panelProps}>
+      <div className="panel-bar panel-history-bar">
         <div className="btn-row">
           <button
             onClick={onUndo}
@@ -32,6 +34,8 @@ export default function RightPanelChrome({
 
       <div className="panel-bar panel-bar--row">
         <div className="panel-title">{title}</div>
+        {onExpand && <button type="button" className="workspace-parameters-expand" onClick={onExpand}
+          aria-label="Expand parameters panel" title="Expand parameters panel">↗</button>}
         <button
           className="btn btn--sm btn--ghost"
           onClick={onClose}

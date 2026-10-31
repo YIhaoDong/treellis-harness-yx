@@ -13,7 +13,7 @@ test('strict schema exposes recursive renderer types and mode-specific actions',
   assert.deepEqual(schema.properties.action.enum, ['replace', 'clarify']);
   assert.equal(schema.$defs.node.anyOf.length, 7);
   for (const [name, definition] of Object.entries(schema.$defs)) {
-    if (name === 'node') continue;
+    if (name === 'node' || name === 'vector') continue;
     assert.equal(definition.additionalProperties, false);
     assert.deepEqual(definition.required, Object.keys(definition.properties));
   }

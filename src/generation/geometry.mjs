@@ -53,13 +53,15 @@ function serializeBox(box) {
   return { min, max, size: box.getSize(new THREE.Vector3()).toArray(), center: box.getCenter(new THREE.Vector3()).toArray() }
 }
 
-export function inspectGeometry(root, { maxInstances = 2048, maxVertices = 500000 } = {}) {
+export function inspectGeometry(root, { maxInstances = 2048, maxVertices = null } = {}) {
   const errors = [], warnings = [], nodes = {}
   const stats = { nodeCount: 0, primitiveCount: 0, meshCount: 0, vertices: 0, generatedVertices: 0, csgOperations: 0, repeatInstances: 0 }
   const resources = new Set(), nodeBoxes = new Map(), active = new WeakSet()
   const material = new THREE.MeshBasicMaterial()
   const primitiveLimit = Number.isFinite(maxInstances) ? Math.max(1, Math.floor(maxInstances)) : 2048
-  const vertexLimit = Number.isFinite(maxVertices) ? Math.max(1, Math.floor(maxVertices)) : 500000
+  // Count geometry for diagnostics. A cumulative count includes every temporary
+  // CSG mesh and must not act as a default complexity gate for the final scene.
+  const vertexLimit = Number.isFinite(maxVertices) ? Math.max(1, Math.floor(maxVertices)) : Infinity
   const seenWarnings = new Set()
   const warn = text => { if (!seenWarnings.has(text)) { seenWarnings.add(text); warnings.push(text) } }
   const fail = message => { throw new Error(message) }
@@ -133,6 +135,7 @@ export function inspectGeometry(root, { maxInstances = 2048, maxVertices = 50000
     const height = Math.max(2, Number(primitive.heightSegments ?? 12))
     // Estimate before allocation: procedural segment counts are user/model input.
     const estimatedVertices = type === 'cube' ? 24 : type === 'torus' ? (Math.floor(radial) + 1) * (Math.floor(tubular) + 1) : type === 'sphere' ? (Math.floor(width) + 1) * (Math.floor(height) + 1) : (Math.floor(radial) + 1) * 6
+    if (!Number.isSafeInteger(estimatedVertices) || estimatedVertices * 3 > 0xffffffff) fail(`${path}: primitive tessellation cannot be represented by supported geometry buffers.`)
     if (stats.generatedVertices + estimatedVertices > vertexLimit) fail(`${path}: primitive tessellation exceeds vertex budget (${vertexLimit}).`)
     let geometry
     if (type === 'cube') geometry = new THREE.BoxGeometry(primitive.w ?? 1, primitive.h ?? 1, primitive.d ?? 1)

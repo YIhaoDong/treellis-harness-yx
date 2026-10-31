@@ -11,6 +11,7 @@ import {
 
 export default function ParameterPanel(props) {
   const {
+    compact = false,
     panelPath,
     selectedNode,
     panelSpecs,
@@ -161,7 +162,7 @@ export default function ParameterPanel(props) {
 
       {/* Name */}
       {selectedNode && (
-        <div className="param-card">
+        <div className="param-card param-card--identity">
           <label className="label-strong">Name</label>
           <input
             type="text"
@@ -186,7 +187,7 @@ export default function ParameterPanel(props) {
 
       {/* Color */}
       {selectedNode && (
-        <div className="param-card">
+        <div className="param-card param-card--color">
           <label className="label-strong">
             Color {colorState.mode === 'primitive' ? '(this primitive)' :
               colorState.mode === 'solid' ? '(apply to all descendants)' :
@@ -286,6 +287,8 @@ export default function ParameterPanel(props) {
         const isScale = spec.path[0] === 'transform' && spec.path[1] === 's'
         const isPrimNum = spec.path[0] === 'primitive'
         const isRepeat = spec.path[0] === 'repeat'
+        const canTranslateRange = isTranslate
+        const canMax = isScale || isPrimNum
 
         const axisIndex = (isTranslate || isScale) ? spec.path[2] : null
         const axisLabel = (isTranslate || isScale) ? 'xyz'[axisIndex] : ''
@@ -398,11 +401,12 @@ export default function ParameterPanel(props) {
         }
 
         return (
-          <div key={i} className="param-card">
+          <div key={i} className="param-card param-card--numeric">
             <div className="param-head">
               <label className="label-strong">{spec.label}</label>
               <input
                 type="number"
+                aria-label={`${spec.label} value`}
                 value={spec.value}
                 onFocus={beginEditAndHighlight}
                 onBlur={() => endEdit?.('param-change')}
@@ -416,6 +420,7 @@ export default function ParameterPanel(props) {
 
             <input
               type="range"
+              aria-label={spec.label}
               min={spec.min}
               max={spec.max}
               step={spec.step}
@@ -427,7 +432,10 @@ export default function ParameterPanel(props) {
               className="param-slider"
             />
 
-            {isTranslate && (
+            {(canTranslateRange || canMax || canRepeatRange) && (
+              <details className="param-range-details" open={!compact || undefined}>
+                <summary className="param-range-summary">Range</summary>
+            {canTranslateRange && (
               <div className="ttcs-row ttcs-row-translate">
                 <span className="ttcs-label">Min</span>
                 <input
@@ -469,7 +477,7 @@ export default function ParameterPanel(props) {
               </div>
             )}
 
-            {(isScale || isPrimNum) && (
+            {canMax && (
               <div className="ttcs-row ttcs-row-maxonly">
                 <span className="ttcs-label">
                   Max{isScale ? ` [${axisLabel}]` : ''}
@@ -556,6 +564,8 @@ export default function ParameterPanel(props) {
                   Reset
                 </button>
               </div>
+            )}
+              </details>
             )}
           </div>
         )

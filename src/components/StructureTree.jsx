@@ -4,8 +4,11 @@
 
 import React, { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import Tree from 'react-d3-tree'
+import { tree as layoutTree } from 'd3-hierarchy'
 import { getRepeatKey } from '../utils/repeat'
 import InstanceLibrary from './InstanceLibrary'
+import { STATIC_DEMO } from '../staticDemo/mode.mjs'
+import { requestStaticText } from '../staticDemo/dialogs.mjs'
 import { animateTreeViewport, centerTreeViewport, expandTreeAncestors, sameTreeViewport, visibleTreeData } from '../utils/treeFocus.mjs'
 
 const capitalize = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s)
@@ -103,6 +106,26 @@ function getScaleForDepth(depth) {
   }
 }
 const MAX_SCALE = getScaleForDepth(0)
+
+function nodeLayoutWidth(node) {
+  const key = node.data._repeatKey || node.data._primKey?.toLowerCase()
+  return NODE_W * getScaleForDepth(node.depth) * (KIND_EXTRA_SCALE[key] || 1)
+}
+
+// Keep react-d3-tree's interaction and link handling, but fit horizontal slots
+// to each node's footprint instead of reserving a full-size slot at every depth.
+class CompactTree extends Tree {
+  generateTree() {
+    const layout = super.generateTree()
+    if (!layout.nodes.length) return layout
+    const verticalPositions = new Map(layout.nodes.map(node => [node, node.y]))
+    layoutTree().nodeSize([1, 1]).separation((a, b) =>
+      (nodeLayoutWidth(a) + nodeLayoutWidth(b)) / 2 + (a.parent === b.parent ? 16 : 28)
+    )(layout.nodes[0])
+    layout.nodes.forEach(node => { node.y = verticalPositions.get(node) })
+    return layout
+  }
+}
 
 function getNodeAtPath(root, path) {
   const parts = String(path).split('.').slice(1).map((s) => parseInt(s, 10))
@@ -242,12 +265,15 @@ function LegendIcon({ shape = 'hex', fill = '#f1f5f9', stroke = '#7b8794' }) {
 function LegendPanel() {
   const STORAGE_KEY = 'ttcs.legend.open'
   const [open, setOpen] = useState(() => {
+    if (STATIC_DEMO) return true
     try { return localStorage.getItem(STORAGE_KEY) !== '0' } catch { return true }
   })
   const toggle = () => {
     setOpen(v => {
       const nv = !v
-      try { localStorage.setItem(STORAGE_KEY, nv ? '1' : '0') } catch { }
+      if (!STATIC_DEMO) {
+        try { localStorage.setItem(STORAGE_KEY, nv ? '1' : '0') } catch { }
+      }
       return nv
     })
   }
@@ -321,20 +347,27 @@ export default function StructureTree({
   onInstantiate, // (path, name) => void
 
   activePath = null,
+  selectedPaths = [],
+  pathRemap = null,
   focusPath = null,
   focusRequestId = 0,
   onFocusDone,
+  layoutScale = 1,
 }) {
   const containerRef = useRef(null)
   const treeRef = useRef(null)
   const [dim, setDim] = useState({ w: 0, h: 0 })
   const dimensionsRef = useRef({ w: 0, h: 0 })
-  const [treeViewport, setTreeViewport] = useState({ translate: { x: 0, y: 96 }, zoom: 1 })
+  const [treeViewport, setTreeViewport] = useState(() => ({ translate: { x: 0, y: layoutScale < 1 ? Math.max(45, 130 * layoutScale + 8) : 96 }, zoom: layoutScale }))
   const treeViewportRef = useRef(treeViewport)
+  const layoutScaleRef = useRef(layoutScale)
   const [sceneObj, setSceneObj] = useState(null)
   const [rawTree, setRawTree] = useState(null)
   const [error, setError] = useState(null)
   const [collapsedPaths, setCollapsedPaths] = useState(() => new Set())
+  useEffect(() => {
+    if (pathRemap) setCollapsedPaths(previous => new Set([...previous].map(path => pathRemap[path]).filter(Boolean)))
+  }, [pathRemap])
 
   const nodeRefs = useRef(new Map())
   const focusFlashRef = useRef(null)
@@ -382,12 +415,21 @@ export default function StructureTree({
       const box = containerRef.current
       if (!box) return
       const next = { w: box.clientWidth, h: box.clientHeight }
+      // Switching to Layers hides this mounted view. Preserve its viewport and
+      // pending focus instead of treating display:none as a real panel resize.
+      if (!next.w || !next.h) return
       const previous = dimensionsRef.current
-      if (previous.w === next.w && previous.h === next.h) return
+      const scaleChanged = layoutScaleRef.current !== layoutScale
+      if (previous.w === next.w && previous.h === next.h && !scaleChanged) return
       cancelTreeFocusRef.current?.()
       dimensionsRef.current = next
       setDim(next)
-      if (previous.w !== next.w) {
+      if (scaleChanged) {
+        const current = treeViewportRef.current
+        updateTreeViewport({ zoom: current.zoom * layoutScale / layoutScaleRef.current,
+          translate: { x: next.w / 2, y: layoutScale < 1 ? Math.max(45, 130 * layoutScale + 8) : 96 } })
+        layoutScaleRef.current = layoutScale
+      } else if (previous.w !== next.w) {
         const current = treeViewportRef.current
         updateTreeViewport({ ...current, translate: {
           ...current.translate,
@@ -400,7 +442,7 @@ export default function StructureTree({
     if (containerRef.current) observer?.observe(containerRef.current)
     window.addEventListener('resize', onResize)
     return () => { observer?.disconnect(); window.removeEventListener('resize', onResize) }
-  }, [updateTreeViewport])
+  }, [updateTreeViewport, layoutScale])
 
   useEffect(() => {
     let active = true
@@ -441,7 +483,7 @@ export default function StructureTree({
       const data = toTree(scene, '0')
       setSceneObj(scene)
       setRawTree(data)
-      setCollapsedPaths(new Set())
+      setCollapsedPaths(previous => new Set([...previous].filter(path => getNodeAtPath(data, path))))
     } catch (e) {
       console.error('Failed to apply external scene:', e)
     }
@@ -462,7 +504,7 @@ export default function StructureTree({
     })
   }, [])
 
-  const requestOpenPanel = useCallback((path, fallbackName, isPrimitive) => {
+  const requestOpenPanel = useCallback((path, fallbackName, isPrimitive, shiftKey = false) => {
     if (!sceneObj) return
     const node = getNodeAtPath(sceneObj, path)
     if (!node) return
@@ -472,7 +514,7 @@ export default function StructureTree({
       fallbackName ||
       (repKey ? 'Repeat' : (isPrimitive ? 'Primitive' : 'Operation'))
 
-    if (typeof onOpenPanel === 'function') onOpenPanel({ path, title })
+    if (typeof onOpenPanel === 'function') onOpenPanel({ path, title, shiftKey })
   }, [sceneObj, onOpenPanel])
 
   const renderNode = useCallback(({ nodeDatum }) => {
@@ -494,12 +536,12 @@ export default function StructureTree({
     const fill = fillFor(opKey, primKey, repeatKey)
     const kind = shapeKindFor(opKey, primKey, repeatKey)
     const iconSrc = iconSrcFor(opKey, primKey, repeatKey)
-    const isActive = activePath && String(activePath) === String(path)
+    const isActive = selectedPaths.includes(String(path)) || activePath && String(activePath) === String(path)
 
     const onCardClick = (e) => {
       e.stopPropagation()
       if (e.altKey) toggleCollapse(path)
-      else requestOpenPanel(path, name, !!primKey)
+      else requestOpenPanel(path, name, !!primKey, e.shiftKey)
     }
 
     const onEnter = () => { setHoveredPath(path); dispatchHover(path) }
@@ -510,7 +552,7 @@ export default function StructureTree({
       if (!isActivate) return
       e.preventDefault()
       if (e.altKey) toggleCollapse(path)
-      else requestOpenPanel(path, name, !!primKey)
+      else requestOpenPanel(path, name, !!primKey, e.shiftKey)
     }
 
     // actions
@@ -531,11 +573,11 @@ export default function StructureTree({
     }
 
     // ✅ instantiate (copy to library)
-    const onInstantiateClick = (e) => {
+    const onInstantiateClick = async (e) => {
       e.stopPropagation()
       if (typeof onInstantiate !== 'function') return
       const defaultName = String(name || 'Instance')
-      const nm = window.prompt('Instance name / 实例名称', defaultName)
+      const nm = STATIC_DEMO ? await requestStaticText('Instance name / 实例名称', defaultName) : window.prompt('Instance name / 实例名称', defaultName)
       if (nm == null) return
       const finalName = String(nm).trim() || defaultName
       onInstantiate(path, finalName)
@@ -638,6 +680,7 @@ export default function StructureTree({
         className={nodeClass}
         data-depth={depth}
         data-path={path}
+        data-selected={!!isActive}
         ref={(el) => {
           const key = String(path)
           if (el) nodeRefs.current.set(key, el)
@@ -664,6 +707,7 @@ export default function StructureTree({
               onClick={onCardClick}
               role="button"
               aria-label={`Open ${name} parameters`}
+              aria-pressed={!!isActive}
               tabIndex={0}
               onKeyDown={onKeyDown}
               style={{
@@ -789,6 +833,7 @@ export default function StructureTree({
     )
   }, [
     activePath,
+    selectedPaths,
     dispatchHover,
     onAddChild,
     onDeletePath,
@@ -920,7 +965,7 @@ export default function StructureTree({
       </div>
 
       {data && dim.w > 0 && (
-        <Tree
+        <CompactTree
           ref={treeRef}
           data={treeData}
           orientation="vertical"

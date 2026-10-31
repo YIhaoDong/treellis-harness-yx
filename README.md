@@ -2,12 +2,7 @@
 
 Treellis is a local editable 3D workspace with a training-free generation harness: prompt assembly, structured AML output, scoped edits, geometric validation, and bounded repair.
 
-This private repository preserves two separately versioned application snapshots:
-
-- `baseline-v1`: the application frozen before the 20-case, five-effort framework evaluation.
-- `optimized-v2`: the separately stored optimization version, published after evaluation and verification.
-
-The baseline's functional source, prompt templates, application resources, and dependency lockfile match the frozen local snapshot. Publication-only changes protect credentials and private data and clarify setup. `SNAPSHOT-PROVENANCE.json` records those differences and the local source manifest hash.
+This repository contains the current Treellis application, based on the original `baseline-v1` snapshot and subsequent editor and generation updates. `SNAPSHOT-PROVENANCE.json` records the initial snapshot's publication changes; the Git history records later changes.
 
 ## Run locally
 
@@ -21,6 +16,14 @@ npm run server
 In another terminal, run `npm run dev` and open the URL shown by Vite.
 
 Each user supplies their own OpenAI API key through the application's Key control. A local `OPENAI_API_KEY` environment variable is also supported. This repository contains no API key or `.local` development configuration.
+
+## Responsive editor
+
+On phones and tablets up to 1100 CSS pixels wide, the 3D view stays above one full-width editor. The bottom navigation switches between Structure, Parameters and Prompt; Model uses the full workspace for the 3D view. Parameter ranges and extra structure actions collapse to leave more editing space. Larger screens keep the three-column workspace.
+
+Libraries opens the nine selected creation models directly in the editor. Parameter, color and name edits retain the current selection and highlight through Undo and Redo.
+
+An optional offline demo can be built with `npm run build:static`. Open the generated `static-demo/treellis-static.html`; generation and server saving are disabled in this demo. Generated demos and verification artifacts are excluded from Git.
 
 ## Deploy
 

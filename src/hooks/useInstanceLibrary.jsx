@@ -6,6 +6,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { deepClone, getNodeAtPath } from '../utils/tree'
 import { newUid } from '../utils/uid'
+import { STATIC_DEMO } from '../staticDemo/mode.mjs'
 
 const LS_KEY = 'ttcs.instanceLibrary.v1'
 
@@ -114,6 +115,7 @@ export default function useInstanceLibrary(limits = DEFAULT_LIMITS) {
 
   // Load once
   useEffect(() => {
+    if (STATIC_DEMO) return
     try {
       const raw = localStorage.getItem(LS_KEY)
       if (!raw) return
@@ -127,6 +129,7 @@ export default function useInstanceLibrary(limits = DEFAULT_LIMITS) {
   }, [])
 
   const persist = useCallback((nextItems) => {
+    if (STATIC_DEMO) return enforceLimits(nextItems, limits)
     try {
       const bounded = enforceLimits(nextItems, limits)
       const payload = pack(bounded)
@@ -196,6 +199,7 @@ export default function useInstanceLibrary(limits = DEFAULT_LIMITS) {
 
   const clear = useCallback(() => {
     setItems([])
+    if (STATIC_DEMO) return
     try { localStorage.removeItem(LS_KEY) } catch {}
   }, [])
 

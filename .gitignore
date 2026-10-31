@@ -16,3 +16,7 @@ dist/
 /UserStudyTypicalCasesAML/
 /ShowCase/
 /jsonStore/
+
+# Generated offline demos and local verification artifacts
+/static-demo/
+/output/

@@ -1,21 +1,19 @@
-// src/hooks/useSceneSelection.jsx
+// Shared persistent selection for the structure tree, layers and 3D viewport.
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { getNodeAtPath } from '../utils/tree'
 
-/**
- * 统一管理场景选中/高亮/树聚焦，以及 3D <-> 树 的交互桥接。
- * 增强：
- * - selectedPath（持久选中）
- * - deselectAll()：空白点击清空选中/高亮/面板
- * - handleSceneClickPath 支持 null（空白点击）
- */
+const isPath = (path) => typeof path === 'string' && /^0(?:\.(?:0|[1-9]\d*))*$/.test(path)
+const samePaths = (a, b) => a.length === b.length && a.every((path, i) => path === b[i])
+
 export default function useSceneSelection({ liveScene }) {
-  // 右侧面板
   const [panelPath, setPanelPathValue] = useState(null)
   const [panelTitle, setPanelTitle] = useState('')
-
-  // 选中/高亮/树聚焦
-  const [selectedPath, setSelectedPath] = useState(null)
+  const [selectedPaths, setSelectedPaths] = useState([])
+  const selectionRef = useRef([])
+  const [selectedPath, setPrimaryPath] = useState(null)
+  const primaryRef = useRef(null)
+  const [multiSelect, setMultiSelectValue] = useState(false)
+  const multiSelectRef = useRef(false)
   const [hoverPath, setHoverPath] = useState(null)
   const [treeFocusPath, setTreeFocusPath] = useState(null)
   const [treeFocusRequestId, setTreeFocusRequestId] = useState(0)
@@ -34,76 +32,108 @@ export default function useSceneSelection({ liveScene }) {
     setTreeFocusPath(null)
   }, [])
 
-  // Existing add/paste/parameter operations explicitly set these paths.
-  // Hover uses its own handler so it can never replace a committed selection.
-  const setPanelPath = useCallback((path) => {
-    setPanelPathValue(path)
-    if (path) { setSelectedPath(path); setHoverPath(path) }
-  }, [])
-  const setHighlightPath = useCallback((path) => {
-    setSelectedPath(path ?? null)
-    setHoverPath(path ?? null)
-  }, [])
-
-  // 树节点点开右侧面板
-  const handleOpenPanel = useCallback(({ path, title }) => {
-    setPanelPath(path)
-    setPanelTitle(title || 'Parameters')
-    setSelectedPath(path)
-    setHighlightPath(path)
-    requestTreeFocus(path)
-  }, [setPanelPath, setHighlightPath, requestTreeFocus])
-
-  // 根据 liveScene/面板路径，同步标题
-  useEffect(() => {
-    if (!panelPath || !liveScene) return
-    const n = getNodeAtPath(liveScene, panelPath)
-    if (n) setPanelTitle(n.name || 'Parameters')
-  }, [liveScene, panelPath])
-
-  // Hover previews are transient; selected parts keep priority during navigation.
-  const handleSceneHoverPath = useCallback((p) => {
-    setHoverPath(p ?? null)
-  }, [])
-
-  const deselectAll = useCallback(() => {
-    setSelectedPath(null)
+  const validPath = useCallback((path) => isPath(path) && (!liveScene || !!getNodeAtPath(liveScene, path)), [liveScene])
+  const commitSelection = useCallback((paths, focusPath, { focus = true, validate = true, scene: nextScene = liveScene } = {}) => {
+    const valid = path => isPath(path) && (!nextScene || !!getNodeAtPath(nextScene, path))
+    const unique = [...new Set(paths)].filter(path => validate ? valid(path) : isPath(path))
+    const primary = unique.includes(focusPath) ? focusPath : unique.at(-1) ?? null
+    if (!samePaths(selectionRef.current, unique)) {
+      selectionRef.current = unique
+      setSelectedPaths(unique)
+    }
+    primaryRef.current = primary
+    setPrimaryPath(primary)
     setHoverPath(null)
-    setPanelPathValue(null)
-    setPanelTitle('')
-    requestTreeFocus(null)
-  }, [requestTreeFocus])
+    setPanelPathValue(primary)
+    setPanelTitle(primary ? getNodeAtPath(nextScene, primary)?.name || 'Parameters' : '')
+    if (focus) requestTreeFocus(primary)
+  }, [liveScene, requestTreeFocus])
 
-  // ✅ 空白点击支持：p 可能是 null
-  const handleSceneClickPath = useCallback((p) => {
-    if (!p) { deselectAll(); return }
-    const n = liveScene ? getNodeAtPath(liveScene, p) : null
-    if (liveScene && !n) return
-    requestTreeFocus(p)
-    setSelectedPath(p)
-    setHighlightPath(p)
-    if (n) { setPanelPath(p); setPanelTitle(n.name || 'Parameters') }
-  }, [liveScene, deselectAll, requestTreeFocus, setPanelPath, setHighlightPath])
-
-  // 仅关闭面板（保留选中/高亮）
-  const clearPanel = useCallback(() => {
-    setPanelPathValue(null)
-    setPanelTitle('')
+  // Programmatic add/paste/group actions deliberately replace the selection set.
+  // A next scene permits grouping + selection in the same React event batch.
+  const selectPaths = useCallback((paths, { focusPath, scene: nextScene = liveScene } = {}) => {
+    commitSelection(Array.isArray(paths) ? paths : [], focusPath, { scene: nextScene })
+  }, [commitSelection, liveScene])
+  const setSelectedPath = useCallback((update) => {
+    const path = typeof update === 'function' ? update(primaryRef.current) : update
+    commitSelection(path == null ? [] : [path], path, { focus: false, validate: false })
+  }, [commitSelection])
+  const setPanelPath = useCallback((path) => {
+    if (path == null) { setPanelPathValue(null); return }
+    commitSelection([path], path, { focus: false, validate: false })
+  }, [commitSelection])
+  const setHighlightPath = useCallback((path) => {
+    commitSelection(path == null ? [] : [path], path, { focus: false, validate: false })
+  }, [commitSelection])
+  const setMultiSelect = useCallback((update) => {
+    const next = !!(typeof update === 'function' ? update(multiSelectRef.current) : update)
+    multiSelectRef.current = next
+    setMultiSelectValue(next)
   }, [])
+
+  const deselectAll = useCallback(() => commitSelection([], null), [commitSelection])
+  const selectClickedPath = useCallback((path, { shiftKey = false, additive = false } = {}) => {
+    if (path == null) {
+      // Shift-clicking empty viewport space should not discard a multi-selection.
+      if (!shiftKey && !additive && !multiSelectRef.current) deselectAll()
+      return
+    }
+    if (!validPath(path)) return
+    let next = [path]
+    if (shiftKey || additive || multiSelectRef.current) {
+      const current = selectionRef.current
+      next = current.includes(path) ? current.filter(item => item !== path) : [...current, path]
+    }
+    commitSelection(next, next.includes(path) ? path : next.at(-1))
+  }, [validPath, commitSelection, deselectAll])
+
+  const handleOpenPanel = useCallback(({ path, title, shiftKey, additive }) => {
+    selectClickedPath(path, { shiftKey, additive })
+    if (primaryRef.current === path && title) setPanelTitle(title)
+  }, [selectClickedPath])
+  const handleSceneClickPath = useCallback((path, options = {}) => {
+    selectClickedPath(path, options)
+  }, [selectClickedPath])
+  const handleSceneHoverPath = useCallback((path) => { setHoverPath(path ?? null) }, [])
+  const clearPanel = useCallback(() => { setPanelPathValue(null); setPanelTitle('') }, [])
+
+  // Accept an object or Map; exact/longest ancestor mappings preserve descendants.
+  const remapSelection = useCallback((pathMap, { scene: nextScene = liveScene } = {}) => {
+    const entries = (pathMap instanceof Map ? [...pathMap] : Object.entries(pathMap || {}))
+      .sort(([a], [b]) => b.length - a.length)
+    const remap = (path) => {
+      if (path == null) return null
+      const entry = entries.find(([from]) => path === from || path.startsWith(`${from}.`))
+      if (!entry) return path
+      return entry[1] == null ? null : `${entry[1]}${path.slice(entry[0].length)}`
+    }
+    commitSelection(selectionRef.current.map(remap).filter(Boolean), remap(primaryRef.current), { validate: false, scene: nextScene })
+  }, [commitSelection, liveScene])
+
+  useEffect(() => {
+    if (!liveScene) return
+    const current = selectionRef.current
+    const remaining = current.filter(validPath)
+    if (!samePaths(current, remaining)) {
+      commitSelection(remaining, primaryRef.current, { focus: false })
+      return
+    }
+    if (hoverPath && !validPath(hoverPath)) setHoverPath(null)
+    if (treeFocusPath && !validPath(treeFocusPath)) requestTreeFocus(null)
+    if (panelPath) {
+      const node = validPath(panelPath) ? getNodeAtPath(liveScene, panelPath) : null
+      if (node) setPanelTitle(node.name || 'Parameters')
+      else { setPanelPathValue(null); setPanelTitle('') }
+    }
+  }, [liveScene, validPath, commitSelection, panelPath, hoverPath, treeFocusPath, requestTreeFocus])
 
   return {
-    // 状态
-    panelPath, setPanelPath,
-    panelTitle, setPanelTitle,
+    panelPath, setPanelPath, panelTitle, setPanelTitle,
     highlightPath: panelPath ?? selectedPath ?? hoverPath, setHighlightPath,
-    selectedPath, setSelectedPath,
+    highlightPaths: selectedPaths.length ? selectedPaths : hoverPath ? [hoverPath] : [],
+    selectedPath, setSelectedPath, selectedPaths, selectPaths, remapSelection,
+    multiSelect, setMultiSelect,
     treeFocusPath, setTreeFocusPath: requestTreeFocus, treeFocusRequestId, acknowledgeTreeFocus,
-
-    // 事件/操作
-    handleOpenPanel,
-    handleSceneHoverPath,
-    handleSceneClickPath,
-    clearPanel,
-    deselectAll,        // ✅ 暴露
+    handleOpenPanel, handleSceneHoverPath, handleSceneClickPath, clearPanel, deselectAll,
   }
 }

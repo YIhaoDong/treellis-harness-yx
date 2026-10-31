@@ -6,6 +6,7 @@ import { runGeometryTask } from './geometryRunner.mjs'
 import { callModel } from './provider.mjs'
 import { getGenerationLimits } from './limits.mjs'
 import { validateConversation } from './followups.mjs'
+import { normalizeImages, imageUserContent, IMAGE_REFERENCE_RULE } from './imageInputs.mjs'
 
 export class GenerationError extends Error {
   constructor(message, code = 'GENERATION_ERROR', details = {}) {
@@ -48,11 +49,12 @@ function chooseExamples(text, prompt) {
   return data.examples.map((example, index) => ({ example, index, score: (example.tags || []).reduce((n, tag) => n + (query.includes(tag.toLowerCase()) ? 1 : 0), 0) }))
     .sort((a, b) => b.score - a.score || a.index - b.index).slice(0, 2).map(({ example }) => ({ description: example.description, aml: example.aml }))
 }
-function messagesFor({ mode, prompt, scene, node, path, context, assets, conversation }) {
+function messagesFor({ mode, prompt, scene, node, path, context, assets, conversation, images }) {
   const system = [assets[mode === 'node' ? 'role_node' : 'role_global'],
     assets[mode === 'create' ? 'task_global_create' : mode === 'node' ? 'task_node_edit' : 'task_global_edit'],
     assets.runtime_rules, assets.jsonFormat, assets.constraints_global, assets.parameterRules, assets.colorRules]
   if (mode === 'node') system.push(assets.constraints_node, assets.nodeAdjustRules)
+  if (images.length) system.push(IMAGE_REFERENCE_RULE)
   const user = [`USER_INSTRUCTION:\n${prompt}`]
   if (mode === 'edit') user.push(`CURRENT_SCENE:\n${JSON.stringify(scene)}`)
   if (mode === 'node') user.push(`SELECTED_PATH: ${path}`, `CURRENT_NODE:\n${JSON.stringify(node)}`, `SPATIAL_CONTEXT (read-only; paths refer to the full scene):\n${JSON.stringify(context)}`)
@@ -61,7 +63,7 @@ function messagesFor({ mode, prompt, scene, node, path, context, assets, convers
     return { path: targetPath, name: getNode(scene, targetPath)?.name || 'Node' }
   }))}`)
   user.push(`AML_EXAMPLES (shape syntax only; use the response envelope required by the schema):\n${JSON.stringify(chooseExamples(assets.jsonCase, prompt))}`)
-  return [{ role: 'system', content: system.join('\n\n') }, ...conversation, { role: 'user', content: user.join('\n\n') }]
+  return [{ role: 'system', content: system.join('\n\n') }, ...conversation, { role: 'user', content: imageUserContent(user.join('\n\n'), images) }]
 }
 function responseText(data) {
   if (data.status === 'incomplete') throw new GenerationError(data.incomplete_details?.reason === 'max_output_tokens'
@@ -87,8 +89,9 @@ export async function runGeneration(input, dependencies = {}) {
   if (!apiKey?.trim()) throw new GenerationError('Enter an OpenAI API key in Key settings.', 'MISSING_KEY')
   if (mode !== 'create' && (!scene || typeof scene !== 'object')) throw new GenerationError('Load a scene before editing.', 'INVALID_INPUT')
   if (JSON.stringify(scene).length > 1500000) throw new GenerationError('This scene is too large for one edit. Select a smaller subtree.', 'INVALID_INPUT')
-  let conversation
+  let conversation, images
   try { conversation = validateConversation(input?.conversation) } catch (error) { throw new GenerationError(error.message, 'INVALID_INPUT') }
+  try { images = normalizeImages(input?.images) } catch (error) { throw new GenerationError(error.message, 'INVALID_IMAGES', { status: 400 }) }
   aborted(signal)
   const node = mode === 'node' ? getNode(scene, path) : scene
   if (mode === 'node' && !node) throw new GenerationError('The selected node no longer exists.', 'STALE_SCENE')
@@ -101,7 +104,7 @@ export async function runGeneration(input, dependencies = {}) {
   const inspect = dependencies.inspectGeometry || ((root) => runGeometryTask({ type: 'inspect', root }, signal))
   const makeContext = dependencies.buildEditContext || ((root, selectedPath) => runGeometryTask({ type: 'context', scene: root, path: selectedPath }, signal))
   const context = mode === 'node' ? await makeContext(scene, path) : null
-  const messages = messagesFor({ mode, prompt, scene, node, path, context, assets, conversation })
+  const messages = messagesFor({ mode, prompt, scene, node, path, context, assets, conversation, images })
   const templateHash = digest(Object.fromEntries(ASSET_NAMES.map((name) => [name, assets[name]])))
   const allowStructure = /\b(add|remove|delete|insert|replace|rebuild|redesign|group|ungroup|create|build|generate|convert|duplicate|mirror|copy|clone|split|attach|detach|append|refine|detail|detailed|elaborate)\b|\b(?:turn|make)\b[\s\S]+\binto\b|添加|新增|增加|移除|删除|删掉|删去|去掉|去除|拿掉|移走|替换|重做|重建|重新设计|组合|分组|拆分|新建|生成|变成|改成|换成|加上|加个|加一个|多加|再加|添上|复制|镜像|细化|精细|细节/i.test(prompt)
   const totalUsage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 }, attempts = []
@@ -110,7 +113,7 @@ export async function runGeneration(input, dependencies = {}) {
   let budget = getGenerationLimits(effort).maxOutputTokens
   for (let attempt = 0; attempt <= repairs; attempt++) {
     progress(attempt ? 'repairing' : 'generating', attempt ? `Fixing the model (${attempt}/${repairs})…` : 'Generating the model…', { attempt: attempt + 1 })
-    const data = await callModel({ model: MODEL_ID, store: false, reasoning: { effort }, text: { format: createResponseFormat(mode) }, input: messages, max_output_tokens: budget }, {
+    const data = await callModel({ model: MODEL_ID, store: false, reasoning: { effort }, text: { format: createResponseFormat(mode, { allowStructure }) }, input: messages, max_output_tokens: budget }, {
       apiKey: apiKey.trim(), fetchImpl, signal,
       onProgress: ({ stage, message, ...extra }) => progress(stage, message, { attempt: attempt + 1, ...extra }),
     })

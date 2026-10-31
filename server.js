@@ -20,7 +20,14 @@ app.use(cors({
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Generation-Id', 'X-Generation-Token'],
 }));
-app.use(express.json({ limit: '10mb' }));        // 接大一点的 JSON
+app.use(express.json({ limit: '20mb' }));        // Nine processed image attachments plus scene context.
+app.use((error, _req, res, next) => {
+  if (error.type === 'entity.too.large') return res.status(413).json({
+    code: 'PAYLOAD_TOO_LARGE', error: 'This request is too large. Remove a reference image or use a smaller scene and try again.',
+  });
+  if (error.type === 'entity.parse.failed') return res.status(400).json({ code: 'INVALID_JSON', error: 'The request contains invalid JSON. Please try again.' });
+  next(error);
+});
 
 // 简易日志（定位问题很好用）
 app.use((req, _res, next) => {
@@ -87,9 +94,16 @@ app.get('/api/generation/config', async (req, res) => {
   }
 });
 let activeGenerations = 0;
-const generationJobs = createGenerationJobs({ run: async (input, options) => {
+async function runGenerationInput(input, options) {
+  if (input?.mode === 'organize') {
+    const { runSmartGrouping } = await import('./src/generation/grouping.mjs');
+    return runSmartGrouping(input, options);
+  }
   const [{ runGenerationWorkflow }] = await generationModules;
   return runGenerationWorkflow(input, { ...options, loadAssets: loadPromptAssets });
+}
+const generationJobs = createGenerationJobs({ run: async (input, options) => {
+  return runGenerationInput(input, options);
 } });
 
 function streamJob(req, res, job, token, after = 0) {
@@ -125,6 +139,12 @@ app.post('/api/generate', async (req, res) => {
   const ownKey = /^Bearer\s+(.+)$/i.exec(req.headers.authorization || '')?.[1]?.trim();
   const apiKey = ownKey || (trustedLocalRequest(req) ? localGenerationKey() : '');
   if (!apiKey) return res.status(401).json({ error: 'Enter an OpenAI API key in Key settings.' });
+  try {
+    const { normalizeImages } = await import('./src/generation/imageInputs.mjs');
+    normalizeImages(req.body?.images);
+  } catch (error) {
+    return res.status(error.status || 400).json({ code: error.code || 'INVALID_IMAGES', error: error.message });
+  }
   if (req.headers['x-generation-id']) {
     try {
       if (activeGenerations + generationJobs.active >= 2 && !generationJobs.get(req.headers['x-generation-id'], req.headers['x-generation-token']))
@@ -149,8 +169,7 @@ app.post('/api/generate', async (req, res) => {
   const heartbeat = setInterval(() => send({ type: 'heartbeat', elapsedMs: Date.now() - requestStarted }), 15000);
   heartbeat.unref?.();
   try {
-    const [{ runGenerationWorkflow }] = await generationModules;
-    const output = await runGenerationWorkflow(req.body, { apiKey, loadAssets: loadPromptAssets, signal: controller.signal,
+    const output = await runGenerationInput(req.body, { apiKey, signal: controller.signal,
       onProgress: (progress) => send({ type: 'progress', ...progress }),
       onCheckpoint: (checkpoint) => send({ type: 'checkpoint', ...checkpoint }) });
     send({ type: 'result', ...output });

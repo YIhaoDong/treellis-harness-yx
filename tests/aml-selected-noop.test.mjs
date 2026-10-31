@@ -185,6 +185,7 @@ test('checked unchanged completion and checkpoints do not call the scene/history
   const clientURL = asModule('export const requestGeneration=(...args)=>globalThis.__amlNoopRequest(...args);')
   const hookSource = (await readFile(new URL('../src/hooks/useGenerationRun.jsx', import.meta.url), 'utf8'))
     .replace("'react'", JSON.stringify(reactURL))
+    .replace("'../staticDemo/mode.mjs'", JSON.stringify(new URL('../src/staticDemo/mode.mjs', import.meta.url).href))
     .replace("'../generation/client.mjs'", JSON.stringify(clientURL))
     .replace("'../generation/progressState.mjs'", JSON.stringify(new URL('../src/generation/progressState.mjs', import.meta.url).href))
   const { default: useGenerationRun } = await import(asModule(hookSource))

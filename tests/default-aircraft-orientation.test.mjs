@@ -5,7 +5,8 @@ import * as THREE from 'three'
 
 // Geometric regression for the shipped aircraft asset, independent of Euler
 // spellings. A torus and a cylinder with identical r values have different axes.
-const scene = JSON.parse(fs.readFileSync(new URL('../public/scene.json', import.meta.url))).scene
+// Freeze the shipped fixture: public/scene.json also stores the user's working scene.
+const scene = JSON.parse(fs.readFileSync(new URL('./fixtures/default-aircraft.json', import.meta.url))).scene
 const repeatSource = fs.readFileSync(new URL('../src/utils/repeat.jsx', import.meta.url), 'utf8')
 const { computeRepeatInstances, isRepeatNode } = await import(`data:text/javascript;base64,${Buffer.from(repeatSource).toString('base64')}`)
 const frames = new Map(), primitives = new Map()

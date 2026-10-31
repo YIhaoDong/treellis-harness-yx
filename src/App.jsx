@@ -1,7 +1,13 @@
 // src/App.jsx
 import React, { useState, useCallback, useEffect } from 'react'
+import { STATIC_DEMO, publishStaticScene } from './staticDemo/mode.mjs'
+import { createInitialScene } from './staticDemo/initialScene.mjs'
+import { requestStaticText } from './staticDemo/dialogs.mjs'
 import ThreeSceneFromJSON from './components/ThreeSceneFromJSON'
 import StructureTree from './components/StructureTree'
+import SceneLayers from './components/SceneLayers.jsx'
+import SceneStructurePanel from './components/SceneStructurePanel.jsx'
+import { ModelModeSelect } from './components/PromptControls.jsx'
 import PromptPanel from './components/PromptPanel'
 import ResizablePromptPane from './components/ResizablePromptPane'
 import HistoryPanel from './components/HistoryPanel'
@@ -11,8 +17,13 @@ import AddNodePicker from './components/AddNodePicker'
 import ParameterPanel from './components/ParameterPanel.jsx'
 import SceneToolbar, { WorkspaceIcon } from './components/SceneToolbar'
 import RightPanelChrome from './components/RightPanelChrome'
+import SceneLibraries from './components/SceneLibraries.jsx'
+import MobileWorkspaceTabs from './components/MobileWorkspaceTabs.jsx'
+import useResponsiveWorkspace from './hooks/useResponsiveWorkspace.jsx'
+import { studyScenes, createLibraryScene } from './libraries/studyScenes.mjs'
 import './styles.css'
 import './workspace.css'
+import './mobileWorkspace.css'
 
 // hooks
 import { useTranslateRanges, useParamMaxOverrides, useRepeatRanges } from './hooks/useParamRanges'
@@ -28,6 +39,8 @@ import useNodeDeletion from './hooks/useNodeDeletion'
 import useNodePrompt from './hooks/useNodePrompt'
 import useHistoryPanel from './hooks/useHistoryPanel'
 import usePanelTitleSync from './hooks/usePanelTitleSync'
+import useSceneOrganization from './hooks/useSceneOrganization.jsx'
+import { getNodeAtPath } from './utils/tree.jsx'
 
 // ✅ App-level clipboard (single source of truth)
 import useClipboard from './hooks/useClipboard'
@@ -79,6 +92,7 @@ function safeJSONStringify(obj) {
 }
 
 function downloadText(filename, text) {
+  if (STATIC_DEMO) return
   const blob = new Blob([text], { type: 'application/json;charset=utf-8' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -191,17 +205,35 @@ function LegendChip({ type }) {
 }
 
 export default function App() {
+  const { compact, viewport } = useResponsiveWorkspace()
+  const [mobilePanel, setMobilePanel] = useState('structure')
+  const [mobileToolsOpen, setMobileToolsOpen] = useState(false)
+  useEffect(() => { if (!compact) setMobileToolsOpen(false) }, [compact])
   const { leftPct, setLeftPct, containerRef, startDrag } = useSplitter(40, 20, 70)
   const [reloadKey, setReloadKey] = useState(0)
-  const [liveScene, setLiveScene] = useState(null)
+  const [frameLibraryScene, setFrameLibraryScene] = useState(false)
+  const [liveScene, setLiveScene] = useState(() => STATIC_DEMO ? createInitialScene() : null)
+  useEffect(() => { publishStaticScene(liveScene) }, [liveScene])
+  const [structureView, setStructureView] = useState('tree')
+  const [sceneGenerationBusy, setSceneGenerationBusy] = useState(false)
+  const [nodeGenerationBusy, setNodeGenerationBusy] = useState(false)
+  const [organizationDialog, setOrganizationDialog] = useState(null)
+  const [groupName, setGroupName] = useState('Group')
+  const [organizationEffort, setOrganizationEffort] = useState('medium')
+  const [organizationPrompt, setOrganizationPrompt] = useState('')
 
   // ✅ Top-left aligned buttons -> centered modals
-  const [topModal, setTopModal] = useState(null) // 'legend' | 'library' | 'live' | null
+  const [topModal, setTopModal] = useState(null) // 'libraries' | 'legend' | 'library' | 'live' | null
+  const closeTopModal = useCallback(() => setTopModal(null), [])
   const toggleTopModal = useCallback((key) => {
+    setMobileToolsOpen(false)
     setTopModal((prev) => (prev === key ? null : key))
   }, [])
 
   const clipboard = useClipboard()
+  useEffect(() => {
+    if (STATIC_DEMO) clipboard.clearClipboard()
+  }, [clipboard.clearClipboard])
 
   // ✅ Instance Library (copy-based)
   const {
@@ -248,13 +280,22 @@ export default function App() {
     panelPath, setPanelPath,
     panelTitle, setPanelTitle,
     highlightPath, setHighlightPath,
-    treeFocusPath, treeFocusRequestId, acknowledgeTreeFocus,
+    selectedPaths, highlightPaths, multiSelect, setMultiSelect, selectPaths, remapSelection,
+    treeFocusPath, treeFocusRequestId, acknowledgeTreeFocus, setTreeFocusPath: focusStructureNode,
     handleOpenPanel,
     handleSceneHoverPath,
     handleSceneClickPath,
     clearPanel,
     deselectAll,
   } = useSceneSelection({ liveScene })
+
+  const generationBusy = sceneGenerationBusy || nodeGenerationBusy
+  const organization = useSceneOrganization({ scene: liveScene, selectedPaths, blocked: generationBusy,
+    recordGeneration, enterDraftFromRoot, selectPaths, remapSelection })
+  const smartScope = selectedPaths.length === 1 ? selectedPaths[0] : selectedPaths.length > 1 &&
+    selectedPaths.every(path => path.slice(0, path.lastIndexOf('.')) === selectedPaths[0].slice(0, selectedPaths[0].lastIndexOf('.')))
+      ? selectedPaths[0].slice(0, selectedPaths[0].lastIndexOf('.')) || '0' : '0'
+  const smartScopeName = liveScene && getNodeAtPath(liveScene, smartScope)?.name || 'Current scene'
 
   usePanelTitleSync({ liveScene, panelPath, setPanelTitle })
 
@@ -365,7 +406,7 @@ export default function App() {
     editTagRef,
   })
 
-  const { openNodePrompt, nodePromptModalProps } = useNodePrompt({
+  const { openNodePrompt, closeNodePrompt, nodePromptModalProps } = useNodePrompt({
     liveScene,
     applyUpdatedNodeAtPath,
     onScopeChange: handleSceneClickPath,
@@ -385,6 +426,24 @@ export default function App() {
     if (!it || !it.subtree) return
     clipboard.setClipboard(it.subtree, null)
   }, [getLibraryItem, clipboard])
+
+  const handleLoadLibraryScene = useCallback((item) => {
+    if (generationBusy || organization.busy) return
+    const root = createLibraryScene(item.id)
+    if (!root) return
+    recordGeneration(root, 'library-load', { libraryId: item.id, title: item.title })
+    enterDraftFromRoot(root)
+    deselectAll()
+    setMultiSelect(false)
+    closeAddUI()
+    closeNodePrompt()
+    setOrganizationDialog(null)
+    setTopModal(null)
+    setFrameLibraryScene(true)
+    setMobilePanel('structure')
+    setReloadKey(key => key + 1)
+  }, [generationBusy, organization.busy, recordGeneration, enterDraftFromRoot,
+    deselectAll, setMultiSelect, closeAddUI, closeNodePrompt])
 
   // ✅ Instantiate: save subtree at path into Library
   const handleInstantiate = useCallback((path, name) => {
@@ -408,7 +467,7 @@ export default function App() {
   ]
 
   return (
-    <div className="app-grid workspace-shell">
+    <div className="app-grid workspace-shell" data-mobile-panel={mobilePanel} data-tools-open={mobileToolsOpen}>
       <header className="workspace-header">
         <div className="workspace-brand" aria-label="Treellis local workspace">
           <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#111318" strokeWidth="1.4" strokeLinejoin="round" aria-hidden="true">
@@ -433,20 +492,27 @@ export default function App() {
             resetHistory()
             enterDraftFromRoot(root)
             pushSnapshot('enter-draft')
+            setMobilePanel('structure')
+            setMobileToolsOpen(false)
           }}
           saveSlot={<SaveScene scene={liveScene} />}
-          onOpenHistory={openHistory}
+          onOpenHistory={() => { setMobileToolsOpen(false); openHistory() }}
           isDraft={isDraft}
         />
 
         <nav className="workspace-global-tools" aria-label="Workspace tools">
+          <button className="workspace-button workspace-libraries-trigger" onClick={() => toggleTopModal('libraries')}
+            aria-haspopup="dialog" aria-expanded={topModal === 'libraries'} title="Load a user-study creation">
+            <WorkspaceIcon name="library" />
+            Libraries
+          </button>
           <button className="workspace-button" onClick={() => toggleTopModal('legend')} aria-pressed={topModal === 'legend'}>
             <WorkspaceIcon name="legend" />
             Legend
           </button>
           <button className="workspace-button" onClick={() => toggleTopModal('library')} aria-pressed={topModal === 'library'}>
             <WorkspaceIcon name="library" />
-            Library
+            Parts
             <span className="workspace-count">{libraryItems?.length || 0}</span>
           </button>
           <button className="workspace-button" onClick={() => toggleTopModal('live')} aria-pressed={topModal === 'live'} title="View the live scene JSON">
@@ -454,24 +520,51 @@ export default function App() {
             Scene JSON
           </button>
         </nav>
+        <div className="workspace-mobile-actions">
+          <button type="button" className="workspace-button" onClick={() => toggleTopModal('libraries')}
+            aria-haspopup="dialog" aria-expanded={topModal === 'libraries'}>
+            <WorkspaceIcon name="library" />Libraries
+          </button>
+          <button type="button" className="workspace-button" aria-expanded={mobileToolsOpen}
+            aria-label="Workspace tools" onClick={() => setMobileToolsOpen(open => !open)}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" /></svg>
+            Tools
+          </button>
+        </div>
       </header>
 
       <div ref={containerRef} className="split-root workspace-main">
         {/* LEFT */}
-        <aside className="split-left" style={{ '--left-pct': `${leftPct}%` }}>
+        <aside id="workspace-structure-panel" className="split-left" style={{ '--left-pct': `${leftPct}%` }}
+          role={compact ? 'tabpanel' : undefined} aria-labelledby={compact ? 'workspace-tab-structure' : undefined}>
           <div className="split-content">
+            <SceneStructurePanel
+              compact={compact}
+              view={structureView} onViewChange={view => { setStructureView(view); focusStructureNode(panelPath || selectedPaths.at(-1) || null) }}
+              multiSelect={multiSelect} onMultiSelectChange={setMultiSelect}
+              selectedPaths={selectedPaths} onClearSelection={deselectAll}
+              onGroup={() => { setGroupName('Group'); setOrganizationDialog('group') }}
+              onUngroup={organization.ungroup} canGroup={organization.canGroup} canUngroup={organization.canUngroup}
+              onSmartGroup={() => setOrganizationDialog('smart')} canSmartGroup={!!liveScene && !generationBusy && !organization.busy}
+              groupingBusy={organization.busy} onCancelSmartGroup={organization.cancel}
+              smartStatus={organization.status} error={organization.error}
+            >
+            <div style={{ height: '100%', display: structureView === 'tree' ? 'block' : 'none' }}>
             <StructureTree
+              layoutScale={compact ? viewport.height <= 500 ? 0.32 : 0.45 : 1}
               key={`st-${reloadKey}-${srcReloadKey}`}
               url={liveScene ? null : sceneUrl}
               scene={liveScene}
               onHoverPath={handleSceneHoverPath}
               activePath={highlightPath}
+              selectedPaths={selectedPaths}
+              pathRemap={organization.pathRemap}
               onSceneChange={handleSceneChangeFromTree}
               onOpenPanel={handleOpenPanel}
               onDeletePath={deleteNodeAtPath}
               onAddChild={openAddChild}
               onNodePrompt={openNodePrompt}
-              focusPath={treeFocusPath}
+              focusPath={structureView === 'tree' && (!compact || mobilePanel === 'structure') ? treeFocusPath : null}
               focusRequestId={treeFocusRequestId}
               onFocusDone={acknowledgeTreeFocus}
               onBlankClick={deselectAll}
@@ -487,6 +580,15 @@ export default function App() {
               onRenameLibraryItem={renameLibraryItem}
               onInstantiate={handleInstantiate}
             />
+            </div>
+            <div style={{ height: '100%', display: structureView === 'layers' ? 'block' : 'none' }}>
+              <SceneLayers scene={liveScene} selectedPaths={selectedPaths} activePath={highlightPath}
+                focusPath={structureView === 'layers' && (!compact || mobilePanel === 'structure') ? treeFocusPath : null} focusRequestId={treeFocusRequestId}
+                onFocusDone={acknowledgeTreeFocus} pathRemap={organization.pathRemap}
+                onSelect={handleSceneClickPath} onHoverPath={handleSceneHoverPath} onBlankClick={deselectAll}
+                onNodePrompt={openNodePrompt} onAddChild={openAddChild} onDeletePath={deleteNodeAtPath} />
+            </div>
+            </SceneStructurePanel>
           </div>
         </aside>
 
@@ -500,21 +602,26 @@ export default function App() {
         />
 
         {/* CENTER */}
-        <main className="split-middle workspace-middle">
+        <main id="workspace-center-panel" className="split-middle workspace-middle" role={compact ? 'tabpanel' : undefined}
+          aria-labelledby={compact ? `workspace-tab-${mobilePanel === 'create' ? 'create' : 'model'}` : undefined}>
           <div className="workspace-viewport">
             <ThreeSceneFromJSON
               key={`scene-${reloadKey}-${srcReloadKey}`}
               url={sceneUrl}
               scene={liveScene}
+              frameOnLoad={frameLibraryScene}
+              responsiveFraming={compact}
               highlightPath={highlightPath}
+              highlightPaths={highlightPaths}
               onHoverPathFromScene={handleSceneHoverPath}
               onClickPathFromScene={handleSceneClickPath}
             />
           </div>
 
-          <ResizablePromptPane>
+          <ResizablePromptPane compact={compact}>
             <PromptPanel
               currentScene={liveScene}
+              disabled={organization.busy} onBusyChange={setSceneGenerationBusy}
               onGenerated={(root, meta) => {
                 if (!root) return
                 recordGeneration(root, 'prompt', meta || {})
@@ -526,14 +633,25 @@ export default function App() {
 
         {/* RIGHT */}
         <RightPanelChrome
+          id="workspace-parameters-panel" role={compact ? 'tabpanel' : undefined}
+          aria-labelledby={compact ? 'workspace-tab-parameters' : undefined}
           title={panelTitle || 'Parameters'}
-          onClose={clearPanel}
-          onUndo={undo}
-          onRedo={redo}
+          onClose={() => { if (compact) setMobilePanel('model'); else clearPanel() }}
+          onUndo={() => {
+            const result = undo()
+            if (result && !result.preserveSelection) deselectAll()
+            if (result?.sceneSwitch) setReloadKey(key => key + 1)
+          }}
+          onRedo={() => {
+            const result = redo()
+            if (result && !result.preserveSelection) deselectAll()
+            if (result?.sceneSwitch) setReloadKey(key => key + 1)
+          }}
           canUndo={canUndo}
           canRedo={canRedo}
         >
           <ParameterPanel
+            compact={compact}
             panelPath={panelPath}
             selectedNode={selectedNode}
             panelSpecs={panelSpecs}
@@ -542,7 +660,7 @@ export default function App() {
             renameNodeAtPath={renameNodeAtPath}
             updateNodeColor={updateNodeColor}
             updateSpecValue={updateSpecValue}
-            setHighlightPath={setHighlightPath}
+            setHighlightPath={path => { if (!selectedPaths.includes(path)) setHighlightPath(path) }}
 
             getTranslateRange={getTranslateRange}
             updateTranslateRange={updateTranslateRange}
@@ -568,6 +686,9 @@ export default function App() {
         </RightPanelChrome>
       </div>
 
+      <MobileWorkspaceTabs active={mobilePanel} onChange={panel => { setMobilePanel(panel); setMobileToolsOpen(false) }}
+        selectedCount={selectedPaths.length} busy={generationBusy || organization.busy} />
+
       {addUI.open && (
         <AddNodePicker
           state={addUI}
@@ -580,9 +701,43 @@ export default function App() {
       )}
 
       <HistoryPanel {...historyPanelProps} />
-      <NodePromptModal {...nodePromptModalProps} />
+      <NodePromptModal {...nodePromptModalProps} disabled={organization.busy} onBusyChange={setNodeGenerationBusy} />
+
+      <TTCSModal open={organizationDialog === 'group'} title="Group selected parts" onClose={() => setOrganizationDialog(null)}>
+        <form className="scene-organization-form" onSubmit={event => {
+          event.preventDefault()
+          if (organization.group(groupName)) setOrganizationDialog(null)
+        }}>
+          <label>Group name<input autoFocus maxLength={160} required value={groupName} onChange={event => setGroupName(event.target.value)} /></label>
+          <p>{selectedPaths.length} parts selected. Their current positions will be kept.</p>
+          {organization.error && <div role="alert">{organization.error}</div>}
+          <div className="scene-organization-form__actions">
+            <button type="button" onClick={() => setOrganizationDialog(null)}>Cancel</button>
+            <button type="submit" disabled={!organization.canGroup || !groupName.trim()}>Create group</button>
+          </div>
+        </form>
+      </TTCSModal>
+      <TTCSModal open={organizationDialog === 'smart'} title="Smart group" onClose={() => setOrganizationDialog(null)}>
+        <form className="scene-organization-form" onSubmit={event => {
+          event.preventDefault(); setOrganizationDialog(null)
+          void organization.organize({ scope: smartScope, effort: organizationEffort, prompt: organizationPrompt })
+        }}>
+          <p>Organize: <strong>{smartScopeName}</strong></p>
+          <label>Grouping preference (optional)<textarea rows={3} maxLength={4000} value={organizationPrompt}
+            placeholder="For example: group the two blades together, and separate supports from wires."
+            onChange={event => setOrganizationPrompt(event.target.value)} /></label>
+          <p>Creates named groups while keeping existing parts and positions. You can undo the result.</p>
+          <div className="scene-organization-form__actions">
+            <ModelModeSelect value={organizationEffort} onChange={event => setOrganizationEffort(event.target.value)} />
+            <button type="button" onClick={() => setOrganizationDialog(null)}>Cancel</button>
+            <button type="submit" disabled={generationBusy || organization.busy || !liveScene}>Organize</button>
+          </div>
+        </form>
+      </TTCSModal>
 
       {/* ===== Centered Modals ===== */}
+      <SceneLibraries open={topModal === 'libraries'} onClose={closeTopModal}
+        items={studyScenes} onSelect={handleLoadLibraryScene} busy={generationBusy || organization.busy} />
       <TTCSModal
         open={topModal === 'legend'}
         title="Legend"
@@ -605,7 +760,7 @@ export default function App() {
 
       <TTCSModal
         open={topModal === 'library'}
-        title={`Library (${libraryItems?.length || 0})`}
+        title={`Parts Library (${libraryItems?.length || 0})`}
         onClose={() => setTopModal(null)}
       >
         <div className="ttcs-libhint">
@@ -631,8 +786,8 @@ export default function App() {
 
                 <button
                   className="btn btn--sm"
-                  onClick={() => {
-                    const next = window.prompt('Rename library item:', it.name || '')
+                  onClick={async () => {
+                    const next = STATIC_DEMO ? await requestStaticText('Rename library item:', it.name || '') : window.prompt('Rename library item:', it.name || '')
                     if (!next) return
                     renameLibraryItem(it.id, next)
                   }}

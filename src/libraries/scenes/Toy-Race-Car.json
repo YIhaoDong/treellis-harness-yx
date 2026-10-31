@@ -1,0 +1,1519 @@
+{
+  "name": "Toy Race Car",
+  "operation": "union",
+  "transform": {
+    "t": [
+      0,
+      0.1,
+      -5.1
+    ],
+    "r": [
+      0,
+      0,
+      -13
+    ],
+    "s": [
+      1,
+      1,
+      1
+    ]
+  },
+  "children": [
+    {
+      "name": "Toy Race Car",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          0,
+          12
+        ],
+        "r": [
+          0,
+          0,
+          13
+        ],
+        "s": [
+          1,
+          1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Chassis",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Main Body",
+              "primitive": {
+                "type": "cube",
+                "w": 9,
+                "h": 0.75,
+                "d": 3.2,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0.8,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  5
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Rear Deck",
+              "primitive": {
+                "type": "cube",
+                "w": 2.8,
+                "h": 0.8,
+                "d": 3,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  2.9,
+                  1.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Nose Cone",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.6,
+                "h": 1.15,
+                "radialSegments": 32,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  -4,
+                  0.9,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  90
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Center Stripe",
+              "primitive": {
+                "type": "cube",
+                "w": 9.2,
+                "h": 0.1,
+                "d": 0.6,
+                "material": {
+                  "color": "#ffd6fb"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  1.3,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Side Pods",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  -0.8,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  6
+                ],
+                "s": [
+                  1,
+                  0.68,
+                  0.89
+                ]
+              },
+              "children": [
+                {
+                  "name": "Side Pod L",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 3.2,
+                    "h": 0.7,
+                    "d": 1,
+                    "material": {
+                      "color": "#dbffd7"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0.8,
+                      0.7,
+                      -1.9
+                    ],
+                    "r": [
+                      0,
+                      10,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Side Pod R",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 3.2,
+                    "h": 0.7,
+                    "d": 1,
+                    "material": {
+                      "color": "#dbffd7"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0.8,
+                      0.7,
+                      1.9
+                    ],
+                    "r": [
+                      0,
+                      -10,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Undertray",
+              "primitive": {
+                "type": "cube",
+                "w": 7,
+                "h": 0.2,
+                "d": 3,
+                "material": {
+                  "color": "#dbffd7"
+                }
+              },
+              "transform": {
+                "t": [
+                  0.5,
+                  0.3,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Top Details",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "children": [
+                {
+                  "name": "Cockpit Canopy",
+                  "primitive": {
+                    "type": "sphere",
+                    "r": 0.9,
+                    "material": {
+                      "color": "#ecd2ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0.1,
+                      1.3,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      8
+                    ],
+                    "s": [
+                      3.1,
+                      0.7,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Hood Bump",
+                  "primitive": {
+                    "type": "sphere",
+                    "r": 0.6,
+                    "material": {
+                      "color": "#fdceff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      -2,
+                      1.4,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      8
+                    ],
+                    "s": [
+                      0.05,
+                      0.05,
+                      0.05
+                    ]
+                  }
+                },
+                {
+                  "name": "Air Intake",
+                  "primitive": {
+                    "type": "cylinder",
+                    "r": 0.35,
+                    "h": 1.1,
+                    "radialSegments": 24,
+                    "material": {
+                      "color": "#c7e7ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      1.4,
+                      2,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      90
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Front Wing",
+          "operation": "union",
+          "transform": {
+            "t": [
+              -5.1,
+              0.6,
+              0
+            ],
+            "r": [
+              0,
+              90,
+              0
+            ],
+            "s": [
+              0.76,
+              0.95,
+              0.6
+            ]
+          },
+          "children": [
+            {
+              "name": "Wing Plane",
+              "primitive": {
+                "type": "cube",
+                "w": 5.65,
+                "h": 0.2,
+                "d": 0.85,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  -0.1,
+                  -0.6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Endplates",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  0,
+                  0.2,
+                  -0.6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1.85,
+                  1,
+                  0.74
+                ]
+              },
+              "children": [
+                {
+                  "name": "Endplate L",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.1,
+                    "h": 0.9,
+                    "d": 1.2,
+                    "material": {
+                      "color": "#ecd2ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      -1.55,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Endplate R",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.1,
+                    "h": 0.9,
+                    "d": 1.2,
+                    "material": {
+                      "color": "#ecd2ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      1.55,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Nose Support",
+              "primitive": {
+                "type": "cube",
+                "w": 1.4,
+                "h": 0.2,
+                "d": 2.65,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  -0.25,
+                  0.8
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.65,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Rear Wing",
+          "operation": "union",
+          "transform": {
+            "t": [
+              4.6,
+              2.4,
+              0
+            ],
+            "r": [
+              0,
+              90,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Main Plane",
+              "primitive": {
+                "type": "cube",
+                "w": 4.2,
+                "h": 0.2,
+                "d": 1.05,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0.4
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Endplates",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  0,
+                  0.2,
+                  0.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1.37,
+                  1,
+                  0.68
+                ]
+              },
+              "children": [
+                {
+                  "name": "Endplate L",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.1,
+                    "h": 0.9,
+                    "d": 1.6,
+                    "material": {
+                      "color": "#ecd2ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      -1.35,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Endplate R",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.1,
+                    "h": 0.9,
+                    "d": 1.6,
+                    "material": {
+                      "color": "#ecd2ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      1.35,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Supports",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  0,
+                  -0.6,
+                  0
+                ],
+                "r": [
+                  26,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  2.74
+                ]
+              },
+              "children": [
+                {
+                  "name": "Support L",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.2,
+                    "h": 1.2,
+                    "d": 0.2,
+                    "material": {
+                      "color": "#fdceff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      -0.4,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Support R",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.2,
+                    "h": 1.2,
+                    "d": 0.2,
+                    "material": {
+                      "color": "#fdceff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0.4,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Car Wheels",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0.6,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1.49
+            ]
+          },
+          "children": [
+            {
+              "name": "Wheel FL",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  -2.8,
+                  0,
+                  -1.6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "children": [
+                {
+                  "name": "Tire",
+                  "primitive": {
+                    "type": "cylinder",
+                    "r": 0.9,
+                    "h": 0.6,
+                    "radialSegments": 36,
+                    "material": {
+                      "color": "#c7e7ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      90,
+                      90
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Hub",
+                  "primitive": {
+                    "type": "cylinder",
+                    "r": 0.35,
+                    "h": 0.2,
+                    "radialSegments": 24,
+                    "material": {
+                      "color": "#fdceff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      -0.3
+                    ],
+                    "r": [
+                      0,
+                      90,
+                      90
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Wheel FR",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  -2.8,
+                  0,
+                  1.6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "children": [
+                {
+                  "name": "Tire",
+                  "primitive": {
+                    "type": "cylinder",
+                    "r": 0.9,
+                    "h": 0.6,
+                    "radialSegments": 36,
+                    "material": {
+                      "color": "#c7e7ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      90,
+                      90
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Hub",
+                  "primitive": {
+                    "type": "cylinder",
+                    "r": 0.35,
+                    "h": 0.2,
+                    "radialSegments": 24,
+                    "material": {
+                      "color": "#fdceff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      0.3
+                    ],
+                    "r": [
+                      0,
+                      90,
+                      90
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Wheel RL",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  2.8,
+                  0,
+                  -1.6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "children": [
+                {
+                  "name": "Tire",
+                  "primitive": {
+                    "type": "cylinder",
+                    "r": 0.9,
+                    "h": 0.6,
+                    "radialSegments": 36,
+                    "material": {
+                      "color": "#c7e7ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      90,
+                      90
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Hub",
+                  "primitive": {
+                    "type": "cylinder",
+                    "r": 0.35,
+                    "h": 0.2,
+                    "radialSegments": 24,
+                    "material": {
+                      "color": "#fdceff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      -0.3
+                    ],
+                    "r": [
+                      0,
+                      90,
+                      90
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Wheel RR",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  2.8,
+                  0,
+                  1.6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "children": [
+                {
+                  "name": "Tire",
+                  "primitive": {
+                    "type": "cylinder",
+                    "r": 0.9,
+                    "h": 0.6,
+                    "radialSegments": 36,
+                    "material": {
+                      "color": "#c7e7ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "r": [
+                      0,
+                      90,
+                      90
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Hub",
+                  "primitive": {
+                    "type": "cylinder",
+                    "r": 0.35,
+                    "h": 0.2,
+                    "radialSegments": 24,
+                    "material": {
+                      "color": "#fdceff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      0.3
+                    ],
+                    "r": [
+                      0,
+                      90,
+                      90
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Side Mirrors",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0.9,
+              1.2,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              7
+            ],
+            "s": [
+              1.13,
+              1.05,
+              1.12
+            ]
+          },
+          "children": [
+            {
+              "name": "Mirrors",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "children": [
+                {
+                  "name": "Mirror L",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.5,
+                    "h": 0.15,
+                    "d": 0.3,
+                    "material": {
+                      "color": "#fdceff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      -1.8
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Mirror R",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.5,
+                    "h": 0.15,
+                    "d": 0.3,
+                    "material": {
+                      "color": "#fdceff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      1.8
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Stalks",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  -0.25,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              },
+              "children": [
+                {
+                  "name": "Stalk L",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.1,
+                    "h": 0.25,
+                    "d": 0.1,
+                    "material": {
+                      "color": "#ffd6fb"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      -0.15,
+                      -1.8
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Stalk R",
+                  "primitive": {
+                    "type": "cube",
+                    "w": 0.1,
+                    "h": 0.25,
+                    "d": 0.1,
+                    "material": {
+                      "color": "#ffd6fb"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      -0.15,
+                      1.8
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Front Details",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Headlights",
+              "operation": "union",
+              "transform": {
+                "t": [
+                  -4.4,
+                  0.8,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  3.17,
+                  1.43,
+                  1.02
+                ]
+              },
+              "children": [
+                {
+                  "name": "Headlight L",
+                  "primitive": {
+                    "type": "sphere",
+                    "r": 0.25,
+                    "material": {
+                      "color": "#ecd2ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      -1.1
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                },
+                {
+                  "name": "Headlight R",
+                  "primitive": {
+                    "type": "sphere",
+                    "r": 0.25,
+                    "material": {
+                      "color": "#ecd2ff"
+                    }
+                  },
+                  "transform": {
+                    "t": [
+                      0,
+                      0,
+                      1.1
+                    ],
+                    "r": [
+                      0,
+                      0,
+                      0
+                    ],
+                    "s": [
+                      1,
+                      1,
+                      1
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "name": "Front Grille",
+              "primitive": {
+                "type": "cube",
+                "w": 0.2,
+                "h": 0.25,
+                "d": 1.2,
+                "material": {
+                  "color": "#dbffd7"
+                }
+              },
+              "transform": {
+                "t": [
+                  -4.7,
+                  0.9,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Exhaust Pipes",
+          "operation": "union",
+          "transform": {
+            "t": [
+              4.7,
+              0.9,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Exhaust L",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.15,
+                "h": 0.9,
+                "radialSegments": 24,
+                "material": {
+                  "color": "#ffd6fb"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  -1
+                ],
+                "r": [
+                  0,
+                  0,
+                  90
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Exhaust R",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.15,
+                "h": 0.9,
+                "radialSegments": 24,
+                "material": {
+                  "color": "#ffd6fb"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  1
+                ],
+                "r": [
+                  0,
+                  0,
+                  90
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

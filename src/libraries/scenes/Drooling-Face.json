@@ -1,0 +1,1136 @@
+{
+  "name": "Drooling Smiley (Merged)",
+  "operation": "union",
+  "transform": {
+    "t": [
+      0,
+      0,
+      0
+    ],
+    "r": [
+      0,
+      0,
+      0
+    ],
+    "s": [
+      1,
+      1,
+      1
+    ]
+  },
+  "children": [
+    {
+      "name": "Face",
+      "primitive": {
+        "type": "sphere",
+        "r": 4.2,
+        "widthSegments": 48,
+        "heightSegments": 32,
+        "material": {
+          "color": "#FFCC4D"
+        }
+      },
+      "transform": {
+        "t": [
+          0,
+          0,
+          -0.1
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1,
+          1,
+          0.1
+        ]
+      }
+    },
+    {
+      "name": "Eyes (Arc) - Set A",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          0.5,
+          0.1
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1.25,
+          1.25,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Eye L (Arc)",
+          "operation": "subtract",
+          "transform": {
+            "t": [
+              -1.5,
+              1,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              35
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Outer Disk",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.85,
+                "h": 0.25,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#3A2B52"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Inner Hole",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.62,
+                "h": 0.3,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Bottom Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 2.2,
+                "h": 1.6,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  -0.42,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Left Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 2,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1.05,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  30
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 2,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  1.05,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  -30
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Eye R (Arc)",
+          "operation": "subtract",
+          "transform": {
+            "t": [
+              1.5,
+              1,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              -30
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Outer Disk",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.85,
+                "h": 0.25,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#3A2B52"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Inner Hole",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.62,
+                "h": 0.3,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Bottom Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 2.2,
+                "h": 1.6,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  -0.42,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Left Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 2,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1.05,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  30
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 2,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  1.05,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  -30
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Eyes (Arc) - Set B",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          -0.6,
+          0.2
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1.13,
+          1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Eye L (Arc)",
+          "operation": "subtract",
+          "transform": {
+            "t": [
+              -1.15,
+              1,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              10
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Outer Disk",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.85,
+                "h": 0.25,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#3A2B52"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Inner Hole",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.5,
+                "h": 0.3,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Bottom Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 2.2,
+                "h": 1.6,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  -0.42,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Left Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 2,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1.05,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  30
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 2,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  1.05,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  -30
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Eye R (Arc)",
+          "operation": "subtract",
+          "transform": {
+            "t": [
+              1.15,
+              1,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              -10
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Outer Disk",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.85,
+                "h": 0.25,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#3A2B52"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Inner Hole",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.5,
+                "h": 0.3,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Bottom Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 2.2,
+                "h": 1.6,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  -0.42,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Left Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 2,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1.05,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  30
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Clip",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 2,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  1.05,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  -30
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Mouth & Tongue",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          -0.8,
+          0.1
+        ],
+        "r": [
+          3,
+          0,
+          0
+        ],
+        "s": [
+          1.1,
+          1.1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Mouth (Half Cylinder)",
+          "operation": "subtract",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              0.95,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Mouth Disc",
+              "primitive": {
+                "type": "cylinder",
+                "r": 1.8,
+                "h": 0.5,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#8F4AF9"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Cut Upper Half",
+              "primitive": {
+                "type": "cube",
+                "w": 4,
+                "h": 2.4,
+                "d": 1,
+                "material": {
+                  "color": "#FFCC4D"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  1.1,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Mouth (Half Cylinder) Copy",
+          "operation": "subtract",
+          "transform": {
+            "t": [
+              0,
+              -0.05,
+              0.05
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              0.95,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Mouth Disc",
+              "primitive": {
+                "type": "cylinder",
+                "r": 1.8,
+                "h": 0.5,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#33A9FF"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  90,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Cut Upper Half",
+              "primitive": {
+                "type": "cube",
+                "w": 4,
+                "h": 3.35,
+                "d": 1,
+                "material": {
+                  "color": "#33A9FF"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0.6,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Extra Drool",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0.8,
+          -0.9,
+          -0.25
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1,
+          1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Droplet A",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              -1.95,
+              0.35
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Stem",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.2,
+                "h": 0.65,
+                "radialSegments": 36,
+                "material": {
+                  "color": "#33A9FF"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0.1,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Tip",
+              "primitive": {
+                "type": "sphere",
+                "r": 0.23,
+                "material": {
+                  "color": "#6ED3FF"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  -0.2,
+                  0.01
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  0.85
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Droplet B",
+          "operation": "union",
+          "transform": {
+            "t": [
+              -0.3,
+              -1.85,
+              0.4
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              0.85,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Stem",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.15,
+                "h": 0.5,
+                "radialSegments": 36,
+                "material": {
+                  "color": "#33A9FF"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  0,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Tip",
+              "primitive": {
+                "type": "sphere",
+                "r": 0.18,
+                "material": {
+                  "color": "#6ED3FF"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  -0.25,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  0.8
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

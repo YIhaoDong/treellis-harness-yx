@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:static": "node scripts/build-static.mjs",
     "preview": "vite preview",
     "server": "node server.js",
     "test": "node --test tests/*.test.mjs"
@@ -15,6 +16,7 @@
     "@react-three/fiber": "^9.3.0",
     "axios": "^1.6.0",
     "cors": "^2.8.6",
+    "d3-hierarchy": "1.1.9",
     "express": "^4.22.3",
     "leva": "^0.9.36",
     "openai": "^4.25.0",
