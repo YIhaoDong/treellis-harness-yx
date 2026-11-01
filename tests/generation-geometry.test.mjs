@@ -79,10 +79,38 @@ test('repeat templates expand inside CSG with world transforms', () => {
   assert.match(inspectGeometry({ repeat: { count: 3, s: [-1, 1, 1] }, children: [cube()] }).errors.join('; '), /degenerate/)
 })
 
-test('budgets guard expanded instances, high tessellation and CSG output', () => {
+test('remaining budgets guard expanded instances, unrepresentable tessellation and explicit CSG output limits', () => {
   assert.match(inspectGeometry({ repeat: { count: 4 }, children: [cube()] }, { maxInstances: 2 }).errors.join('; '), /instance budget/)
-  assert.match(inspectGeometry({ primitive: { type: 'sphere', widthSegments: 1e9 } }).errors.join('; '), /vertex budget/)
+  assert.match(inspectGeometry({ primitive: { type: 'sphere', widthSegments: 1e9 } }).errors.join('; '), /representation|represented|tessellation/)
   assert.match(inspectGeometry({ operation: 'subtract', children: [cube(4), cube()] }, { maxVertices: 55 }).errors.join('; '), /CSG result exceeds vertex budget/)
+})
+
+test('default geometry validation accepts meshes above the former 500000 vertex ceiling', () => {
+  const scene = { children: [256, 44].map(count => ({ repeat: { count, t: [20, 0, 0] }, children: [{ primitive: { type: 'torus' } }] })) }
+  const report = inspectGeometry(scene)
+  assert.equal(report.ok, true, report.errors.join('; '))
+  assert.equal(report.stats.primitiveCount, 300)
+  assert.equal(report.stats.meshCount, 300)
+  assert.equal(report.stats.vertices, 300 * 17 * 101)
+  assert.ok(report.stats.vertices > 500000)
+  assert.match(inspectGeometry(scene, { maxVertices: 500000 }).errors.join('; '), /vertex budget/)
+})
+
+test('cumulative CSG intermediates can exceed 500000 vertices while the final mesh remains compact', () => {
+  const scene = { operation: 'subtract', children: [
+    { operation: 'union', children: Array.from({ length: 168 }, (_, i) => cube(1, { t: [i * 2, 0, 0] })) },
+    cube(1, { t: [-10, 0, 0] })
+  ] }
+  const report = inspectGeometry(scene)
+  assert.equal(report.ok, true, report.errors.join('; '))
+  assert.ok(report.stats.generatedVertices > 500000, JSON.stringify(report.stats))
+  assert.equal(report.stats.vertices, 168 * 36)
+  assert.equal(report.stats.meshCount, 1)
+  assert.equal(report.stats.csgOperations, 168)
+  near(report.bounds.size[0], 335)
+  near(report.bounds.size[1], 1)
+  near(report.bounds.size[2], 1)
+  assert.match(inspectGeometry(scene, { maxVertices: 500000 }).errors.join('; '), /CSG result exceeds vertex budget/)
 })
 
 test('objective checks validate counts, extents, relative extents and alignment', () => {

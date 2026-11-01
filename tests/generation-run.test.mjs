@@ -13,6 +13,7 @@ const clientURL = asModule('export const requestGeneration=(...a)=>globalThis.__
 const progressURL = new URL('../src/generation/progressState.mjs', import.meta.url).href;
 const source = (await readFile(new URL('../src/hooks/useGenerationRun.jsx', import.meta.url), 'utf8'))
   .replace("'react'", JSON.stringify(reactURL))
+  .replace("'../staticDemo/mode.mjs'", JSON.stringify(new URL('../src/staticDemo/mode.mjs', import.meta.url).href))
   .replace("'../generation/client.mjs'", JSON.stringify(clientURL))
   .replace("'../generation/progressState.mjs'", JSON.stringify(progressURL));
 const { default: useGenerationRun } = await import(asModule(source));
@@ -63,6 +64,18 @@ function harness(initial) {
 const original = { name: 'Plane', children: [{ name: 'Wing', children: [{ name: 'Tip' }] }, { name: 'Engine' }] };
 const input = { mode: 'edit', prompt: 'Detail the plane', effort: 'max', strategy: 'staged', scene: original };
 const checkpoint = result => ({ type: 'checkpoint', result, meta: {}, step: 1, totalSteps: 2, title: 'Wing', resume: { version: 1, completedSteps: 1 } });
+
+test('changing reference images invalidates a previous node answer while text replies retain it', async () => {
+  const h = harness({ scene: original, path: '0.0', identity: 'question', imageRevision: 'image-a', open: true });
+  const running = h.flush().run({ ...input, mode: 'node', path: '0.0' });
+  h.requests[0].reject(Object.assign(new Error('Choose a wing size.'), { code: 'CLARIFICATION' }));
+  await running;
+  assert.equal(h.flush().clarificationIsCurrent, true);
+  assert.equal(h.flush({ identity: 'custom text reply' }).clarificationIsCurrent, true);
+  assert.equal(h.flush({ imageRevision: 'image-b' }).clarificationIsCurrent, false);
+  assert.equal(h.flush().clarification.imageRevision, 'image-a');
+  h.unmount();
+});
 
 test('a clarification keeps the modal open, carries full answer context and never applies geometry', async () => {
   let applied = 0, completed = 0;

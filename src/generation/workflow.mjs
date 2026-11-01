@@ -7,6 +7,7 @@ import { validateConversation } from './followups.mjs'
 import { summarizeScenePalette } from './palette.mjs'
 import { runGeometryTask } from './geometryRunner.mjs'
 import { validateCompletedPartPaths, buildCompletedPartReferences } from './completedReferences.mjs'
+import { normalizeImages, imageRevision, imageUserContent, IMAGE_REFERENCE_RULE } from './imageInputs.mjs'
 
 const MAX_STEPS = 6
 const clone = value => JSON.parse(JSON.stringify(value))
@@ -34,8 +35,9 @@ function putNode(scene, path, node) {
   return result
 }
 function validateInput(input, dependencies) {
-  let conversation
+  let conversation, images
   try { conversation = validateConversation(input?.conversation) } catch (error) { throw new GenerationError(error.message, 'INVALID_INPUT') }
+  try { images = normalizeImages(input?.images) } catch (error) { throw new GenerationError(error.message, 'INVALID_IMAGES', { status: 400 }) }
   const prompt = String(input?.prompt || '').trim()
   const effort = input?.effort || DEFAULT_RUN_MODE
   if (!['create', 'edit', 'node'].includes(input?.mode)) throw new GenerationError('Unknown generation mode.', 'INVALID_INPUT')
@@ -51,7 +53,7 @@ function validateInput(input, dependencies) {
   if (input.mode === 'node' && !node) throw new GenerationError('The selected node no longer exists.', 'STALE_SCENE')
   if (input.mode === 'node' && input.node && JSON.stringify(node) !== JSON.stringify(input.node)) throw new GenerationError('The selected node changed. Reopen its prompt and try again.', 'STALE_SCENE')
   aborted(dependencies.signal)
-  return { prompt, effort, scopePath, conversation }
+  return { prompt, effort, scopePath, conversation, images }
 }
 function validateSteps(steps, scene, scopePath) {
   if (!Array.isArray(steps) || !steps.length || steps.length > MAX_STEPS) throw new GenerationError('The part plan must contain 1–6 steps.', 'INVALID_PLAN')
@@ -118,6 +120,7 @@ function assertResume(resume, input, scene, context) {
   const maximum = input.mode === 'create' ? 7 : 6
   if (!resume || resume.version !== 1 || !['parts', 'plan'].includes(resume.phase) || !/^[A-Za-z0-9-]{8,80}$/.test(resume.runId || '') || resume.mode !== input.mode || resume.scopePath !== context.scopePath || resume.effort !== context.effort || resume.originalPrompt !== context.prompt || !Number.isInteger(resume.completedSteps) || !Number.isInteger(resume.totalSteps) || resume.completedSteps < 0 || resume.totalSteps > maximum || resume.completedSteps > resume.totalSteps || resume.sceneRevision !== revision(scene)) throw new GenerationError('This plan no longer matches the scene or generation settings. Start a new generation.', 'STALE_PLAN')
   if (resume.conversationRevision ? resume.conversationRevision !== revision(context.conversation) : context.conversation.length) throw new GenerationError('The conversation changed. Start a new generation.', 'STALE_PLAN')
+  if ((resume.imageRevision || '') !== imageRevision(context.images)) throw new GenerationError('The reference images changed. Start a new generation.', 'STALE_PLAN')
   const constraints = validateConstraints(resume.constraints || [])
   const plan = validatePlanTitles(resume.plan || resume.steps?.map(step => step.title) || [])
   if (resume.phase === 'plan') {
@@ -135,18 +138,19 @@ function assertResume(resume, input, scene, context) {
 
 /** Both entry points use this router; a checkpoint is always a complete, checked edit scope. */
 export async function runGenerationWorkflow(input, dependencies = {}) {
-  validateInput(input, dependencies)
+  const { images } = validateInput(input, dependencies)
   const strategy = input?.strategy || 'single'
   if (!['single', 'staged'].includes(strategy)) throw new GenerationError('Choose a supported generation strategy.', 'INVALID_INPUT')
   if (strategy === 'single') {
     if (input.resume) throw new GenerationError('A part plan can only continue in step-by-step mode.', 'INVALID_INPUT')
-    return (dependencies.runGeneration || runGeneration)(input, dependencies)
+    return (dependencies.runGeneration || runGeneration)({ ...input, ...(images.length ? { images } : {}) }, dependencies)
   }
   return runStagedGeneration(input, dependencies)
 }
 
 export async function runStagedGeneration(input, dependencies = {}) {
-  const { prompt, effort, scopePath, conversation } = validateInput(input, dependencies)
+  const { prompt, effort, scopePath, conversation, images } = validateInput(input, dependencies)
+  const attachmentsRevision = imageRevision(images)
   const { signal, onProgress = () => {}, onCheckpoint = async () => {} } = dependencies
   const generate = dependencies.runGeneration || runGeneration, planCall = dependencies.callModel || callModel
   const started = Date.now(), totalUsage = usage(), allChanges = []
@@ -155,7 +159,7 @@ export async function runStagedGeneration(input, dependencies = {}) {
   const initialRevision = working ? revision(working) : null
   const taskProgress = () => ({ strategy: 'staged', phase, planReady: phase === 'parts', completedSteps, totalSteps, plan: [...titles] })
   const emit = (stage, message, extra = {}) => { aborted(signal); onProgress({ stage, message, ...extra, ...taskProgress() }) }
-  const makeResume = () => ({ version: 1, runId, phase, steps: clone(remaining), constraints: [...constraints], plan: [...titles], completedSteps, totalSteps, scopePath, originalPrompt: prompt, conversationRevision: revision(conversation), effort, mode: input.mode, sceneRevision: revision(working), completedPartPaths: [...completedPartPaths], usage: { ...totalUsage } })
+  const makeResume = () => ({ version: 1, runId, phase, steps: clone(remaining), constraints: [...constraints], plan: [...titles], completedSteps, totalSteps, scopePath, originalPrompt: prompt, conversationRevision: revision(conversation), ...(attachmentsRevision ? { imageRevision: attachmentsRevision } : {}), effort, mode: input.mode, sceneRevision: revision(working), completedPartPaths: [...completedPartPaths], usage: { ...totalUsage } })
   const metaFor = (base, checkpointPhase, title = '', path = scopePath) => ({ ...base,
     prompt: { mode: 'full', text: prompt, len: prompt.length },
     model: { ...(base.model || {}), name: MODEL_ID, id: MODEL_ID, family: MODEL_FAMILY_LABEL, runMode: effort, reasoningEffort: effort },
@@ -173,7 +177,7 @@ export async function runStagedGeneration(input, dependencies = {}) {
   }
   try {
     if (input.resume) {
-      const restored = assertResume(input.resume, input, working, { prompt, effort, scopePath, conversation })
+      const restored = assertResume(input.resume, input, working, { prompt, effort, scopePath, conversation, images })
       ;({ runId, phase, steps: remaining, constraints, completedSteps, totalSteps } = restored)
       addUsage(totalUsage, restored.usage)
       titles = restored.plan; completedPartPaths = restored.completedPartPaths
@@ -181,7 +185,7 @@ export async function runStagedGeneration(input, dependencies = {}) {
     } else if (input.mode === 'create') {
       titles = ['Base assembly']; totalSteps = 1
       emit('part', 'Building the base assembly…', { step: 1, totalSteps: 1, title: 'Base assembly' })
-      const base = await generate({ ...input, prompt: `${prompt}\n\nSTAGED CREATION: Create a coherent coarse base assembly first. Preserve the requested identity, proportions and main parts, but use at most 18 primitive nodes and give major parts distinct named subtrees so they can be refined independently later. Do not attempt final tiny details in this first pass.` }, {
+      const base = await generate({ ...input, ...(images.length ? { images } : {}), prompt: `${prompt}\n\nSTAGED CREATION: Create a coherent coarse base assembly first. Preserve the requested identity, proportions and main parts, but use at most 18 primitive nodes and give major parts distinct named subtrees so they can be refined independently later. Do not attempt final tiny details in this first pass.` }, {
         ...dependencies, maxRepairs: Math.min(1, Math.max(0, dependencies.maxRepairs ?? 1)), onProgress: event => emit('part', `Base assembly · ${event.message || 'Generating…'}`, { ...event, stage: 'part', step: 1, totalSteps: 1, title: 'Base assembly', detailStage: event.stage }),
       })
       aborted(signal)
@@ -200,8 +204,9 @@ export async function runStagedGeneration(input, dependencies = {}) {
       format.schema.properties.steps.maxItems = Math.min(MAX_STEPS, allowedPaths.length)
       const body = { model: MODEL_ID, store: false, reasoning: { effort }, text: { format }, max_output_tokens: getGenerationLimits(effort).maxOutputTokens,
         input: [{ role: 'system', content: 'You plan a staged editable 3D assembly refinement in Treellis. Return only the required JSON. Write a brief user-facing task summary, never private reasoning. Select 1–6 independent existing part paths inside the selected scope. Never choose an entire selected assembly/root if it already has children. Select meaningful existing child subtrees instead. Paths must exist, must be unique, and must not overlap as ancestor/descendant. Leaf scope may target itself. Give each step a concise title in the user’s language and an actionable instruction describing visible requested improvements, attachment locations and overall proportions. Each instruction applies only to its subtree; existing outside parts cannot be replaced. Keep the original object identity unless the user explicitly requests conversion. Put cross-part dimensions, symmetry, proportions and interface preservation in at most six short shared constraints. Refining several unrelated components in parallel is deliberately avoided to preserve consistent interfaces. The synopsis includes read-only outside context; do not target it. This is a routing step only: do not solve final geometry, enumerate every parameter or write AML during planning. Leave exact geometry calculations to the individual part tasks. If a simple creation base already satisfies the requested final state, plan one concise verification step on an allowed existing part instead of inventing extra detail or unnecessary tasks. A verification task may finish with a checked no-op when objective checks confirm the requested state. Keep the plan concise and proportional to the request. The read-only palette contains actual scene colors and their source paths. When a part instruction needs an existing color or a material reference outside its subtree, give its explicit #RRGGBB from that palette so the part can execute without missing neighbor information. Never invent an existing dark material or leave an unresolved relative color reference. For unspecified minor cosmetic choices, use an available scene color or leave the configured default choice to the part task; do not turn such choices into a user clarification dependency.' },
-          ...conversation, { role: 'user', content: `ORIGINAL_REQUEST (interpret as the latest answer/instruction in the preceding dialogue):\n${prompt}\n\nEDITABLE_SCOPE: ${scopePath}\nASSEMBLY_SYNOPSIS:\n${JSON.stringify(synopsis)}` }],
+          ...conversation, { role: 'user', content: imageUserContent(`ORIGINAL_REQUEST (interpret as the latest answer/instruction in the preceding dialogue):\n${prompt}\n\nEDITABLE_SCOPE: ${scopePath}\nASSEMBLY_SYNOPSIS:\n${JSON.stringify(synopsis)}`, images) }],
       }
+      if (images.length) body.input[0].content += `\n\n${IMAGE_REFERENCE_RULE}`
       let plan
       for (let attempt = 0; attempt < 2; attempt++) {
         const data = await planCall(body, { ...dependencies, onProgress: event => emit('planning', event.message || 'Planning the parts…', { ...event, stage: 'planning', step: completedSteps, totalSteps }) })
@@ -242,7 +247,7 @@ export async function runStagedGeneration(input, dependencies = {}) {
         if (path !== step.path || revision(scene) !== referenceRevision) throw new GenerationError('The scene changed while preparing completed part references.', 'STALE_SCENE')
         return { ...context, completedPartsReferences: buildCompletedPartReferences(scene, { selectedPath: path, scopePath, completedPartPaths, completedPartsCount: Math.max(0, completedSteps - (input.mode === 'create' ? 1 : 0)), sceneRevision: referenceRevision }) }
       }
-      const next = await generate({ mode: 'node', scene: working, node: clone(getNode(working, step.path)), path: step.path, prompt: stepPrompt, effort, conversation }, {
+      const next = await generate({ mode: 'node', scene: working, node: clone(getNode(working, step.path)), path: step.path, prompt: stepPrompt, effort, conversation, ...(images.length ? { images } : {}) }, {
         ...dependencies, buildEditContext: partContext, maxRepairs: Math.min(1, Math.max(0, dependencies.maxRepairs ?? 1)),
         onProgress: event => emit('part', `${step.title} · ${event.message || 'Generating…'}`, { ...event, stage: 'part', detailStage: event.stage, step: number, totalSteps, title: step.title, path: step.path }),
       })

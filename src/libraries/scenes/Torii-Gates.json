@@ -1,0 +1,2248 @@
+{
+  "name": "Torii Corridor",
+  "operation": "union",
+  "transform": {
+    "t": [
+      3.4,
+      -0.5,
+      10
+    ],
+    "r": [
+      0,
+      0,
+      0
+    ],
+    "s": [
+      1.71,
+      1.23,
+      1
+    ]
+  },
+  "children": [
+    {
+      "name": "Torii Gate 2",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          0,
+          -15
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1,
+          1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Torii Legs",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Left Post",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.5,
+                "h": 8,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  -3,
+                  4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Post",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.5,
+                "h": 8,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  3,
+                  4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Footings",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          },
+          "children": [
+            {
+              "name": "Left Base",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 0.8,
+                "d": 1.2,
+                "material": {
+                  "color": "#dbffd7"
+                }
+              },
+              "transform": {
+                "t": [
+                  -3,
+                  0.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Base",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 0.8,
+                "d": 1.2,
+                "material": {
+                  "color": "#dbffd7"
+                }
+              },
+              "transform": {
+                "t": [
+                  3,
+                  0.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nuki (Middle Crossbeam)",
+          "primitive": {
+            "type": "cube",
+            "w": 8.4,
+            "h": 0.6,
+            "d": 1,
+            "material": {
+              "color": "#c7e7ff"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              6.6,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "Center Pillar",
+          "primitive": {
+            "type": "cube",
+            "w": 0.5,
+            "h": 0.7,
+            "d": 1,
+            "material": {
+              "color": "#c7e7ff"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              7.25,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "Top Assembly",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          },
+          "children": [
+            {
+              "name": "Kasagi Center",
+              "primitive": {
+                "type": "cube",
+                "w": 9,
+                "h": 0.6,
+                "d": 1.2,
+                "material": {
+                  "color": "#ecd2ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  8.2,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Kasagi Left Wing",
+              "primitive": {
+                "type": "cube",
+                "w": 4,
+                "h": 0.6,
+                "d": 1.2,
+                "material": {
+                  "color": "#ecd2ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  -3.2,
+                  8.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  -6
+                ]
+              }
+            },
+            {
+              "name": "Kasagi Right Wing",
+              "primitive": {
+                "type": "cube",
+                "w": 4,
+                "h": 0.6,
+                "d": 1.2,
+                "material": {
+                  "color": "#ecd2ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  3.2,
+                  8.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  6
+                ]
+              }
+            },
+            {
+              "name": "Shimaki Underbeam",
+              "primitive": {
+                "type": "cube",
+                "w": 9.2,
+                "h": 0.4,
+                "d": 1,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  7.8,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Torii Gate 3",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          0,
+          0
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1,
+          1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Torii Legs",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Left Post",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.5,
+                "h": 8,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  -3,
+                  4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Post",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.5,
+                "h": 8,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  3,
+                  4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Footings",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          },
+          "children": [
+            {
+              "name": "Left Base",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 0.8,
+                "d": 1.2,
+                "material": {
+                  "color": "#dbffd7"
+                }
+              },
+              "transform": {
+                "t": [
+                  -3,
+                  0.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Base",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 0.8,
+                "d": 1.2,
+                "material": {
+                  "color": "#dbffd7"
+                }
+              },
+              "transform": {
+                "t": [
+                  3,
+                  0.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nuki (Middle Crossbeam)",
+          "primitive": {
+            "type": "cube",
+            "w": 8.4,
+            "h": 0.6,
+            "d": 1,
+            "material": {
+              "color": "#c7e7ff"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              6.6,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "Center Pillar",
+          "primitive": {
+            "type": "cube",
+            "w": 0.5,
+            "h": 0.7,
+            "d": 1,
+            "material": {
+              "color": "#c7e7ff"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              7.25,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "Top Assembly",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          },
+          "children": [
+            {
+              "name": "Kasagi Center",
+              "primitive": {
+                "type": "cube",
+                "w": 9,
+                "h": 0.6,
+                "d": 1.2,
+                "material": {
+                  "color": "#ecd2ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  8.2,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Kasagi Left Wing",
+              "primitive": {
+                "type": "cube",
+                "w": 4,
+                "h": 0.6,
+                "d": 1.2,
+                "material": {
+                  "color": "#ecd2ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  -3.2,
+                  8.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  -6
+                ]
+              }
+            },
+            {
+              "name": "Kasagi Right Wing",
+              "primitive": {
+                "type": "cube",
+                "w": 4,
+                "h": 0.6,
+                "d": 1.2,
+                "material": {
+                  "color": "#ecd2ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  3.2,
+                  8.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  6
+                ]
+              }
+            },
+            {
+              "name": "Shimaki Underbeam",
+              "primitive": {
+                "type": "cube",
+                "w": 9.2,
+                "h": 0.4,
+                "d": 1,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  7.8,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Torii Gate 4",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          0,
+          15
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1,
+          1,
+          1
+        ]
+      },
+      "children": [
+        {
+          "name": "Torii Legs",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Left Post",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.5,
+                "h": 8,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  -3,
+                  4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Post",
+              "primitive": {
+                "type": "cylinder",
+                "r": 0.5,
+                "h": 8,
+                "radialSegments": 48,
+                "material": {
+                  "color": "#c7e7ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  3,
+                  4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Footings",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          },
+          "children": [
+            {
+              "name": "Left Base",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 0.8,
+                "d": 1.2,
+                "material": {
+                  "color": "#dbffd7"
+                }
+              },
+              "transform": {
+                "t": [
+                  -3,
+                  0.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Base",
+              "primitive": {
+                "type": "cube",
+                "w": 1.2,
+                "h": 0.8,
+                "d": 1.2,
+                "material": {
+                  "color": "#dbffd7"
+                }
+              },
+              "transform": {
+                "t": [
+                  3,
+                  0.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  0.58,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Nuki (Middle Crossbeam)",
+          "primitive": {
+            "type": "cube",
+            "w": 8.4,
+            "h": 0.6,
+            "d": 1,
+            "material": {
+              "color": "#c7e7ff"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              6.6,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "Center Pillar",
+          "primitive": {
+            "type": "cube",
+            "w": 0.5,
+            "h": 0.7,
+            "d": 1,
+            "material": {
+              "color": "#c7e7ff"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              7.25,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "name": "Top Assembly",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ]
+          },
+          "children": [
+            {
+              "name": "Kasagi Center",
+              "primitive": {
+                "type": "cube",
+                "w": 9,
+                "h": 0.6,
+                "d": 1.2,
+                "material": {
+                  "color": "#ecd2ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  8.2,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Kasagi Left Wing",
+              "primitive": {
+                "type": "cube",
+                "w": 4,
+                "h": 0.6,
+                "d": 1.2,
+                "material": {
+                  "color": "#ecd2ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  -3.2,
+                  8.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  -6
+                ]
+              }
+            },
+            {
+              "name": "Kasagi Right Wing",
+              "primitive": {
+                "type": "cube",
+                "w": 4,
+                "h": 0.6,
+                "d": 1.2,
+                "material": {
+                  "color": "#ecd2ff"
+                }
+              },
+              "transform": {
+                "t": [
+                  3.2,
+                  8.4,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  6
+                ]
+              }
+            },
+            {
+              "name": "Shimaki Underbeam",
+              "primitive": {
+                "type": "cube",
+                "w": 9.2,
+                "h": 0.4,
+                "d": 1,
+                "material": {
+                  "color": "#fdceff"
+                }
+              },
+              "transform": {
+                "t": [
+                  0,
+                  7.8,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Brick Path",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          0,
+          -10
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          0.8,
+          1,
+          1.67
+        ]
+      },
+      "children": [
+        {
+          "name": "Brick 01",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              -13.2
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 02",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              -11
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 03",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              -8.8
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 04",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              -6.6
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 05",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              -4.4
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 06",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              -2.2
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 07",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 08",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              2.2
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 09",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              4.4
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 10",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              6.6
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 11",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              8.8
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 12",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              11
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Brick 13",
+          "primitive": {
+            "type": "cube",
+            "w": 0.8,
+            "h": 0.1,
+            "d": 2,
+            "material": {
+              "color": "#d8ffd4"
+            }
+          },
+          "transform": {
+            "t": [
+              0,
+              0.05,
+              13.2
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1
+            ]
+          }
+        },
+        {
+          "name": "Left Brick Row",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1.1
+            ]
+          },
+          "children": [
+            {
+              "name": "Left Brick 01",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1,
+                  0.05,
+                  -12.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Left Brick 02",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1,
+                  0.05,
+                  -7.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Left Brick 03",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1,
+                  0.05,
+                  -2.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Left Brick 04",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1,
+                  0.05,
+                  2.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Left Brick 05",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1,
+                  0.05,
+                  7.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Left Brick 06",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -1,
+                  0.05,
+                  12.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Right Brick Row",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0.3
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              1,
+              1,
+              1.1
+            ]
+          },
+          "children": [
+            {
+              "name": "Right Brick 01",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  1,
+                  0.05,
+                  -12.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Brick 02",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  1,
+                  0.05,
+                  -7.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Brick 03",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  1,
+                  0.05,
+                  -2.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Brick 04",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  1,
+                  0.05,
+                  2.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Brick 05",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  1,
+                  0.05,
+                  7.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            },
+            {
+              "name": "Right Brick 06",
+              "primitive": {
+                "type": "cube",
+                "w": 0.8,
+                "h": 0.1,
+                "d": 2,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  1,
+                  0.05,
+                  12.5
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ],
+                "s": [
+                  1,
+                  1,
+                  1
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Outer Brick Rows",
+      "operation": "union",
+      "transform": {
+        "t": [
+          0,
+          0,
+          -9.4
+        ],
+        "r": [
+          0,
+          0,
+          0
+        ],
+        "s": [
+          1.55,
+          1,
+          1.37
+        ]
+      },
+      "children": [
+        {
+          "name": "Far Left Brick Row",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              0.5,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Far Left Brick 01",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -5,
+                  0.0375,
+                  -18
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Left Brick 02",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -5,
+                  0.0375,
+                  -12
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Left Brick 03",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -5,
+                  0.0375,
+                  -6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Left Brick 04",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -5,
+                  0.0375,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Left Brick 05",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -5,
+                  0.0375,
+                  6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Left Brick 06",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -5,
+                  0.0375,
+                  12
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Left Brick 07",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  -5,
+                  0.0375,
+                  18
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Far Right Brick Row",
+          "operation": "union",
+          "transform": {
+            "t": [
+              0,
+              0,
+              0
+            ],
+            "r": [
+              0,
+              0,
+              0
+            ],
+            "s": [
+              0.5,
+              1,
+              1
+            ]
+          },
+          "children": [
+            {
+              "name": "Far Right Brick 01",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  5,
+                  0.0375,
+                  -18
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Right Brick 02",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  5,
+                  0.0375,
+                  -12
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Right Brick 03",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  5,
+                  0.0375,
+                  -6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Right Brick 04",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  5,
+                  0.0375,
+                  0
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Right Brick 05",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  5,
+                  0.0375,
+                  6
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Right Brick 06",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  5,
+                  0.0375,
+                  12
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            },
+            {
+              "name": "Far Right Brick 07",
+              "primitive": {
+                "type": "cube",
+                "w": 0.6,
+                "h": 0.075,
+                "d": 1.5,
+                "material": {
+                  "color": "#d8ffd4"
+                }
+              },
+              "transform": {
+                "t": [
+                  5,
+                  0.0375,
+                  18
+                ],
+                "r": [
+                  0,
+                  0,
+                  0
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

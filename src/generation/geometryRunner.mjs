@@ -7,13 +7,13 @@ export function runGeometryTask(data, signal) {
     const finish = (error, value) => {
       if (settled) return
       settled = true
-      clearTimeout(timer)
       signal?.removeEventListener('abort', abort)
       worker.terminate()
       error ? reject(error) : resolve(value)
     }
     const abort = () => finish(new DOMException('Cancelled', 'AbortError'))
-    const timer = setTimeout(() => finish(new Error('Geometry check exceeded its 15 second limit. Simplify the model or repeated parts.')), 15000)
+    // Complex CSG may take longer than a fixed deadline. Stop remains immediate
+    // because computation is isolated in this worker and abort terminates it.
     signal?.addEventListener('abort', abort, { once: true })
     worker.once('message', (message) => finish(message.error ? new Error(message.error) : null, message.result))
     worker.once('error', (error) => finish(error))

@@ -1,0 +1,1014 @@
+{
+  "scene": {
+    "name": "Toilet",
+    "operation": "union",
+    "transform": {
+      "t": [
+        0,
+        0,
+        0
+      ],
+      "r": [
+        0,
+        0,
+        0
+      ],
+      "s": [
+        1,
+        1,
+        1
+      ]
+    },
+    "children": [
+      {
+        "name": "Base",
+        "operation": "union",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "Foot",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.3,
+              "h": 0.12,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.06,
+                0.02
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1.25,
+                1,
+                1.55
+              ]
+            }
+          },
+          {
+            "name": "Pedestal",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.18,
+              "h": 0.34,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.25,
+                -0.01
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1.25,
+                1,
+                1.2
+              ]
+            }
+          },
+          {
+            "name": "RearBrace",
+            "primitive": {
+              "type": "cube",
+              "w": 0.34,
+              "h": 0.3,
+              "d": 0.22,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.22,
+                -0.17
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "Outlet",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.09,
+              "h": 0.14,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.07,
+                -0.23
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1.1,
+                1,
+                1.2
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "BowlShell",
+        "operation": "subtract",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "BowlOuter",
+            "operation": "union",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "OuterTop",
+                "primitive": {
+                  "type": "sphere",
+                  "r": 0.5,
+                  "material": {
+                    "color": "#F9FAFB"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0.45,
+                    0.08
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    0.72,
+                    0.46,
+                    0.9
+                  ]
+                }
+              },
+              {
+                "name": "OuterLower",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.15,
+                  "h": 0.45,
+                  "material": {
+                    "color": "#F9FAFB"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0.29,
+                    0.04
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1.3,
+                    1,
+                    1.35
+                  ]
+                }
+              },
+              {
+                "name": "RearThroat",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.32,
+                  "h": 0.22,
+                  "d": 0.22,
+                  "material": {
+                    "color": "#F9FAFB"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0.42,
+                    -0.18
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "InnerCavity",
+            "primitive": {
+              "type": "sphere",
+              "r": 0.45,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.56,
+                0.11
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                0.7,
+                0.34,
+                0.8
+              ]
+            }
+          },
+          {
+            "name": "SiphonWell",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.11,
+              "h": 0.34,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.25,
+                0.03
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1.2
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Water",
+        "primitive": {
+          "type": "cylinder",
+          "r": 0.15,
+          "h": 0.02,
+          "material": {
+            "color": "#F9FAFB"
+          }
+        },
+        "transform": {
+          "t": [
+            0,
+            0.31,
+            0.04
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1.15,
+            1,
+            1.4
+          ]
+        }
+      },
+      {
+        "name": "Seat",
+        "operation": "union",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "SeatRing",
+            "primitive": {
+              "type": "torus",
+              "r": 0.25,
+              "t": 0.04,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.55,
+                0.13
+              ],
+              "r": [
+                95,
+                0,
+                0
+              ],
+              "s": [
+                1.22,
+                1.36,
+                1.54
+              ]
+            }
+          },
+          {
+            "name": "SeatBridge",
+            "primitive": {
+              "type": "cube",
+              "w": 0.22,
+              "h": 0.03,
+              "d": 0.07,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.585,
+                -0.16
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "SeatCaps",
+            "repeat": {
+              "type": "linear",
+              "count": 2,
+              "t": [
+                0.18,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "SeatCap",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.02,
+                  "h": 0.028,
+                  "material": {
+                    "color": "#F9FAFB"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -0.09,
+                    0.6,
+                    -0.19
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Lid",
+        "operation": "union",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "LidPanel",
+            "primitive": {
+              "type": "sphere",
+              "r": 0.28,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.9,
+                -0.18
+              ],
+              "r": [
+                100,
+                0,
+                0
+              ],
+              "s": [
+                1.16,
+                0.09,
+                1.45
+              ]
+            }
+          },
+          {
+            "name": "LidBridge",
+            "primitive": {
+              "type": "cube",
+              "w": 0.22,
+              "h": 0.025,
+              "d": 0.06,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.62,
+                -0.19
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "HingeBar",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.018,
+              "h": 0.22,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.61,
+                -0.2
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "HingePosts",
+            "repeat": {
+              "type": "linear",
+              "count": 2,
+              "t": [
+                0.18,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "HingePost",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.018,
+                  "h": 0.05,
+                  "material": {
+                    "color": "#F9FAFB"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -0.09,
+                    0.61,
+                    -0.2
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Tank",
+        "operation": "union",
+        "transform": {
+          "t": [
+            0,
+            0,
+            0
+          ],
+          "r": [
+            0,
+            0,
+            0
+          ],
+          "s": [
+            1,
+            1,
+            1
+          ]
+        },
+        "children": [
+          {
+            "name": "Union",
+            "operation": "union",
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "TankBody",
+                "primitive": {
+                  "type": "cube",
+                  "w": 0.64,
+                  "h": 0.42,
+                  "d": 0.24,
+                  "material": {
+                    "color": "#F9FAFB"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0.84,
+                    -0.38
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              },
+              {
+                "name": "tube",
+                "primitive": {
+                  "type": "cylinder",
+                  "material": {
+                    "color": "#F9FAFB"
+                  },
+                  "r": 0.05,
+                  "h": 0.75,
+                  "radialSegments": 24
+                },
+                "transform": {
+                  "t": [
+                    0,
+                    0.3,
+                    -0.4
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "TankLid",
+            "primitive": {
+              "type": "cube",
+              "w": 0.68,
+              "h": 0.035,
+              "d": 0.28,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                1.0675,
+                -0.38
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "TankConnector",
+            "primitive": {
+              "type": "cube",
+              "w": 0.22,
+              "h": 0.14,
+              "d": 0.12,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.61,
+                -0.26
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "FlushPipe",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.06,
+              "h": 0.18,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                0.58,
+                -0.22
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "ButtonBase",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.07,
+              "h": 0.02,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0,
+                1.095,
+                -0.38
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          },
+          {
+            "name": "Buttons",
+            "repeat": {
+              "type": "linear",
+              "count": 2,
+              "t": [
+                0.08,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "transform": {
+              "t": [
+                0,
+                0,
+                0
+              ],
+              "r": [
+                0,
+                0,
+                0
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            },
+            "children": [
+              {
+                "name": "Button",
+                "primitive": {
+                  "type": "cylinder",
+                  "r": 0.022,
+                  "h": 0.018,
+                  "material": {
+                    "color": "#F9FAFB"
+                  }
+                },
+                "transform": {
+                  "t": [
+                    -0.04,
+                    1.104,
+                    -0.38
+                  ],
+                  "r": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "s": [
+                    1,
+                    1,
+                    1
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "name": "SupplyPipe",
+            "primitive": {
+              "type": "cylinder",
+              "r": 0.018,
+              "h": 0.16,
+              "material": {
+                "color": "#F9FAFB"
+              }
+            },
+            "transform": {
+              "t": [
+                0.2,
+                0.3,
+                -0.29
+              ],
+              "r": [
+                0,
+                0,
+                90
+              ],
+              "s": [
+                1,
+                1,
+                1
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

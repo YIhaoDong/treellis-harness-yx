@@ -149,6 +149,8 @@ export async function callModel(body, {
     const currentReader = reader
     const decoder = new TextDecoder('utf-8', { fatal: true })
     const summaries = new Map()
+    const milestones = new Set()
+    let lastSemanticAt = Date.now()
     let buffer = '', outputText = '', outputChars = 0, lastOutputEmit = 0, lastSummaryEmit = 0, lastSummary = '', latestSummary = '', terminal
     const reportSummary = (event, done = false) => {
       const key = `${event.item_id ?? event.output_index ?? 'summary'}:${event.summary_index ?? 0}`
@@ -171,6 +173,21 @@ export async function callModel(body, {
       if (!event || typeof event !== 'object' || Array.isArray(event)) throw new ProviderError('OpenAI returned an invalid response event.', 'PROVIDER_STREAM_ERROR')
       const eventType = event.type || lines.find(line => line.startsWith('event:'))?.slice(6).trim()
       if (event.response) rememberResponse(event.response)
+      // Heartbeat comments, partial frames and repeated status notifications are
+      // transport activity, not evidence that the response is making progress.
+      // Real deltas (including private reasoning, never exposed) and new output
+      // milestones keep the stream alive. Silence only reconnects the transport;
+      // the accepted background response continues under its original ID.
+      if (['response.created', 'response.queued', 'response.in_progress'].includes(eventType)) {
+        const state = eventType === 'response.created' ? event.response?.status || 'created' : eventType.slice('response.'.length)
+        const milestone = `state:${state}`
+        if (!milestones.has(milestone)) { milestones.add(milestone); lastSemanticAt = Date.now() }
+      } else if (/^response\.(output_text|reasoning|reasoning_text|reasoning_summary_text)\.delta$/.test(eventType) && typeof event.delta === 'string' && event.delta.length) {
+        lastSemanticAt = Date.now()
+      } else if (/^response\.(output_item|content_part|reasoning_summary_part)\.(added|done)$/.test(eventType)) {
+        const milestone = `${eventType}:${event.item_id ?? event.item?.id ?? event.output_index ?? ''}:${event.content_index ?? event.summary_index ?? ''}`
+        if (!milestones.has(milestone)) { milestones.add(milestone); lastSemanticAt = Date.now() }
+      }
       if (eventType === 'response.created') emit({ stage: 'provider', message: 'OpenAI accepted the request.' })
       else if (eventType === 'response.queued') emit({ stage: 'provider', message: 'OpenAI queued the request…' })
       else if (eventType === 'response.in_progress') emit({ stage: 'provider', message: 'GPT is processing the request…' })
@@ -208,12 +225,18 @@ export async function callModel(body, {
     try {
       while (!terminal) {
         let idleTimer
+        const idleError = () => new ProviderError('The stream stopped making progress. Reconnecting to the running response…', 'PROVIDER_STREAM_ERROR', { causeCode: 'STREAM_IDLE', retryable: true })
+        // Until an ID is known, retain v1's byte-idle behavior: a live HTTP 200
+        // stream is ambiguous acceptance and semantic silence must not cause a
+        // fresh POST. Once known, recovery can safely retrieve the same ID.
+        const remainingIdleMs = responseId ? policy.streamIdleMs - (Date.now() - lastSemanticAt) : policy.streamIdleMs
+        if (policy.streamIdleMs && remainingIdleMs <= 0) throw idleError()
         const idle = new Promise((_, reject) => {
           if (policy.streamIdleMs) idleTimer = setTimeout(() => {
             transportController.abort()
             try { void currentReader.cancel().catch(() => {}) } catch {}
-            reject(new ProviderError('The stream became idle. Reconnecting to the running response…', 'PROVIDER_STREAM_ERROR', { causeCode: 'STREAM_IDLE', retryable: true }))
-          }, policy.streamIdleMs)
+            reject(idleError())
+          }, remainingIdleMs)
         })
         let chunk
         try { chunk = await Promise.race([currentReader.read(), idle, abortPromise]) }

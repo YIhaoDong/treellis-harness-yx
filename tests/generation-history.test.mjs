@@ -34,3 +34,33 @@ test('back-to-back generation checkpoints each undo to their immediate predecess
   assert.deepEqual(applied, [wings, original, wings, engine])
   assert.deepEqual(original, { name: 'Aircraft', wings: 1, engine: 1 })
 })
+
+test('library transitions request camera framing through undo/redo while ordinary edits preserve the view', async () => {
+  const compiled = await build({
+    entryPoints: [fileURLToPath(new URL('../src/hooks/useEditHistory.jsx', import.meta.url))],
+    bundle: true, write: false, format: 'cjs', platform: 'node', external: ['react'],
+  })
+  const module = { exports: {} }
+  new Function('require', 'module', 'exports', compiled.outputFiles[0].text)(createRequire(import.meta.url), module, module.exports)
+  const original = { name: 'Large model' }
+  const cup = { name: 'Cup' }
+  const editedCup = { name: 'Edited Cup' }
+  const restored = []
+  let history
+  function Capture() {
+    history = module.exports.default({ liveScene: original, setLiveScene: scene => restored.push(scene) })
+    return null
+  }
+  renderToStaticMarkup(React.createElement(Capture))
+  history.recordGeneration(cup, 'library-load')
+  history.recordGeneration(editedCup, 'rename')
+  assert.equal(history.undo().sceneSwitch, false)
+  assert.equal(history.undo().sceneSwitch, true)
+  assert.equal(history.redo().sceneSwitch, true)
+  assert.equal(history.redo().sceneSwitch, false)
+  assert.equal(history.undo().sceneSwitch, false)
+  assert.equal(history.undo().sceneSwitch, true)
+  assert.deepEqual(restored, [cup, original, cup, editedCup, cup, original])
+  assert.deepEqual(original, { name: 'Large model' })
+  assert.deepEqual(cup, { name: 'Cup' })
+})

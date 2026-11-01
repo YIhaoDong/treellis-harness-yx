@@ -1,5 +1,6 @@
 // src/hooks/useParamRanges.js
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { STATIC_DEMO } from '../staticDemo/mode.mjs'
 
 // 公开给外部用于占位/默认 UI 提示
 export const DEFAULT_T_RANGE = { min: -10, max: 10, step: 0.1 }
@@ -20,6 +21,7 @@ export function useTranslateRanges() {
   const [rangeDraftTick, setRangeDraftTick] = useState(0)
 
   useEffect(() => {
+    if (STATIC_DEMO) return
     try {
       const raw = localStorage.getItem(RANGE_LS_KEY)
       if (raw) {
@@ -30,6 +32,7 @@ export function useTranslateRanges() {
   }, [])
 
   const persist = useCallback(() => {
+    if (STATIC_DEMO) return
     try { localStorage.setItem(RANGE_LS_KEY, JSON.stringify(rangeOverridesRef.current)) } catch {}
   }, [])
 
@@ -93,6 +96,7 @@ export function useParamMaxOverrides() {
   const [paramMaxDraftTick, setParamMaxDraftTick] = useState(0)
 
   useEffect(() => {
+    if (STATIC_DEMO) return
     try {
       const raw = localStorage.getItem(PARAM_MAX_LS_KEY)
       if (raw) {
@@ -103,6 +107,7 @@ export function useParamMaxOverrides() {
   }, [])
 
   const persist = useCallback(() => {
+    if (STATIC_DEMO) return
     try { localStorage.setItem(PARAM_MAX_LS_KEY, JSON.stringify(paramMaxOverridesRef.current)) } catch {}
   }, [])
 
@@ -164,6 +169,7 @@ export function useRepeatRanges() {
   const [repeatDraftTick, setRepeatDraftTick] = useState(0)
 
   useEffect(() => {
+    if (STATIC_DEMO) return
     try {
       const raw = localStorage.getItem(REPEAT_LS_KEY)
       if (raw) {
@@ -174,6 +180,7 @@ export function useRepeatRanges() {
   }, [])
 
   const persist = useCallback(() => {
+    if (STATIC_DEMO) return
     try { localStorage.setItem(REPEAT_LS_KEY, JSON.stringify(repeatOverridesRef.current)) } catch {}
   }, [])
 

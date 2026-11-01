@@ -21,7 +21,9 @@ export function bindViewportPicking(element, {
   let candidate = null
   let lastHoverPath = null
 
-  const isModified = (event) => event.shiftKey || event.ctrlKey || event.metaKey || event.altKey
+  // Shift taps add/remove selection; Shift drags still belong to OrbitControls.
+  const isNavigationModified = (event) => event.ctrlKey || event.metaKey || event.altKey
+  const changedModifiers = (event, start) => isNavigationModified(event) || !!event.shiftKey !== start.shiftKey
   const movedTooFar = (event, start) => (
     (event.clientX - start.x) ** 2 + (event.clientY - start.y) ** 2 > thresholdSquared
   )
@@ -42,8 +44,8 @@ export function bindViewportPicking(element, {
     const alreadyPressed = pointers.size > 0
     pointers.add(event.pointerId)
     candidate = !alreadyPressed && !navigationEvents.has(event) && event.button === 0 &&
-      event.isPrimary !== false && !isModified(event)
-      ? { pointerId: event.pointerId, x: event.clientX, y: event.clientY }
+      event.isPrimary !== false && !isNavigationModified(event)
+      ? { pointerId: event.pointerId, x: event.clientX, y: event.clientY, shiftKey: !!event.shiftKey }
       : null
     clearHover()
   }
@@ -52,7 +54,7 @@ export function bindViewportPicking(element, {
     // Also reject a button chord or a modifier pressed after pointerdown.
     const buttonsChanged = event.pointerType !== 'touch' &&
       event.buttons != null && event.buttons !== 1
-    if (movedTooFar(event, candidate) || isModified(event) || buttonsChanged) candidate = null
+    if (movedTooFar(event, candidate) || changedModifiers(event, candidate) || buttonsChanged) candidate = null
   }
   const onMove = (event) => {
     trackMovement(event)
@@ -69,9 +71,9 @@ export function bindViewportPicking(element, {
     const wasPressed = pointers.delete(event.pointerId)
     if (pending?.pointerId === event.pointerId) candidate = null
     if (!wasPressed || !pending || pending.pointerId !== event.pointerId ||
-      pointers.size || event.button !== 0 || isModified(event) ||
+      pointers.size || event.button !== 0 || changedModifiers(event, pending) ||
       movedTooFar(event, pending) || !isInside(event)) return
-    onClickPath?.(intersect?.(event.clientX, event.clientY) ?? null)
+    onClickPath?.(intersect?.(event.clientX, event.clientY) ?? null, { shiftKey: pending.shiftKey, additive: pending.shiftKey })
   }
   const onCancel = (event) => {
     pointers.delete(event.pointerId)
@@ -82,7 +84,7 @@ export function bindViewportPicking(element, {
   }
   const cancelCandidate = () => { candidate = null }
   const onKeyDown = (event) => {
-    if (['Shift', 'Control', 'Alt', 'Meta'].includes(event.key)) cancelCandidate()
+    if (['Control', 'Alt', 'Meta'].includes(event.key) || (event.key === 'Shift' && !candidate?.shiftKey)) cancelCandidate()
   }
   const reset = () => {
     pointers.clear()

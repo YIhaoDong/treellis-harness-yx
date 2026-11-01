@@ -10,10 +10,12 @@ const SEGMENT_KEYS = ['widthSegments', 'heightSegments', 'radialSegments', 'tubu
 // These legacy fields affect rendering and must never follow a changed node kind.
 const LEGACY_KIND_KEYS = new Set(['kind', 'nodeKind', 'repeatType', 'repeatMode']);
 const number = { type: 'number' };
+// Mirror existing runtime rejection rules early; no new geometric lower bound.
+const positiveDimension = { type: 'number', exclusiveMinimum: 0 };
+const checkPath = { type: 'string', pattern: '^0(?:\\.(?:0|[1-9]\\d*))*$' };
 const vector = { type: 'array', items: number, minItems: 3, maxItems: 3 };
 const nullable = (schema) => ({ anyOf: [schema, { type: 'null' }] });
 const object = (properties) => ({ type: 'object', properties, required: Object.keys(properties), additionalProperties: false });
-const transformSchema = object({ t: vector, r: vector, s: vector });
 const materialSchema = object({ color: { type: 'string', pattern: '^#[0-9a-fA-F]{6}$' } });
 export const OBJECTIVE_CHECK_KINDS = ['count', 'extent', 'relative_extent', 'align', 'axis_direction', 'axis_parallel', 'axis_distance'];
 // Angular alignment is measured as 1-abs(dot), not degrees. Reject loose
@@ -27,30 +29,37 @@ export function hasAxisParallelCheck(checks, distance) {
 
 function makeNodeSchema(kind) {
   const fields = {
-    name: { type: 'string' }, transform: nullable(transformSchema), primitive: { type: 'null' },
+    name: { type: 'string' }, transform: nullable({ $ref: '#/$defs/transform' }), primitive: { type: 'null' },
     operation: { type: 'null' }, repeat: { type: 'null' }, children: { type: 'null' },
   };
   if (PRIMITIVES[kind]) {
-    fields.primitive = object({ type: { type: 'string', enum: [kind] }, ...Object.fromEntries(PRIMITIVES[kind].map(k => [k, number])), material: nullable(materialSchema) });
+    fields.primitive = object({ type: { type: 'string', enum: [kind] }, ...Object.fromEntries(PRIMITIVES[kind].map(k => [k, positiveDimension])), material: nullable({ $ref: '#/$defs/material' }) });
   } else if (kind === 'operation') {
     fields.operation = { type: 'string', enum: ['union', 'subtract', 'intersection'] };
     fields.children = { type: 'array', items: { $ref: '#/$defs/node' }, minItems: 1, maxItems: 128 };
   } else {
-    fields.repeat = object({ type: { type: 'string', enum: ['linear', 'circular'] }, count: { type: 'integer', minimum: 1, maximum: 64 }, t: vector, r: vector, s: vector, radius: nullable(number) });
+    fields.repeat = object({ type: { type: 'string', enum: ['linear', 'circular'] }, count: { type: 'integer', minimum: 1, maximum: 64 }, t: { $ref: '#/$defs/vector' }, r: { $ref: '#/$defs/vector' }, s: { $ref: '#/$defs/vector' }, radius: nullable(number) });
     fields.children = { type: 'array', items: { $ref: '#/$defs/node' }, minItems: 1, maxItems: 128 };
   }
   return object(fields);
 }
 
 /** Shape accepted by Responses API text.format (Chat Completions wraps json_schema). */
-export function createResponseFormat(mode = 'create') {
+export function createResponseFormat(mode = 'create', { allowStructure = true } = {}) {
   if (!['create', 'edit', 'node'].includes(mode)) throw new Error(`Unknown generation mode: ${mode}`);
+  // This is the host's existing permission gate, not a second intent classifier.
+  const patchOnly = mode !== 'create' && !allowStructure;
   const variants = [...Object.keys(PRIMITIVES), 'operation', 'repeat'];
-  const defs = Object.fromEntries(variants.map(kind => [kind, makeNodeSchema(kind)]));
+  const defs = {
+    vector,
+    transform: object({ t: { $ref: '#/$defs/vector' }, r: { $ref: '#/$defs/vector' }, s: { $ref: '#/$defs/vector' } }),
+    material: materialSchema,
+    ...Object.fromEntries(variants.map(kind => [kind, makeNodeSchema(kind)])),
+  };
   defs.node = { anyOf: variants.map(kind => ({ $ref: `#/$defs/${kind}` })) };
   const schema = object({
-    action: { type: 'string', enum: mode === 'create' ? ['replace', 'clarify'] : ['patch', 'replace', 'clarify'] },
-    replacement: nullable({ $ref: '#/$defs/node' }),
+    action: { type: 'string', enum: mode === 'create' ? ['replace', 'clarify'] : patchOnly ? ['patch', 'clarify'] : ['patch', 'replace', 'clarify'] },
+    replacement: patchOnly ? { type: 'null' } : nullable({ $ref: '#/$defs/node' }),
     patches: { type: 'array', maxItems: 128, items: object({ path: { type: 'string' }, value: { anyOf: [number, { type: 'string' }, vector] } }) },
     message: { type: 'string' },
     suggestions: { type: 'array', maxItems: 3, items: object({
@@ -59,11 +68,11 @@ export function createResponseFormat(mode = 'create') {
     plan: { type: 'array', maxItems: 12, items: { type: 'string' } },
     checks: { type: 'array', maxItems: 24, items: object({
       kind: { type: 'string', enum: OBJECTIVE_CHECK_KINDS },
-      path: { type: 'string' }, otherPath: { type: 'string' }, axis: { type: 'string', enum: ['x', 'y', 'z'] },
+      path: checkPath, otherPath: { anyOf: [{ type: 'string', enum: [''] }, checkPath] }, axis: { type: 'string', enum: ['x', 'y', 'z'] },
       comparison: { type: 'string', enum: ['eq', 'lt', 'le', 'gt', 'ge'] }, value: number, tolerance: number,
     }) },
   });
-  schema.$defs = defs;
+  if (!patchOnly) schema.$defs = defs;
   return { type: 'json_schema', name: 'treellis_generation', strict: true, schema };
 }
 

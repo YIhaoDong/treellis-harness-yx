@@ -1,0 +1,969 @@
+{
+  "type": "json_schema",
+  "name": "treellis_generation",
+  "strict": true,
+  "schema": {
+    "type": "object",
+    "properties": {
+      "action": {
+        "type": "string",
+        "enum": [
+          "patch",
+          "replace",
+          "clarify"
+        ]
+      },
+      "replacement": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/node"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "patches": {
+        "type": "array",
+        "maxItems": 128,
+        "items": {
+          "type": "object",
+          "properties": {
+            "path": {
+              "type": "string"
+            },
+            "value": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "number"
+                  },
+                  "minItems": 3,
+                  "maxItems": 3
+                }
+              ]
+            }
+          },
+          "required": [
+            "path",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "message": {
+        "type": "string"
+      },
+      "suggestions": {
+        "type": "array",
+        "maxItems": 3,
+        "items": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "instruction": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "label",
+            "instruction",
+            "path"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "plan": {
+        "type": "array",
+        "maxItems": 12,
+        "items": {
+          "type": "string"
+        }
+      },
+      "checks": {
+        "type": "array",
+        "maxItems": 24,
+        "items": {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "type": "string",
+              "enum": [
+                "count",
+                "extent",
+                "relative_extent",
+                "align",
+                "axis_direction",
+                "axis_parallel",
+                "axis_distance"
+              ]
+            },
+            "path": {
+              "type": "string"
+            },
+            "otherPath": {
+              "type": "string"
+            },
+            "axis": {
+              "type": "string",
+              "enum": [
+                "x",
+                "y",
+                "z"
+              ]
+            },
+            "comparison": {
+              "type": "string",
+              "enum": [
+                "eq",
+                "lt",
+                "le",
+                "gt",
+                "ge"
+              ]
+            },
+            "value": {
+              "type": "number"
+            },
+            "tolerance": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "kind",
+            "path",
+            "otherPath",
+            "axis",
+            "comparison",
+            "value",
+            "tolerance"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "required": [
+      "action",
+      "replacement",
+      "patches",
+      "message",
+      "suggestions",
+      "plan",
+      "checks"
+    ],
+    "additionalProperties": false,
+    "$defs": {
+      "cube": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "transform": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "t": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "r": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "s": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "t",
+                  "r",
+                  "s"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "primitive": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "cube"
+                ]
+              },
+              "w": {
+                "type": "number"
+              },
+              "h": {
+                "type": "number"
+              },
+              "d": {
+                "type": "number"
+              },
+              "material": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "color": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]{6}$"
+                      }
+                    },
+                    "required": [
+                      "color"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "w",
+              "h",
+              "d",
+              "material"
+            ],
+            "additionalProperties": false
+          },
+          "operation": {
+            "type": "null"
+          },
+          "repeat": {
+            "type": "null"
+          },
+          "children": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "name",
+          "transform",
+          "primitive",
+          "operation",
+          "repeat",
+          "children"
+        ],
+        "additionalProperties": false
+      },
+      "sphere": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "transform": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "t": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "r": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "s": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "t",
+                  "r",
+                  "s"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "primitive": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "sphere"
+                ]
+              },
+              "r": {
+                "type": "number"
+              },
+              "material": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "color": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]{6}$"
+                      }
+                    },
+                    "required": [
+                      "color"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "r",
+              "material"
+            ],
+            "additionalProperties": false
+          },
+          "operation": {
+            "type": "null"
+          },
+          "repeat": {
+            "type": "null"
+          },
+          "children": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "name",
+          "transform",
+          "primitive",
+          "operation",
+          "repeat",
+          "children"
+        ],
+        "additionalProperties": false
+      },
+      "cylinder": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "transform": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "t": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "r": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "s": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "t",
+                  "r",
+                  "s"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "primitive": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "cylinder"
+                ]
+              },
+              "r": {
+                "type": "number"
+              },
+              "h": {
+                "type": "number"
+              },
+              "material": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "color": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]{6}$"
+                      }
+                    },
+                    "required": [
+                      "color"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "r",
+              "h",
+              "material"
+            ],
+            "additionalProperties": false
+          },
+          "operation": {
+            "type": "null"
+          },
+          "repeat": {
+            "type": "null"
+          },
+          "children": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "name",
+          "transform",
+          "primitive",
+          "operation",
+          "repeat",
+          "children"
+        ],
+        "additionalProperties": false
+      },
+      "torus": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "transform": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "t": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "r": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "s": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "t",
+                  "r",
+                  "s"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "primitive": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "torus"
+                ]
+              },
+              "r": {
+                "type": "number"
+              },
+              "t": {
+                "type": "number"
+              },
+              "material": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "color": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]{6}$"
+                      }
+                    },
+                    "required": [
+                      "color"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "r",
+              "t",
+              "material"
+            ],
+            "additionalProperties": false
+          },
+          "operation": {
+            "type": "null"
+          },
+          "repeat": {
+            "type": "null"
+          },
+          "children": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "name",
+          "transform",
+          "primitive",
+          "operation",
+          "repeat",
+          "children"
+        ],
+        "additionalProperties": false
+      },
+      "cone": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "transform": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "t": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "r": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "s": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "t",
+                  "r",
+                  "s"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "primitive": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "cone"
+                ]
+              },
+              "r": {
+                "type": "number"
+              },
+              "h": {
+                "type": "number"
+              },
+              "material": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "color": {
+                        "type": "string",
+                        "pattern": "^#[0-9a-fA-F]{6}$"
+                      }
+                    },
+                    "required": [
+                      "color"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "r",
+              "h",
+              "material"
+            ],
+            "additionalProperties": false
+          },
+          "operation": {
+            "type": "null"
+          },
+          "repeat": {
+            "type": "null"
+          },
+          "children": {
+            "type": "null"
+          }
+        },
+        "required": [
+          "name",
+          "transform",
+          "primitive",
+          "operation",
+          "repeat",
+          "children"
+        ],
+        "additionalProperties": false
+      },
+      "operation": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "transform": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "t": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "r": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "s": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "t",
+                  "r",
+                  "s"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "primitive": {
+            "type": "null"
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "union",
+              "subtract",
+              "intersection"
+            ]
+          },
+          "repeat": {
+            "type": "null"
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/node"
+            },
+            "minItems": 1,
+            "maxItems": 128
+          }
+        },
+        "required": [
+          "name",
+          "transform",
+          "primitive",
+          "operation",
+          "repeat",
+          "children"
+        ],
+        "additionalProperties": false
+      },
+      "repeat": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "transform": {
+            "anyOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "t": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "r": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  },
+                  "s": {
+                    "type": "array",
+                    "items": {
+                      "type": "number"
+                    },
+                    "minItems": 3,
+                    "maxItems": 3
+                  }
+                },
+                "required": [
+                  "t",
+                  "r",
+                  "s"
+                ],
+                "additionalProperties": false
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "primitive": {
+            "type": "null"
+          },
+          "operation": {
+            "type": "null"
+          },
+          "repeat": {
+            "type": "object",
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": [
+                  "linear",
+                  "circular"
+                ]
+              },
+              "count": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 64
+              },
+              "t": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "r": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "s": {
+                "type": "array",
+                "items": {
+                  "type": "number"
+                },
+                "minItems": 3,
+                "maxItems": 3
+              },
+              "radius": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            },
+            "required": [
+              "type",
+              "count",
+              "t",
+              "r",
+              "s",
+              "radius"
+            ],
+            "additionalProperties": false
+          },
+          "children": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/node"
+            },
+            "minItems": 1,
+            "maxItems": 128
+          }
+        },
+        "required": [
+          "name",
+          "transform",
+          "primitive",
+          "operation",
+          "repeat",
+          "children"
+        ],
+        "additionalProperties": false
+      },
+      "node": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/cube"
+          },
+          {
+            "$ref": "#/$defs/sphere"
+          },
+          {
+            "$ref": "#/$defs/cylinder"
+          },
+          {
+            "$ref": "#/$defs/torus"
+          },
+          {
+            "$ref": "#/$defs/cone"
+          },
+          {
+            "$ref": "#/$defs/operation"
+          },
+          {
+            "$ref": "#/$defs/repeat"
+          }
+        ]
+      }
+    }
+  }
+}

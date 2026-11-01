@@ -1,5 +1,7 @@
 // src/components/InstanceLibrary.jsx
 import React, { useEffect, useMemo, useState } from 'react'
+import { STATIC_DEMO } from '../staticDemo/mode.mjs'
+import { requestStaticText } from '../staticDemo/dialogs.mjs'
 
 /**
  * InstanceLibrary (copy-based)
@@ -20,10 +22,12 @@ export default function InstanceLibrary({
 }) {
   const STORAGE_KEY = 'ttcs.library.open'
   const [open, setOpen] = useState(() => {
+    if (STATIC_DEMO) return false
     try { return localStorage.getItem(STORAGE_KEY) === '1' } catch { return false }
   })
 
   useEffect(() => {
+    if (STATIC_DEMO) return
     try { localStorage.setItem(STORAGE_KEY, open ? '1' : '0') } catch {}
   }, [open])
 
@@ -88,9 +92,9 @@ export default function InstanceLibrary({
     if (typeof onPick === 'function') onPick(id)
   }
 
-  const handleRename = (id, currentName) => {
+  const handleRename = async (id, currentName) => {
     if (typeof onRename !== 'function') return
-    const next = window.prompt('Rename instance / 重命名实例', String(currentName || 'Instance'))
+    const next = STATIC_DEMO ? await requestStaticText('Rename instance / 重命名实例', String(currentName || 'Instance')) : window.prompt('Rename instance / 重命名实例', String(currentName || 'Instance'))
     if (next == null) return
     const nm = String(next).trim()
     if (!nm) return

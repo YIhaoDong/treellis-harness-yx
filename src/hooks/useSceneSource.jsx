@@ -1,5 +1,7 @@
 // src/hooks/useSceneSource.jsx
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { STATIC_DEMO } from '../staticDemo/mode.mjs'
+import { createInitialScene } from '../staticDemo/initialScene.mjs'
 
 /**
  * 管理场景来源（远端 /scene.json 与本地 blob 草稿）：
@@ -21,11 +23,18 @@ export default function useSceneSource({
   const blobUrlRef = useRef(null)
   const lastSceneTextRef = useRef(null)
   const acceptTreeChangeRef = useRef(true)
+  const draftModeRef = useRef(false)
 
   // 进入草稿：用 root 生成 blob URL，并切换为草稿模式
   const enterDraftFromRoot = useCallback((root) => {
     if (!root) return
+    draftModeRef.current = true
     setLiveScene(root)
+    if (STATIC_DEMO) {
+      setIsDraft(true)
+      acceptTreeChangeRef.current = false
+      return
+    }
     const wrapped = { scene: root }
     const blob = new Blob([JSON.stringify(wrapped, null, 2)], { type: 'application/json' })
     const blobUrl = URL.createObjectURL(blob)
@@ -38,6 +47,14 @@ export default function useSceneSource({
 
   // 刷新（按钮使用）
   const refresh = useCallback(() => {
+    if (STATIC_DEMO) {
+      setLiveScene(createInitialScene())
+      draftModeRef.current = false
+      setIsDraft(false)
+      acceptTreeChangeRef.current = false
+      setReloadKey(k => k + 1)
+      return
+    }
     if (!isDraft) {
       lastSceneTextRef.current = null
       setLiveScene(null)
@@ -49,16 +66,18 @@ export default function useSceneSource({
 
   // 轮询 /scene.json（仅在非草稿时生效；编辑中暂停）
   useEffect(() => {
-    if (isDraft) return
+    if (STATIC_DEMO || isDraft) return
     let stopped = false
     let timer = null
     const check = async () => {
-      if (stopped) return
+      if (stopped || draftModeRef.current) return
       if (editingRef?.current) { timer = setTimeout(check, pollIntervalMs); return }
       try {
         const res = await fetch('/scene.json?ts=' + Date.now(), { cache: 'no-store' })
         if (res.ok) {
           const text = await res.text()
+          // A request started before a library load must not replace its draft.
+          if (stopped || draftModeRef.current) return
           if (lastSceneTextRef.current == null) {
             lastSceneTextRef.current = text
           } else if (text !== lastSceneTextRef.current) {
@@ -70,7 +89,7 @@ export default function useSceneSource({
           }
         }
       } catch {}
-      timer = setTimeout(check, pollIntervalMs)
+      if (!stopped && !draftModeRef.current) timer = setTimeout(check, pollIntervalMs)
     }
     check()
     return () => { stopped = true; if (timer) clearTimeout(timer) }

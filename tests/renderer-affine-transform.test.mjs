@@ -170,9 +170,9 @@ test('union highlight clones preserve sheared input matrices and share the displ
 })
 
 test('production union-highlight effect applies the display parent once', () => {
-  const start = source.indexOf('  // highlight update'), effectStart = source.indexOf('useEffect(() => {', start) + 'useEffect(() => {'.length, end = source.indexOf('  }, [sceneObj, highlightPath, unionHighlight, debug])', effectStart)
+  const start = source.indexOf('  // highlight update'), effectStart = source.indexOf('useEffect(() => {', start) + 'useEffect(() => {'.length, end = source.indexOf('  }, [sceneObj, highlightPath, highlightPaths, unionHighlight, debug])', effectStart)
   assert.ok(start >= 0 && effectStart > start && end > effectStart)
-  const runEffect = new Function('sceneObj', 'highlightPath', 'unionHighlight', 'debug', 'ghostRef', 'indexRef', 'setUnionMesh', 'unionMeshes', 'withViewportOffset', source.slice(effectStart, end))
+  const runEffect = new Function('sceneObj', 'highlightPath', 'unionHighlight', 'debug', 'ghostRef', 'indexRef', 'setUnionMesh', 'unionMeshes', 'withViewportOffset', 'highlightPaths', source.slice(effectStart, end))
   const scene = { operation: 'union', transform: parent, children: [box({ t: [-4, 0, 0], r: [33, -28, 61] }, 1, 1.5, 2), box({ t: [4, 0, 0], r: [23, 42, -17] }, 1.2, 0.8, 1.4)] }
   const { ghostGroup, index } = renderer.buildGhostAndIndex(scene), ghostRef = { current: withViewportOffset(ghostGroup) }, indexRef = { current: index }
   let overlay
@@ -180,6 +180,27 @@ test('production union-highlight effect applies the display parent once', () => 
   assert.equal(overlay.isGroup, true)
   const actual = new THREE.Box3().setFromObject(overlay), expected = new THREE.Box3().setFromObject(withViewportOffset(renderer.buildVisualScene(scene)))
   nearArray(actual.min.toArray(), expected.min.toArray(), 1e-6); nearArray(actual.max.toArray(), expected.max.toArray(), 1e-6)
+})
+
+test('multi-selection highlights the union of selected subtree meshes, deduplicating ancestor overlap', () => {
+  const start = source.indexOf('  // highlight update'), effectStart = source.indexOf('useEffect(() => {', start) + 'useEffect(() => {'.length, end = source.indexOf('  }, [sceneObj, highlightPath, highlightPaths, unionHighlight, debug])', effectStart)
+  assert.ok(start >= 0 && end > effectStart)
+  const runEffect = new Function('sceneObj', 'highlightPath', 'unionHighlight', 'debug', 'ghostRef', 'indexRef', 'setUnionMesh', 'unionMeshes', 'withViewportOffset', 'highlightPaths', source.slice(effectStart, end))
+  const scene = { operation: 'union', children: [{ operation: 'union', children: [box(), box({ t: [2, 0, 0] })] }, box({ t: [-2, 0, 0] })] }
+  const { ghostGroup, index } = renderer.buildGhostAndIndex(scene)
+  const ghostRef = { current: withViewportOffset(ghostGroup) }, indexRef = { current: index }
+  const visible = () => [...index.get('0').meshes].filter(mesh => mesh.visible)
+  runEffect(scene, '0.1', false, false, ghostRef, indexRef, () => {}, renderer.unionMeshes, withViewportOffset, ['0.0', '0.0.0'])
+  assert.deepEqual(visible(), index.get('0.0').meshes)
+  let unionInputs
+  runEffect(scene, null, true, false, ghostRef, indexRef, () => {}, meshes => { unionInputs = meshes; return null }, withViewportOffset, ['0', '0.0', '0.0.0'])
+  assert.equal(unionInputs.length, 3)
+  assert.equal(new Set(unionInputs).size, 3)
+  assert.deepEqual(visible(), [])
+  runEffect(scene, '0.1', false, false, ghostRef, indexRef, () => {}, renderer.unionMeshes, withViewportOffset, [])
+  assert.deepEqual(visible(), [], 'an explicit empty highlight set overrides the legacy path')
+  runEffect(scene, '0.1', false, false, ghostRef, indexRef, () => {}, renderer.unionMeshes, withViewportOffset)
+  assert.deepEqual(visible(), index.get('0.1').meshes, 'legacy single-path calls remain supported')
 })
 
 test('ray picking hits the correct sheared world face and preserves the AML path', () => {

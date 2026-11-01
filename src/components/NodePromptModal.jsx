@@ -1,14 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { STATIC_DEMO } from '../staticDemo/mode.mjs'
 import { nodeDisplayName } from '../utils/promptMeta.jsx'
 import { DEFAULT_RUN_MODE } from '../utils/llmConfig.js'
 import { GenerateButton, GenerationProgress, GenerationStrategySelect, ModelModeSelect } from './PromptControls.jsx'
 import { stageLabel, supportsStagedGeneration } from '../generation/progressState.mjs'
 import useGenerationService from '../hooks/useGenerationService.jsx'
 import useGenerationRun from '../hooks/useGenerationRun.jsx'
+import usePromptImages from '../hooks/usePromptImages.jsx'
+import PromptImageAttachments from './PromptImageAttachments.jsx'
 import { boundedNodeConversation, followupNodeAt, nodeFollowupSuggestions, nodeReplyConversation } from '../utils/nodeFollowup.mjs'
 import '../prompt.css'
 
-export default function NodePromptModal({ open, path, node, scene, onClose, onApply, onScopeChange }) {
+export default function NodePromptModal({ open, path, node, scene, onClose, onApply, onScopeChange, disabled = false, onBusyChange }) {
   const [prompt, setPrompt] = useState('')
   const [showOptions, setShowOptions] = useState(false)
   const [apiKey, setApiKey] = useState('')
@@ -21,19 +24,22 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
   const taRef = useRef(null)
   const lastReplyRef = useRef(null)
   const pendingRef = useRef(null)
+  const attachments = usePromptImages({ disabled, isDisabled: () => busy || !!pendingRef.current || disabled })
   const detailed = supportsStagedGeneration(runMode)
   const strategy = detailed ? preferredStrategy : 'single'
-  const identity = JSON.stringify({ prompt, effort: runMode, strategy, path: activePath, conversation })
+  const identity = JSON.stringify({ prompt, effort: runMode, strategy, path: activePath, conversation, images: attachments.revision })
   const generation = useGenerationRun({ scene, path: activePath, open, identity,
+    imageRevision: attachments.revision,
     onApply: (result, meta) => onApply?.(result, meta, activePath), onComplete: () => onClose?.() })
   const { busy, error, errorCode, setError, clarification, clarificationIsCurrent } = generation
+  useEffect(() => { onBusyChange?.(busy); return () => onBusyChange?.(false) }, [busy, onBusyChange])
   const activeNode = followupNodeAt(scene, activePath) || (!scene && activePath === path ? node : null)
   const nodeName = nodeDisplayName(activeNode)
   const service = useGenerationService()
   const revision = JSON.stringify(scene)
   const replyIsCurrent = !replyContext || (replyContext.revision === revision && replyContext.path === activePath)
   const hasReply = !!clarification || conversation.length > 0
-  const canRun = open && service.ready && !busy && !pendingAction && (!!apiKey.trim() || service.localKeyAvailable) && !!activeNode && !!activePath
+  const canRun = open && service.ready && !busy && !disabled && !attachments.loading && !pendingAction && (!!apiKey.trim() || service.localKeyAvailable) && !!activeNode && !!activePath
   const canSubmit = canRun && replyIsCurrent && (!clarification || clarificationIsCurrent) && !!prompt.trim()
   const displayError = (errorCode === 'CLARIFICATION' && clarification ? '' : error) || service.error
   const suggestions = nodeFollowupSuggestions(scene, clarification?.path, clarification?.suggestions)
@@ -51,10 +57,11 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
     setPendingAction(null)
     pendingRef.current = null
     lastReplyRef.current = null
+    attachments.clear()
     if (!open) return
     setPrompt('')
     let key = ''
-    try { key = (localStorage.getItem('OPENAI_API_KEY') || '').trim() } catch {}
+    try { if (!STATIC_DEMO) key = (localStorage.getItem('OPENAI_API_KEY') || '').trim() } catch {}
     setApiKey(key)
     setShowOptions(!key && !service.localKeyAvailable)
     const timer = setTimeout(() => taRef.current?.focus(), 50)
@@ -72,13 +79,13 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
     if (!pendingAction || activePath !== pendingAction.path || pendingRef.current !== pendingAction) return
     pendingRef.current = null
     setPendingAction(null)
-    if (!open || busy || !service.ready || !activeNode || revision !== pendingAction.revision) {
-      setError('The scene changed. Ask a new question before applying this suggestion.')
+    if (!open || busy || disabled || attachments.loading || !service.ready || !activeNode || revision !== pendingAction.revision || attachments.revision !== pendingAction.imageRevision) {
+      setError('The scene or reference images changed, or another task is running. Ask again before applying this suggestion.')
       return
     }
     generation.run({ mode: 'node', prompt: pendingAction.instruction, scene, node: activeNode,
-      path: activePath, effort: runMode, strategy, conversation: pendingAction.conversation }, { apiKey })
-  }, [pendingAction, activePath, open, busy, service.ready, activeNode, revision, apiKey, runMode, strategy])
+      path: activePath, effort: runMode, strategy, conversation: pendingAction.conversation, images: attachments.images }, { apiKey })
+  }, [pendingAction, activePath, open, busy, disabled, attachments.loading, attachments.revision, service.ready, activeNode, revision, apiKey, runMode, strategy])
   useEffect(() => { if (open && service.ready && service.localKeyAvailable && !apiKey) setShowOptions(false) }, [service.ready, service.localKeyAvailable, open])
   useEffect(() => {
     if (!open) return
@@ -89,6 +96,7 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
     return () => document.removeEventListener('keydown', onEscape)
   }, [open, onClose])
   const saveKey = () => {
+    if (STATIC_DEMO) return
     try {
       const key = apiKey.trim()
       if (key) localStorage.setItem('OPENAI_API_KEY', key)
@@ -96,15 +104,16 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
     } catch { setError('This browser cannot save the key. You can still use it for this session.') }
   }
   const submit = (resume = false) => {
+    if (STATIC_DEMO) return
     if (!canSubmit || pendingRef.current) return
     generation.run({ mode: 'node', prompt, scene, node: activeNode, path: activePath, effort: runMode, strategy,
-      conversation: boundedNodeConversation(conversation) }, { apiKey, resume })
+      conversation: boundedNodeConversation(conversation), images: attachments.images }, { apiKey, resume })
   }
   const acceptSuggestion = suggestion => {
     if (!canRun || pendingRef.current || !clarificationIsCurrent || clarification?.revision !== revision || clarification.path !== activePath) return
     const selected = nodeFollowupSuggestions(scene, activePath, [suggestion])[0]
     if (!selected) return
-    const action = { ...selected, conversation: nodeReplyConversation(clarification), revision }
+    const action = { ...selected, conversation: nodeReplyConversation(clarification), revision, imageRevision: attachments.revision }
     pendingRef.current = action
     setPendingAction(action)
     setConversation(action.conversation)
@@ -154,7 +163,7 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
             <span>{suggestions.length ? 'Choose an action or reply below.' : 'Reply below to continue.'}</span>
           </div>
           {staleReply && <div className="node-reply__stale" role="status">
-            The scene or selection changed. Ask again before using these suggestions.
+            The scene, selection or reference images changed. Ask again before using these suggestions.
             <button type="button" className="prompt-secondary prompt-secondary--border" onClick={startNewQuestion}>Start new question</button>
           </div>}
         </section>}
@@ -162,7 +171,8 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
           The scene changed. Ask again to use its latest state.
           <button type="button" className="prompt-secondary prompt-secondary--border" disabled={busy} onClick={startNewQuestion}>Start new question</button>
         </div>}
-        <div className="prompt-composer">
+        <div className="prompt-composer" {...attachments.composerProps}>
+          <PromptImageAttachments attachments={attachments} disabled={busy || disabled || !!pendingAction} />
           <textarea
             className={`prompt-textarea prompt-textarea--node${hasReply ? ' prompt-textarea--reply' : ''}`}
             aria-label="Node prompt"
