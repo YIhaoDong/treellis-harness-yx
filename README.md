@@ -30,9 +30,9 @@ An optional offline demo can be built with `npm run build:static`. Open the gene
 The frontend and the generation server deploy separately (see `.env.example`):
 
 - **Frontend → Vercel** (`treellis.art`): import this repo as a Vite project and set `VITE_API_BASE=https://api.treellis.art`.
-- **Generation server → AWS** (`api.treellis.art`): `server.js` runs under systemd (`deploy/treellis-api.service`) behind Caddy (`deploy/Caddyfile`) or nginx (`deploy/nginx.conf`), which terminates HTTPS. `ALLOWED_ORIGINS` puts the server in public mode: CORS is limited to the site, and the local key and the draft/commit endpoints are disabled.
+- **Generation server → Render** (`api.treellis.art`): in Render choose New → Blueprint, select this repo, and it creates the `treellis-api` service from `render.yaml` (Starter plan, one always-on instance, because generation jobs live in memory). Then add `api.treellis.art` under the service's Settings → Custom Domains and create the CNAME record Render shows at the DNS provider; Render issues the HTTPS certificate. Pushes to `main` redeploy automatically. `ALLOWED_ORIGINS` puts the server in public mode: CORS is limited to the site, and the local key and the draft/commit endpoints are disabled.
 
-First-time server setup (Ubuntu shown; on Amazon Linux use `dnf install nodejs22` and install Caddy from its COPR):
+Self-hosted alternative: `server.js` runs under systemd (`deploy/treellis-api.service`) behind Caddy (`deploy/Caddyfile`) or nginx (`deploy/nginx.conf`), which terminates HTTPS. First-time setup (Ubuntu shown; on Amazon Linux use `dnf install nodejs22` and install Caddy from its COPR):
 
 ```sh
 curl -fsSL https://deb.nodesource.com/setup_22.x | sudo bash - && sudo apt install -y nodejs caddy git
