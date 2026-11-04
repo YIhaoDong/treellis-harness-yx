@@ -69,155 +69,120 @@ button, input, select, textarea { font-family: inherit; }
 }
 
 /* panel bars & body */
-.panel-bar{ padding:12px; border-bottom:1px solid #e5e7eb; } /* 面板标题栏 */
-.panel-bar--row{ display:flex; align-items:center; justify-content:space-between; } /* 标题栏两端对齐 */
-.panel-title{ font-weight:700; font-size: 36px }         /* 标题字体加粗 */
-.panel-body{ padding:12px; overflow:auto; flex:1; } /* 面板主体可滚动，占满剩余空间 */
+.panel-bar{ padding: 10px 12px 10px 16px; border-bottom: 1px solid #e8eaee; }
+.panel-bar--row{ display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 44px; }
+.panel-title{ color: var(--ui-faint); font-size: var(--fs-xs); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.panel-close{
+  display: grid; place-items: center; width: 28px; height: 28px; padding: 0;
+  border: 0; border-radius: 7px; background: transparent; color: #4b5563;
+  font: 20px/1 var(--app-font); cursor: pointer;
+}
+.panel-close:hover{ background: #eef0f3; color: #111318; }
+.panel-close:focus-visible{ outline: 2px solid var(--ui-focus); outline-offset: 1px; }
+.panel-body{ padding: 4px 16px 20px; overflow: auto; flex: 1; }
 
-.path-muted{ color:#64748b; font-size:12px; margin-bottom:10px; } /* 路径轻描 */
-.muted{ color:#94a3b8; }                /* 次级文字颜色 */
-.hint{ font-size:12px; color:#9ca3af; margin-top:6px; } /* 小提示风格 */
+/* Shared text helpers (also used by older panels) */
+.muted{ color: var(--ui-faint); }
+.hint{ font-size: var(--fs-sm); color: var(--ui-faint); margin-top: 6px; }
+.input--error{ border-color: #ef4444 !important; }
 
-.label-strong{ display:block; font-weight:700; margin-bottom:6px; } /* 强提示标签 */
-
-/* buttons */
+/* Legacy buttons still used by a few hidden panels */
 .btn{
-  height:44px;                          /* 常规大按钮高度 */
-  padding:0 12px;                       /* 左右内边距 */
-  border:1px solid #e5e7eb;             /* 边框 */
-  border-radius:12px;                   /* 圆角 */
-  box-shadow:0 1px 3px rgba(0,0,0,.08); /* 轻阴影 */
-  cursor:pointer;                       /* 指针样式 */
-  font-weight:700;                      /* 加粗 */
-  background:#fff;                      /* 白底 */
-  color:#111827;                        /* 深文字 */
+  height: 34px; padding: 0 12px; border: 1px solid var(--ui-border-strong); border-radius: 9px;
+  background: #fff; color: var(--ui-text); font: 500 var(--fs-md)/1 var(--app-font); cursor: pointer;
 }
-.btn:hover{ background:#f8fafc; }
-.btn--dark{ background:#111827; color:#fff; }
-.btn--dark:hover{ filter: brightness(1.05); }
-.btn--blue{ background:#2563eb; color:#fff; }
-.btn--blue:hover{ filter: brightness(1.05); }
-.btn--ghost{ background:#fff; }
-.btn--sm{ height:30px; padding:0 10px; border-radius:8px; font-weight:600; } /* 小号按钮 */
-.btn--grow{ flex:1; }                          /* 自动拉伸 */
-.btn:disabled{ background:#f3f4f6; color:#9ca3af; cursor:not-allowed; } /* 禁用态 */
+.btn:hover{ background: var(--ui-subtle); }
+.btn--sm{ height: 28px; padding: 0 10px; border-radius: 7px; }
+.btn:disabled{ background: #f3f4f6; color: #8b919b; cursor: not-allowed; }
 
-.btn-row{ display:flex; gap:12px; }           /* 按钮横排 */
+/* ===== Parameters ===== */
+.param-empty{
+  display: grid; justify-items: center; gap: 6px;
+  margin-top: 48px; padding: 0 12px; color: var(--ui-muted); text-align: center;
+}
+.param-empty svg{ color: #b5bac3; margin-bottom: 6px; }
+.param-empty__title{ color: var(--ui-text); font-size: var(--fs-lg); font-weight: 600; }
+.param-empty p{ max-width: 260px; margin: 0; line-height: 1.5; }
 
-/* =========================
-   表单控件（右侧面板）
-   ========================= */
-.text-input{
-  width:90%;                         /* 通用文本输入：默认占父 90% 宽（通用场景） */
-  height: var(--ttcs-input-h);       /* 高度用统一变量 */
-  padding:6px 10px;                  /* 上下/左右内边距 */
-  border-radius:6px;                 /* 圆角 */
-  border:1px solid #e5e7eb;          /* 边框 */
-  box-sizing: border-box;            /* ✅ 宽度包含 padding/border，避免撑破布局 */
-  outline: none;
+.param-identity{ padding: 12px 0 14px; border-bottom: 1px solid #eceef1; }
+.param-identity__name{
+  width: 100%; min-width: 0; margin: 0 0 2px -7px; padding: 4px 6px;
+  border: 1px solid transparent; border-radius: 7px; background: transparent;
+  color: var(--ui-text); font: 600 var(--fs-xl)/1.3 var(--app-font); letter-spacing: -.01em;
 }
-.text-input:focus,
-.param-number:focus,
-.ttcs-input-compact:focus{
-  border-color:#2563eb;
-  box-shadow:0 0 0 3px rgba(37,99,235,.12);
-}
-.text-input--sm{ height:calc(var(--ttcs-input-h) - 4px); } /* 小号高度（少 4px） */
-.input--error{ border-color:#ef4444 !important; }         /* 错误态边框红色 */
+.param-identity__name:hover{ border-color: #e2e5ea; }
+.param-identity__name:focus{ border-color: #a4aab5; background: #fff; outline: none; box-shadow: 0 0 0 3px #18212f0d; }
+.param-identity__type{ color: var(--ui-faint); font-size: var(--fs-sm); }
 
-/* —— 让参数卡片标题行里的数值输入（右上角）固定小宽度，并靠右 —— */
-.param-head .text-input{
-  width: var(--ttcs-input-w);        /* ✅ 顶部数值输入改为小宽度（与 Min/Max 一致） */
-  margin-left: auto;                 /* ✅ 推向最右侧，保证右对齐 */
+.param-section{ padding: 14px 0 12px; border-bottom: 1px solid #eceef1; }
+.param-section:last-child{ border-bottom: 0; }
+.param-section__head{ display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 24px; margin-bottom: 6px; }
+.param-section__head h3{ margin: 0; color: var(--ui-text); font-size: var(--fs-md); font-weight: 600; }
+.param-section__note{ color: var(--ui-faint); font-size: var(--fs-sm); }
+.param-section__hint{ margin: 0 0 8px; color: var(--ui-faint); font-size: var(--fs-sm); line-height: 1.4; }
+.param-section__toggle{
+  padding: 2px 8px; border: 1px solid transparent; border-radius: 6px; background: transparent;
+  color: #4b5563; font: 500 var(--fs-sm)/1.6 var(--app-font); cursor: pointer;
 }
+.param-section__toggle:hover{ background: #eef0f3; color: #111318; }
+.param-section__toggle[aria-expanded="true"]{ border-color: #d9dde4; background: #fff; color: #111318; }
 
-/* Color 颜色输入 */
-.color-input{
-  width: var(--ttcs-color-w);        /* 颜色框宽度变量 */
-  height: var(--ttcs-color-h);       /* 颜色框高度变量 */
-  border:1px solid #e5e7eb;          /* 边框 */
-  border-radius:5px;                 /* 圆角 */
-  padding:0;                         /* 无内边距 */
-  box-sizing: border-box;            /* ✅ 同步 box-sizing，避免宽高被 padding 影响 */
+.param-row{
+  display: grid; grid-template-columns: var(--param-label-w, 82px) minmax(0, 1fr) 66px;
+  align-items: center; gap: 10px; min-height: 32px;
 }
-.hidden-color-input{
-  position:absolute; opacity:0; width:0; height:0; pointer-events:auto; /* 隐藏真实 color input */
+.param-row--axis{ --param-label-w: 14px; }
+.param-row__label{
+  overflow: hidden; color: #3a404b; font-size: var(--fs-md); text-overflow: ellipsis; white-space: nowrap;
+  cursor: ew-resize; user-select: none; touch-action: none;
 }
-
-/* param cards */
-.param-card{ margin-bottom:12px; padding:10px; border:1px solid #f1f5f9; border-radius:10px; } /* 参数卡片容器 */
-.param-head{ display:flex; justify-content:space-between; margin-bottom:6px; } /* 标题行：左标题 + 右输入 */
+.param-row__label--axis{ font-weight: 600; }
+.param-row__label--x{ color: #d1453b; }
+.param-row__label--y{ color: #2f8f3a; }
+.param-row__label--z{ color: #2f63d1; }
+.param-slider{ width: 100%; min-width: 0; margin: 0; accent-color: #3a404b; }
 .param-number{
-  width: var(--ttcs-input-w);        /* Min/Max 框宽度变量 */
-  height: var(--ttcs-input-h);       /* Min/Max 框高度变量 */
-  padding:4px 6px;                   /* 内边距 */
-  border-radius:8px;                 /* 圆角 */
-  border:1px solid #e5e7eb;          /* 边框 */
-  box-sizing: border-box;            /* ✅ 包含 padding/border，解决“穿模/挤压” */
-  outline: none;
+  width: 100%; height: 28px; padding: 0 7px;
+  border: 1px solid #dfe2e8; border-radius: 7px; background: #fff;
+  color: var(--ui-text); font: 500 var(--fs-md)/1 var(--app-font); font-variant-numeric: tabular-nums; text-align: right;
+  outline: none; appearance: textfield;
 }
 .param-number::-webkit-outer-spin-button,
-.param-number::-webkit-inner-spin-button{ -webkit-appearance: none; margin:0; }
-/* 去掉 WebKit 的 number 旋钮 */
-.param-number::-webkit-outer-spin-button,
-.param-number::-webkit-inner-spin_button {
-  -webkit-appearance: none;
-  margin: 0;
+.param-number::-webkit-inner-spin-button{ -webkit-appearance: none; margin: 0; }
+.param-number:focus,
+.param-range__input:focus,
+.param-color__hex:focus{ border-color: #a4aab5; box-shadow: 0 0 0 3px #18212f0d; }
+
+.param-color{ display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 8px; align-items: center; }
+.param-color__swatch{
+  position: relative; display: block; width: 34px; height: 30px; overflow: hidden;
+  border: 1px solid #d9dde4; border-radius: 8px; background: var(--swatch, #fff); cursor: pointer;
+}
+.param-color__swatch[data-mixed="true"]{ background: conic-gradient(#f87171, #fbbf24, #34d399, #60a5fa, #a78bfa, #f87171); }
+.param-color__swatch input{ position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.param-color__hex{
+  width: 100%; height: 30px; padding: 0 9px; border: 1px solid #dfe2e8; border-radius: 7px;
+  font: 500 var(--fs-md)/1 var(--app-mono); outline: none;
 }
 
-/* 统一用无前缀的 appearance，避免 VS Code 黄线 */
-.param-number[type="number"] {
-  appearance: textfield;  /* Chrome / Safari / Firefox (modern) */
+.param-ranges{ margin-top: 10px; padding: 10px; border-radius: 9px; background: #f6f7f9; }
+.param-range{
+  display: grid; grid-template-columns: minmax(48px, 1fr) 54px auto 54px auto;
+  align-items: center; gap: 6px; min-height: 30px;
 }
-
-.param-slider{ width:100%; }         /* 滑杆宽度占满 */
-
-/* tiny grids */
-.grid-2{ display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; } /* 两列小栅格 */
-
- /* ===== Right panel controls (JSX 调用处) ===== */
-.ttcs-row { display: grid; gap: 8px; align-items: center; margin-top: 8px; } /* 每一行的基础网格 */
-
-/* Translate 行列宽： [Min标签] [Min输入] [Max标签] [Max输入] [余量/Reset] */
-.ttcs-row-translate {
-  grid-template-columns: 24px var(--ttcs-input-w) 32px var(--ttcs-input-w) auto; /* ✅ 标签列略放大更稳 */
+.param-range--repeat{ grid-template-columns: minmax(48px, 1fr) 46px auto 46px auto 40px auto; }
+.param-range__label{ overflow: hidden; color: #3a404b; font-size: var(--fs-sm); text-overflow: ellipsis; white-space: nowrap; }
+.param-range__dash{ color: var(--ui-faint); font-size: var(--fs-xs); }
+.param-range__fixed{ color: var(--ui-faint); font-size: var(--fs-sm); text-align: right; }
+.param-range__input{
+  width: 100%; min-width: 0; height: 26px; padding: 0 6px; border: 1px solid #dfe2e8; border-radius: 6px;
+  background: #fff; font: var(--fs-sm)/1 var(--app-font); text-align: right; outline: none;
 }
-
-/* Scale/Primitive 行： [Label] [Max输入] [Slider占满] [Reset] */
-.ttcs-row-maxonly  { grid-template-columns: 56px var(--ttcs-input-w) 1fr auto; } /* 1fr 推动 Reset 到最右侧 */
-
-/* 标签样式 */
-.ttcs-label {
-  font-size: 12px;                   /* 字号 */
-  color: #64748b;                    /* 颜色 */
-  white-space: nowrap;               /* ✅ 不换行，防止 “Max” 折行挤乱网格 */
+.param-range__reset{
+  padding: 2px 6px; border: 0; border-radius: 6px; background: transparent;
+  color: #4b5563; font: var(--fs-sm)/1.6 var(--app-font); cursor: pointer;
 }
-
-/* 紧凑输入（备用类，某些行使用） */
-.ttcs-input-compact{
-  height: var(--ttcs-input-h);       /* 高度统一变量 */
-  width: var(--ttcs-input-w);        /* 宽度统一变量 */
-  padding: 4px 6px;                  /* 内边距 */
-  border-radius: 8px;                /* 圆角 */
-  border: 1px solid #e5e7eb;         /* 边框 */
-  box-sizing: border-box;            /* ✅ 同样防止超宽 */
-  outline: none;
-}
-
-/* Reset 按钮 */
-.ttcs-btn-reset {
-  justify-self: end;                 /* ✅ 在网格单元内靠右（与卡片右边对齐） */
-  height: var(--ttcs-btn-h);         /* 高度变量 */
-  line-height: var(--ttcs-btn-h);    /* 文字垂直居中 */
-  padding: 0 10px;                   /* 左右内边距 */
-  margin-right: 0;
-  border-radius: 8px;                /* 圆角 */
-  border: 1px solid #e5e7eb;         /* 边框 */
-  background: #fff;                  /* 背景白 */
-  cursor: pointer;                   /* 指针 */
-  font-size: 12px;                   /* 字号 */
-}
-.ttcs-btn-reset:hover { background: #f3f4f6; } /* 悬停浅灰 */
+.param-range__reset:hover{ background: #e9ebef; color: #111318; }
 
 /* =========================
    (Original) Tree & Legend
