@@ -4,9 +4,10 @@ services:
   - type: web
     name: treellis-api
     runtime: node
-    # Generation jobs live in memory, so use one always-on instance; the free plan sleeps and drops them.
-    plan: starter
-    numInstances: 1
+    # Free plan: sleeps after 15 minutes without requests and may restart, which drops in-memory
+    # generation jobs. Keep it awake with an external ping to /api/health (README.md "Deploy");
+    # switch to plan: starter for an always-on instance.
+    plan: free
     buildCommand: npm ci --omit=dev
     startCommand: npm run server
     healthCheckPath: /api/health
@@ -17,3 +18,18 @@ services:
         value: production
       - key: ALLOWED_ORIGINS
         value: https://treellis.art,https://www.treellis.art
+      - key: MAX_ACTIVE_GENERATIONS
+        value: "4"
+      # Free accounts (README.md "Free accounts"). sync: false values are entered in the Render dashboard.
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_PUBLISHABLE_KEY
+        sync: false
+      - key: SUPABASE_SECRET_KEY
+        sync: false
+      - key: ACCOUNT_OPENAI_API_KEY
+        sync: false
+      - key: FREE_GENERATIONS
+        value: "3"
+      - key: FREE_EFFORTS
+        value: low,medium,high

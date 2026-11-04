@@ -1,17 +1,15 @@
 import { STATIC_DEMO } from '../staticDemo/mode.mjs';
+import { generationBaseURL } from './baseURL.mjs';
+import { accountToken, configureAccounts, refreshAccountUsage } from '../account/session.mjs';
 
-export function generationBaseURL() {
-  // A deployed frontend is built with VITE_API_BASE (e.g. https://api.treellis.art).
-  const configured = import.meta.env?.VITE_API_BASE;
-  if (configured) return configured.replace(/\/+$/, '');
-  const hostname = typeof window === 'undefined' ? 'localhost' : window.location.hostname;
-  return `http://${hostname === '::1' ? '[::1]' : hostname}:3001`;
-}
+export { generationBaseURL };
+
 export async function getGenerationConfig(signal) {
   if (STATIC_DEMO) return { ready: true, localKeyAvailable: true };
   const response = await fetch(`${generationBaseURL()}/api/generation/config`, { cache: 'no-store', signal });
   const data = await response.json();
   if (!response.ok || !data.ready) throw new Error(data.error || 'The generation service is unavailable. Start npm run server and retry.');
+  if (data.accounts) void configureAccounts(data.accounts);
   return data;
 }
 const cancelled = () => new DOMException('Cancelled', 'AbortError');
@@ -35,7 +33,10 @@ export async function requestGeneration(input, { apiKey = '', signal, onProgress
   if (STATIC_DEMO) return;
   const id = sessionId(), token = sessionId(), base = generationBaseURL();
   const headers = { 'Content-Type': 'application/json', 'X-Generation-Id': id, 'X-Generation-Token': token };
+  // The user's own key wins; otherwise a signed-in account runs a free generation.
+  const session = apiKey.trim() ? '' : await accountToken();
   if (apiKey.trim()) headers.Authorization = `Bearer ${apiKey.trim()}`;
+  else if (session) headers['X-Treellis-Session'] = session;
   let acknowledged = false, cursor = 0, result = null, checkpoints = 0, connection, reconnects = 0, cancelSent = false;
   const cancelJob = () => {
     if (cancelSent) return;
@@ -134,5 +135,8 @@ export async function requestGeneration(input, { apiKey = '', signal, onProgress
   } catch (error) {
     if (error.deliveryError || signal?.aborted || error.code === 'CONNECTION_LOST') cancelJob();
     throw error;
-  } finally { signal?.removeEventListener('abort', abort); }
+  } finally {
+    signal?.removeEventListener('abort', abort);
+    if (session) void refreshAccountUsage();
+  }
 }

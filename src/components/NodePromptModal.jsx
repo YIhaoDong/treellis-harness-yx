@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { STATIC_DEMO } from '../staticDemo/mode.mjs'
+import { accountSnapshot } from '../account/session.mjs'
 import { nodeDisplayName } from '../utils/promptMeta.jsx'
 import { DEFAULT_RUN_MODE } from '../utils/llmConfig.js'
 import { GenerateButton, GenerationProgress, GenerationStrategySelect, ModelModeSelect } from './PromptControls.jsx'
@@ -8,6 +9,7 @@ import useGenerationService from '../hooks/useGenerationService.jsx'
 import useGenerationRun from '../hooks/useGenerationRun.jsx'
 import usePromptImages from '../hooks/usePromptImages.jsx'
 import PromptImageAttachments from './PromptImageAttachments.jsx'
+import AccountSettings, { useAccount } from './AccountSettings.jsx'
 import { boundedNodeConversation, followupNodeAt, nodeFollowupSuggestions, nodeReplyConversation } from '../utils/nodeFollowup.mjs'
 import '../prompt.css'
 
@@ -36,10 +38,12 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
   const activeNode = followupNodeAt(scene, activePath) || (!scene && activePath === path ? node : null)
   const nodeName = nodeDisplayName(activeNode)
   const service = useGenerationService()
+  const account = useAccount()
+  const accountReady = account.signedIn && !apiKey.trim() && account.usage?.remaining !== 0
   const revision = JSON.stringify(scene)
   const replyIsCurrent = !replyContext || (replyContext.revision === revision && replyContext.path === activePath)
   const hasReply = !!clarification || conversation.length > 0
-  const canRun = open && service.ready && !busy && !disabled && !attachments.loading && !pendingAction && (!!apiKey.trim() || service.localKeyAvailable) && !!activeNode && !!activePath
+  const canRun = open && service.ready && !busy && !disabled && !attachments.loading && !pendingAction && (!!apiKey.trim() || service.localKeyAvailable || accountReady) && !!activeNode && !!activePath
   const canSubmit = canRun && replyIsCurrent && (!clarification || clarificationIsCurrent) && !!prompt.trim()
   const displayError = (errorCode === 'CLARIFICATION' && clarification ? '' : error) || service.error
   const suggestions = nodeFollowupSuggestions(scene, clarification?.path, clarification?.suggestions)
@@ -63,7 +67,7 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
     let key = ''
     try { if (!STATIC_DEMO) key = (localStorage.getItem('OPENAI_API_KEY') || '').trim() } catch {}
     setApiKey(key)
-    setShowOptions(!key && !service.localKeyAvailable)
+    setShowOptions(!key && !service.localKeyAvailable && !accountSnapshot().signedIn)
     const timer = setTimeout(() => taRef.current?.focus(), 50)
     return () => { clearTimeout(timer) }
   }, [open, path])
@@ -213,9 +217,10 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
         </div>
         {showOptions && (
           <div className="prompt-key-settings" id="node-prompt-settings">
+            <AccountSettings hasOwnKey={!!apiKey.trim()} />
             <label className="prompt-key-label" htmlFor="node-api-key">API key</label>
             <input id="node-api-key" className="prompt-key-input" type="password" autoComplete="off"
-              placeholder={service.localKeyAvailable ? "Local test key configured" : "OpenAI API key"} value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
+              placeholder={service.localKeyAvailable ? "Local test key configured" : account.enabled ? "Your own OpenAI API key (optional)" : "OpenAI API key"} value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
             <button type="button" className="prompt-secondary prompt-secondary--border" onClick={saveKey}>Save Key</button>
           </div>
         )}

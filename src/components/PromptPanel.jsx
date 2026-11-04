@@ -8,6 +8,7 @@ import useGenerationService from '../hooks/useGenerationService.jsx'
 import useGenerationRun from '../hooks/useGenerationRun.jsx'
 import usePromptImages from '../hooks/usePromptImages.jsx'
 import PromptImageAttachments from './PromptImageAttachments.jsx'
+import AccountSettings, { useAccount } from './AccountSettings.jsx'
 import '../prompt.css'
 
 export default function PromptPanel({ onGenerated, defaultModel = '', currentScene, disabled = false, onBusyChange }) {
@@ -29,12 +30,14 @@ export default function PromptPanel({ onGenerated, defaultModel = '', currentSce
   const { busy, error, errorCode, setError } = generation
   useEffect(() => { onBusyChange?.(busy); return () => onBusyChange?.(false) }, [busy, onBusyChange])
   const service = useGenerationService()
+  const account = useAccount()
+  const accountReady = account.signedIn && !apiKey.trim() && account.usage?.remaining !== 0
   useEffect(() => {
     if (STATIC_DEMO) return
     try { setApiKey((localStorage.getItem('OPENAI_API_KEY') || '').trim()) } catch {}
   }, [])
   useEffect(() => { if (service.ready) setShowOptions(!apiKey && !service.localKeyAvailable) }, [service.ready, service.localKeyAvailable])
-  const canGenerate = service.ready && (!!apiKey.trim() || service.localKeyAvailable) && !!prompt.trim() && !busy && !disabled && !attachments.loading
+  const canGenerate = service.ready && (!!apiKey.trim() || service.localKeyAvailable || accountReady) && !!prompt.trim() && !busy && !disabled && !attachments.loading
   const displayError = error || service.error
   const saveKey = () => {
     if (STATIC_DEMO) return
@@ -84,16 +87,17 @@ export default function PromptPanel({ onGenerated, defaultModel = '', currentSce
               onClick={() => setShowOptions((v) => !v)}>⚙ Key</button>
             {busy && <button type="button" className="prompt-secondary" onClick={generation.cancel}>Stop</button>}
             <GenerateButton onClick={() => generate()} disabled={!canGenerate} busy={busy} status={`${stageLabel(generation.progress?.stage, generation.progress?.attempt)}…`}
-              title={!service.ready ? 'Start the generation server' : !apiKey && !service.localKeyAvailable ? 'Missing API key' : !prompt.trim() ? 'Enter a prompt' : 'Ctrl/Cmd + Enter'} />
+              title={!service.ready ? 'Start the generation server' : !apiKey && !service.localKeyAvailable && !accountReady ? (account.enabled ? 'Sign in or add an API key in ⚙ Key' : 'Missing API key') : !prompt.trim() ? 'Enter a prompt' : 'Ctrl/Cmd + Enter'} />
           </div>
         </div>
       </div>
       <GenerationProgressPopover progress={generation.progress} busy={busy} canResume={canGenerate && generation.canResume} onResume={() => generate(true)} />
       {showOptions && (
         <div className="prompt-key-settings" id="global-prompt-settings">
+          <AccountSettings hasOwnKey={!!apiKey.trim()} />
           <label className="prompt-key-label" htmlFor="global-api-key">API key</label>
           <input id="global-api-key" className="prompt-key-input" type="password"
-            autoComplete="off" placeholder={service.localKeyAvailable ? "Local test key configured" : "OpenAI API key"} value={apiKey}
+            autoComplete="off" placeholder={service.localKeyAvailable ? "Local test key configured" : account.enabled ? "Your own OpenAI API key (optional)" : "OpenAI API key"} value={apiKey}
             onChange={(e) => setApiKey(e.target.value)} />
           <button type="button" className="prompt-secondary prompt-secondary--border"
             onClick={saveKey}>Save Key</button>

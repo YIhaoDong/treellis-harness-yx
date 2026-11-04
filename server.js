@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const cors = require('cors');
 const { createGenerationJobs, publicError } = require('./src/generation/jobs.cjs');
+const { createAccounts } = require('./src/account/accounts.cjs');
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -12,13 +13,18 @@ const port = process.env.PORT || 3001;
 // Without it the server behaves as a local development server and accepts any origin.
 const ALLOWED_ORIGINS = (process.env.ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean);
 const PUBLIC_DEPLOY = ALLOWED_ORIGINS.length > 0;
+// Free accounts (sign in by email, a few generations on the lab key) turn on when the
+// Supabase and ACCOUNT_OPENAI_API_KEY variables are set; see README.md "Free accounts".
+const accounts = createAccounts();
+const MAX_ACTIVE = Math.max(1, Number(process.env.MAX_ACTIVE_GENERATIONS) || 2);
+const BUSY_MESSAGE = 'Treellis is busy with other generations right now. Please try again in a minute.';
 
 // ---------- 基础中间件 ----------
 // 预检 OPTIONS 由 cors 直接返回 204（有的环境里必须显式返回 204 才不会报 Failed to fetch）
 app.use(cors({
   origin: PUBLIC_DEPLOY ? ALLOWED_ORIGINS : true,  // 本地允许跨域（来自 Vite 5173）
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Generation-Id', 'X-Generation-Token'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Generation-Id', 'X-Generation-Token', 'X-Treellis-Session'],
 }));
 app.use(express.json({ limit: '20mb' }));        // Nine processed image attachments plus scene context.
 app.use((error, _req, res, next) => {
@@ -88,7 +94,7 @@ app.get('/api/generation/config', async (req, res) => {
     if (Object.values(assets).some((text) => !text.trim())) throw new Error('Missing prompt templates.');
     JSON.parse(assets.jsonCase);
     res.json({ ready: true, model: config.MODEL_ID, efforts: Object.keys(config.RUN_MODES),
-      localKeyAvailable: trustedLocalRequest(req) && !!localGenerationKey() });
+      localKeyAvailable: trustedLocalRequest(req) && !!localGenerationKey(), accounts: accounts.publicConfig() });
   } catch {
     res.status(503).json({ ready: false, error: 'The generation service is missing its prompt files. Restore public/prompts and restart the server.' });
   }
@@ -102,9 +108,22 @@ async function runGenerationInput(input, options) {
   const [{ runGenerationWorkflow }] = await generationModules;
   return runGenerationWorkflow(input, { ...options, loadAssets: loadPromptAssets });
 }
-const generationJobs = createGenerationJobs({ run: async (input, options) => {
-  return runGenerationInput(input, options);
+// Accounts with a free generation currently running (one at a time per account).
+const accountRuns = new Set();
+const generationJobs = createGenerationJobs({ maxActive: MAX_ACTIVE, busyMessage: BUSY_MESSAGE, run: async (input, options) => {
+  const account = options.context?.account;
+  try {
+    return await runGenerationInput(input, options);
+  } catch (error) {
+    // A failed run gives its free generation back; a run the user stopped does not.
+    if (account && error.name !== 'AbortError' && !options.signal.aborted)
+      await accounts.refund(account).catch((failure) => console.error('[accounts] refund failed', failure.message));
+    throw error;
+  } finally {
+    if (account) accountRuns.delete(account.id);
+  }
 } });
+const sessionToken = (req) => String(req.headers['x-treellis-session'] || '').trim();
 
 function streamJob(req, res, job, token, after = 0) {
   res.setTimeout(0);
@@ -135,26 +154,64 @@ app.post('/api/generation/jobs/:id/cancel', (req, res) => {
   if (!generationJobs.cancel(req.params.id, req.headers['x-generation-token'])) return res.status(404).json({ error: 'Generation session unavailable.' });
   res.json({ ok: true });
 });
+app.get('/api/account', async (req, res) => {
+  res.set('Cache-Control', 'no-store');
+  if (!accounts.enabled) return res.status(404).json({ error: 'Accounts are not enabled on this server.' });
+  try {
+    const user = await accounts.verify(sessionToken(req));
+    res.json({ email: user.email, ...(await accounts.usage(user)) });
+  } catch (error) { res.status(error.status || 500).json({ code: error.code, error: error.message }); }
+});
 app.post('/api/generate', async (req, res) => {
   const ownKey = /^Bearer\s+(.+)$/i.exec(req.headers.authorization || '')?.[1]?.trim();
-  const apiKey = ownKey || (trustedLocalRequest(req) ? localGenerationKey() : '');
-  if (!apiKey) return res.status(401).json({ error: 'Enter an OpenAI API key in Key settings.' });
+  let apiKey = ownKey || (trustedLocalRequest(req) ? localGenerationKey() : '');
+  let account = null;
+  // Check the request before taking a free generation for it.
   try {
     const { normalizeImages } = await import('./src/generation/imageInputs.mjs');
     normalizeImages(req.body?.images);
   } catch (error) {
     return res.status(error.status || 400).json({ code: error.code || 'INVALID_IMAGES', error: error.message });
   }
+  if (!apiKey && accounts.enabled && sessionToken(req)) {
+    // A signed-in user without their own key runs a free generation on the lab key.
+    const id = req.headers['x-generation-id'];
+    if (!id) return res.status(400).json({ error: 'Reload Treellis and try again.' });
+    const reattach = generationJobs.get(id, req.headers['x-generation-token']);
+    try {
+      account = await accounts.verify(sessionToken(req));
+      if (!reattach) {
+        accounts.checkEffort(req.body?.effort);
+        if (accountRuns.has(account.id)) return res.status(429).json({ code: 'ACCOUNT_BUSY',
+          error: 'Your account already has a generation running. Wait for it to finish or stop it first.' });
+        if (activeGenerations + generationJobs.active >= MAX_ACTIVE) return res.status(429).json({ error: BUSY_MESSAGE });
+        accountRuns.add(account.id);
+        try { await accounts.claim(account); } catch (error) { accountRuns.delete(account.id); throw error; }
+      }
+    } catch (error) { return res.status(error.status || 500).json({ code: error.code, error: error.message }); }
+    apiKey = accounts.openaiKey;
+  }
+  if (!apiKey) return res.status(401).json({ error: accounts.enabled
+    ? 'Sign in for free generations, or enter your own OpenAI API key, in ⚙ Key.'
+    : 'Enter an OpenAI API key in Key settings.' });
   if (req.headers['x-generation-id']) {
     try {
-      if (activeGenerations + generationJobs.active >= 2 && !generationJobs.get(req.headers['x-generation-id'], req.headers['x-generation-token']))
-        return res.status(429).json({ error: 'Two generations are already running. Please wait or cancel one.' });
-      const job = generationJobs.start({ id: req.headers['x-generation-id'], token: req.headers['x-generation-token'], owner: apiKey, input: req.body });
+      if (!account && activeGenerations + generationJobs.active >= MAX_ACTIVE && !generationJobs.get(req.headers['x-generation-id'], req.headers['x-generation-token']))
+        return res.status(429).json({ error: BUSY_MESSAGE });
+      const job = generationJobs.start({ id: req.headers['x-generation-id'], token: req.headers['x-generation-token'], owner: apiKey, input: req.body,
+        context: account ? { account } : null });
       streamJob(req, res, job, req.headers['x-generation-token']);
-    } catch (error) { res.status(error.status || 500).json({ error: error.message }); }
+    } catch (error) {
+      // The job never started, so its free generation is given back.
+      if (account && !generationJobs.get(req.headers['x-generation-id'], req.headers['x-generation-token'])) {
+        accountRuns.delete(account.id);
+        accounts.refund(account).catch((failure) => console.error('[accounts] refund failed', failure.message));
+      }
+      res.status(error.status || 500).json({ error: error.message });
+    }
     return;
   }
-  if (activeGenerations + generationJobs.active >= 2) return res.status(429).json({ error: 'Two generations are already running. Please wait or cancel one.' });
+  if (activeGenerations + generationJobs.active >= MAX_ACTIVE) return res.status(429).json({ error: BUSY_MESSAGE });
   const controller = new AbortController();
   const cancel = () => { if (!res.writableEnded) controller.abort(); };
   req.on('aborted', cancel);

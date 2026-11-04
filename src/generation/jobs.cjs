@@ -45,7 +45,7 @@ function publicError(error) {
 // A page connection can disappear without losing an expensive generation. Jobs
 // are private capabilities, retained in memory only, and never auto-commit scenes.
 function createGenerationJobs({ run, maxActive = 2, retentionMs = 30 * 60 * 1000,
-  orphanMs = 10 * 60 * 1000, maxRetained = 8 } = {}) {
+  orphanMs = 10 * 60 * 1000, maxRetained = 8, busyMessage = 'Two generations are already running. Please wait or cancel one.' } = {}) {
   const jobs = new Map();
   let active = 0;
   const authorize = (id, token) => {
@@ -78,7 +78,7 @@ function createGenerationJobs({ run, maxActive = 2, retentionMs = 30 * 60 * 1000
     }
   };
   return {
-    start({ id, token, owner = '', input }) {
+    start({ id, token, owner = '', input, context = null }) {
       if (!validId(id) || !validId(token)) throw Object.assign(new Error('Invalid generation session.'), { status: 400 });
       const inputHash = digest(JSON.stringify(input));
       const ownerHash = digest(owner);
@@ -88,7 +88,7 @@ function createGenerationJobs({ run, maxActive = 2, retentionMs = 30 * 60 * 1000
           throw Object.assign(new Error('The generation session does not match this request.'), { status: 409 });
         return existing;
       }
-      if (active >= maxActive) throw Object.assign(new Error('Two generations are already running. Please wait or cancel one.'), { status: 429 });
+      if (active >= maxActive) throw Object.assign(new Error(busyMessage), { status: 429 });
       const job = { id, tokenHash: digest(token), inputHash, ownerHash, state: 'running', sequence: 0,
         events: [], listeners: new Set(), controller: new AbortController(), startedAt: Date.now() };
       jobs.set(id, job); active++;
@@ -96,7 +96,7 @@ function createGenerationJobs({ run, maxActive = 2, retentionMs = 30 * 60 * 1000
       // Defer execution so the caller can attach its first event subscriber.
       queueMicrotask(async () => {
         try {
-          const output = await run(input, { apiKey: owner, signal: job.controller.signal,
+          const output = await run(input, { apiKey: owner, context, signal: job.controller.signal,
             onProgress: progress => { if (!job.controller.signal.aborted) emit(job, { type: 'progress', ...progress }); },
             onCheckpoint: checkpoint => { if (!job.controller.signal.aborted) emit(job, { type: 'checkpoint', ...checkpoint }); } });
           if (!job.controller.signal.aborted) emit(job, { type: 'result', ...output });

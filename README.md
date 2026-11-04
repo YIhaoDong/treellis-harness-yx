@@ -30,7 +30,7 @@ An optional offline demo can be built with `npm run build:static`. Open the gene
 The frontend and the generation server deploy separately (see `.env.example`):
 
 - **Frontend → Vercel** (`treellis.art`): import this repo as a Vite project and set `VITE_API_BASE=https://api.treellis.art`.
-- **Generation server → Render** (`api.treellis.art`): in Render choose New → Blueprint, select this repo, and it creates the `treellis-api` service from `render.yaml` (Starter plan, one always-on instance, because generation jobs live in memory). Then add `api.treellis.art` under the service's Settings → Custom Domains and create the CNAME record Render shows at the DNS provider; Render issues the HTTPS certificate. Pushes to `main` redeploy automatically. `ALLOWED_ORIGINS` puts the server in public mode: CORS is limited to the site, and the local key and the draft/commit endpoints are disabled.
+- **Generation server → Render** (`api.treellis.art`): in Render choose New → Blueprint, select this repo, and it creates the `treellis-api` service from `render.yaml` (free plan). Then add `api.treellis.art` under the service's Settings → Custom Domains and create the CNAME record Render shows at the DNS provider; Render issues the HTTPS certificate. Pushes to `main` redeploy automatically. The free plan sleeps after 15 minutes without requests (waking takes up to a minute and drops nothing, but a sleep or restart drops generations in progress, since jobs live in memory), so add a free uptime monitor (e.g. UptimeRobot or cron-job.org) that requests `https://api.treellis.art/api/health` every 10 minutes; 750 free instance hours a month cover one always-awake service. For guaranteed uptime, change `plan: free` to `plan: starter` ($7/month). `ALLOWED_ORIGINS` puts the server in public mode: CORS is limited to the site, and the local key and the draft/commit endpoints are disabled.
 
 Self-hosted alternative: `server.js` runs under systemd (`deploy/treellis-api.service`) behind Caddy (`deploy/Caddyfile`) or nginx (`deploy/nginx.conf`), which terminates HTTPS. First-time setup (Ubuntu shown; on Amazon Linux use `dnf install nodejs22` and install Caddy from its COPR):
 
@@ -45,7 +45,19 @@ sudo cp deploy/Caddyfile /etc/caddy/Caddyfile && sudo systemctl reload caddy
 
 Update: `cd /opt/treellis && sudo -u treellis git pull && sudo -u treellis npm ci --omit=dev && sudo systemctl restart treellis-api`.
 
-No API key is configured on either service; each user enters their own key, which the server forwards to OpenAI without storing it.
+Users can enter their own OpenAI key, which the server forwards to OpenAI without storing it, or sign in for free generations (below).
+
+### Free accounts
+
+Visitors can sign in with their email (a magic link, or the code in the same email) under ⚙ Key and run `FREE_GENERATIONS` generations (default 3, in total) on the lab's OpenAI key, at the efforts in `FREE_EFFORTS` (default low, medium, high). A user's own key always takes precedence. A run that fails is given back; a run the user stops is not. `FREE_ATTEMPTS` (default 10) caps how many runs one account can start including given-back failures, and each account runs one generation at a time. Accounts and usage counts live in Supabase; the lab key stays on Render and never reaches the browser. Without the four variables below the feature stays off and Treellis works as before.
+
+One-time setup:
+
+1. **Supabase**: create a project. In SQL Editor, run `supabase/schema.sql`. Under Authentication → URL Configuration set Site URL `https://treellis.art` and add redirect URLs `https://treellis.art/**`, `https://www.treellis.art/**`, `http://localhost:5173/**`. Under Authentication → Emails → Magic Link, add `{{ .Token }}` to the template so the email also carries a code (useful when someone opens the email on their phone). Supabase's built-in email sender allows only a few emails per hour, so before inviting people set up custom SMTP (Authentication → Emails → SMTP settings, e.g. Resend or SendGrid) and raise the email rate limit under Authentication → Rate Limits.
+2. **OpenAI**: create a project for Treellis, set its monthly budget (Settings → Project → Limits), and create a key in it. Budget enforcement can lag behind usage, so keep the organization's prepaid credit modest with auto-recharge off as a hard backstop.
+3. **Render**: in the `treellis-api` service's Environment, set `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` (Supabase → Project Settings → API Keys) and `ACCOUNT_OPENAI_API_KEY`. The browser receives the Supabase URL and publishable key from `/api/generation/config`, so Vercel needs no new variables.
+
+To review sign-ups and usage, see Authentication → Users and the `generation_usage` table in Supabase. To give someone more generations, lower their `used` count there.
 
 ## Verify
 

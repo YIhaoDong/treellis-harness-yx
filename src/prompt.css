@@ -99,3 +99,9 @@
 @media (max-width: 1100px) { .prompt-dock { padding: 10px; } .prompt-footer__group { flex-wrap: wrap; } }
 @media (max-width: 600px) { .prompt-modal { padding: 15px; } .prompt-modal-overlay { padding: 10px; } .prompt-caption { font-size: 10px; } }
 @media (prefers-reduced-motion: reduce) { .prompt-spinner, .generation-progress__task-icon--active, .generation-progress-popover__dot { animation: none !important; } }
+.prompt-account { flex: 1 1 100%; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding-bottom: 8px; margin-bottom: 2px; border-bottom: 1px solid var(--prompt-border); min-width: 0; }
+.prompt-account__status { color: #20252d; font-size: 12px; overflow-wrap: anywhere; }
+.prompt-account__hint { color: #5c626c; font-size: 12px; overflow-wrap: anywhere; }
+.prompt-account__hint--error { color: #a33636; }
+.prompt-account__row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; width: 100%; }
+.prompt-account__code { flex: 0 1 120px; letter-spacing: .1em; }
