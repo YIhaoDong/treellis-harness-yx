@@ -6,7 +6,7 @@ import { emailLinkResult, sendCodeError, verifyCodeError } from './authMessages.
 
 let client = null
 let configuring = null
-let state = { enabled: false, signedIn: false, email: '', usage: null, freeEfforts: [], freeGenerations: 0, codeLength: 6,
+let state = { enabled: false, signedIn: false, email: '', usage: null, freeEfforts: [], freeGenerations: 0, codeLength: 8,
   // Set when this page was opened from an emailed sign-in link.
   linkSignedIn: false, linkError: '' }
 const listeners = new Set()
@@ -24,7 +24,7 @@ export function configureAccounts(config) {
     try { window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`) } catch {}
   }
   set({ enabled: true, freeEfforts: config.freeEfforts || [], freeGenerations: config.freeGenerations || 0,
-    codeLength: config.codeLength || 6, linkError: link?.error || '' })
+    codeLength: config.codeLength || 8, linkError: link?.error || '' })
   configuring = import('@supabase/supabase-js').then(async ({ createClient }) => {
     // Implicit flow: the emailed link signs in on whichever device opens it.
     client = createClient(config.supabaseUrl, config.supabaseKey, {

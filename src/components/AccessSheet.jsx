@@ -49,7 +49,7 @@ export default function AccessSheet({ access, id, inline = false, onGenerate }) 
   }, [resendAt])
   if (!sheet) return null
 
-  const codeLength = account.codeLength || 6
+  const codeLength = account.codeLength || 8
   const step = sheet === 'key' || !account.enabled ? 'key' : account.signedIn ? 'account' : sentTo ? 'code' : 'email'
   const waitSeconds = Math.max(0, Math.ceil((resendAt - now) / 1000))
   const attempt = async (action) => {
@@ -95,11 +95,11 @@ export default function AccessSheet({ access, id, inline = false, onGenerate }) 
     title = 'Check your email'
     body = <>
       <p className="prompt-access__lead">We sent a {codeLength}-digit code to <strong>{sentTo}</strong>.</p>
-      <form className="prompt-access__form" onSubmit={event => { event.preventDefault(); if (code.length >= 6) verify(code) }}>
+      <form className="prompt-access__form" onSubmit={event => { event.preventDefault(); if (code.length === codeLength) verify(code) }}>
         <input className="prompt-key-input prompt-access__code" inputMode="numeric" autoComplete="one-time-code" autoFocus
           placeholder={'0'.repeat(codeLength)} aria-label="Sign-in code" maxLength={codeLength}
           value={code} onChange={event => typeCode(event.target.value)} disabled={working} />
-        <button type="submit" className="prompt-access__primary" disabled={working || code.length < 6}>{working ? 'Checking…' : 'Sign in'}</button>
+        <button type="submit" className="prompt-access__primary" disabled={working || code.length < codeLength}>{working ? 'Checking…' : 'Sign in'}</button>
       </form>
       <p className="prompt-access__hint">Or open the link in the email on this device. Can't find it? Check your spam folder.</p>
       <div className="prompt-access__actions">

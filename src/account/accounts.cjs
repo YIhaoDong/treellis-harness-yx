@@ -24,12 +24,12 @@ function accountSettingsFromEnv(env = process.env) {
     freeAttempts: count(env.FREE_ATTEMPTS, 10),
     freeEfforts: list(env.FREE_EFFORTS, ['low', 'medium', 'high']),
     // Digits in the emailed sign-in code: Supabase → Authentication → Providers → Email → Email OTP Length.
-    codeLength: Math.min(10, Math.max(6, count(env.SIGN_IN_CODE_LENGTH, 6))),
+    codeLength: Math.min(10, Math.max(6, count(env.SIGN_IN_CODE_LENGTH, 8))),
   };
 }
 
 function createAccounts(settings = accountSettingsFromEnv(), { fetchImpl = (...args) => fetch(...args) } = {}) {
-  const { url, publishableKey, secretKey, openaiKey, freeGenerations, freeAttempts, freeEfforts, codeLength = 6 } = settings;
+  const { url, publishableKey, secretKey, openaiKey, freeGenerations, freeAttempts, freeEfforts, codeLength = 8 } = settings;
   const enabled = !!(url && publishableKey && secretKey && openaiKey);
   // Legacy anon/service_role keys are JWTs and also go in Authorization; the newer
   // sb_publishable_/sb_secret_ keys go only in the apikey header.
