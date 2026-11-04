@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { STATIC_DEMO } from '../staticDemo/mode.mjs'
-import { accountSnapshot } from '../account/session.mjs'
 import { nodeDisplayName } from '../utils/promptMeta.jsx'
 import { DEFAULT_RUN_MODE } from '../utils/llmConfig.js'
 import { GenerateButton, GenerationProgress, GenerationStrategySelect, ModelModeSelect } from './PromptControls.jsx'
@@ -9,14 +8,13 @@ import useGenerationService from '../hooks/useGenerationService.jsx'
 import useGenerationRun from '../hooks/useGenerationRun.jsx'
 import usePromptImages from '../hooks/usePromptImages.jsx'
 import PromptImageAttachments from './PromptImageAttachments.jsx'
-import AccountSettings, { useAccount } from './AccountSettings.jsx'
+import AccessSheet, { AccessChip } from './AccessSheet.jsx'
+import useGenerationAccess from '../hooks/useGenerationAccess.jsx'
 import { boundedNodeConversation, followupNodeAt, nodeFollowupSuggestions, nodeReplyConversation } from '../utils/nodeFollowup.mjs'
 import '../prompt.css'
 
 export default function NodePromptModal({ open, path, node, scene, onClose, onApply, onScopeChange, disabled = false, onBusyChange }) {
   const [prompt, setPrompt] = useState('')
-  const [showOptions, setShowOptions] = useState(false)
-  const [apiKey, setApiKey] = useState('')
   const [runMode, setRunMode] = useState(DEFAULT_RUN_MODE)
   const [preferredStrategy, setPreferredStrategy] = useState('staged')
   const [activePath, setActivePath] = useState(path)
@@ -38,12 +36,11 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
   const activeNode = followupNodeAt(scene, activePath) || (!scene && activePath === path ? node : null)
   const nodeName = nodeDisplayName(activeNode)
   const service = useGenerationService()
-  const account = useAccount()
-  const accountReady = account.signedIn && !apiKey.trim() && account.usage?.remaining !== 0
+  const access = useGenerationAccess({ service, active: open })
   const revision = JSON.stringify(scene)
   const replyIsCurrent = !replyContext || (replyContext.revision === revision && replyContext.path === activePath)
   const hasReply = !!clarification || conversation.length > 0
-  const canRun = open && service.ready && !busy && !disabled && !attachments.loading && !pendingAction && (!!apiKey.trim() || service.localKeyAvailable || accountReady) && !!activeNode && !!activePath
+  const canRun = open && service.ready && !busy && !disabled && !attachments.loading && !pendingAction && !!activeNode && !!activePath
   const canSubmit = canRun && replyIsCurrent && (!clarification || clarificationIsCurrent) && !!prompt.trim()
   const displayError = (errorCode === 'CLARIFICATION' && clarification ? '' : error) || service.error
   const suggestions = nodeFollowupSuggestions(scene, clarification?.path, clarification?.suggestions)
@@ -64,10 +61,6 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
     attachments.clear()
     if (!open) return
     setPrompt('')
-    let key = ''
-    try { if (!STATIC_DEMO) key = (localStorage.getItem('OPENAI_API_KEY') || '').trim() } catch {}
-    setApiKey(key)
-    setShowOptions(!key && !service.localKeyAvailable && !accountSnapshot().signedIn)
     const timer = setTimeout(() => taRef.current?.focus(), 50)
     return () => { clearTimeout(timer) }
   }, [open, path])
@@ -88,9 +81,8 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
       return
     }
     generation.run({ mode: 'node', prompt: pendingAction.instruction, scene, node: activeNode,
-      path: activePath, effort: runMode, strategy, conversation: pendingAction.conversation, images: attachments.images }, { apiKey })
-  }, [pendingAction, activePath, open, busy, disabled, attachments.loading, attachments.revision, service.ready, activeNode, revision, apiKey, runMode, strategy])
-  useEffect(() => { if (open && service.ready && service.localKeyAvailable && !apiKey) setShowOptions(false) }, [service.ready, service.localKeyAvailable, open])
+      path: activePath, effort: access.effort(runMode), strategy, conversation: pendingAction.conversation, images: attachments.images }, { apiKey: access.apiKey })
+  }, [pendingAction, activePath, open, busy, disabled, attachments.loading, attachments.revision, service.ready, activeNode, revision, access.apiKey, runMode, strategy])
   useEffect(() => {
     if (!open) return
     const onEscape = (event) => {
@@ -99,21 +91,22 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
     document.addEventListener('keydown', onEscape)
     return () => document.removeEventListener('keydown', onEscape)
   }, [open, onClose])
-  const saveKey = () => {
-    if (STATIC_DEMO) return
-    try {
-      const key = apiKey.trim()
-      if (key) localStorage.setItem('OPENAI_API_KEY', key)
-      else localStorage.removeItem('OPENAI_API_KEY')
-    } catch { setError('This browser cannot save the key. You can still use it for this session.') }
-  }
   const submit = (resume = false) => {
     if (STATIC_DEMO) return
     if (!canSubmit || pendingRef.current) return
-    generation.run({ mode: 'node', prompt, scene, node: activeNode, path: activePath, effort: runMode, strategy,
-      conversation: boundedNodeConversation(conversation), images: attachments.images }, { apiKey, resume })
+    if (!access.hasAccess) { access.requestAccess(); return }
+    generation.run({ mode: 'node', prompt, scene, node: activeNode, path: activePath, effort: access.effort(runMode), strategy,
+      conversation: boundedNodeConversation(conversation), images: attachments.images }, { apiKey: access.apiKey, resume })
   }
+  useEffect(() => { if (access.effort(runMode) !== runMode) setRunMode(access.effort(runMode)) }, [runMode, access.lockedEfforts.join()])
+  useEffect(() => {
+    if (!open || !access.waiting || !access.settled) return
+    access.finishWaiting()
+    submit()
+  }, [open, access.waiting, access.settled])
+  useEffect(() => { if (open && errorCode) access.handleRunError(errorCode) }, [open, errorCode])
   const acceptSuggestion = suggestion => {
+    if (!access.hasAccess) { access.requestAccess(); return }
     if (!canRun || pendingRef.current || !clarificationIsCurrent || clarification?.revision !== revision || clarification.path !== activePath) return
     const selected = nodeFollowupSuggestions(scene, activePath, [suggestion])[0]
     if (!selected) return
@@ -195,11 +188,9 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
           />
           <div className="prompt-footer">
             <div className="prompt-footer__group">
-              <ModelModeSelect value={runMode} onChange={(e) => setRunMode(e.target.value)} disabled={busy} />
+              <ModelModeSelect value={runMode} onChange={(e) => setRunMode(e.target.value)} disabled={busy} locked={access.lockedEfforts} />
               {detailed && <GenerationStrategySelect value={strategy} disabled={busy} onChange={event => setPreferredStrategy(event.target.value)} />}
-              <button type="button" className="prompt-secondary" title="Options" disabled={busy}
-                aria-expanded={showOptions} aria-controls="node-prompt-settings"
-                onClick={() => setShowOptions((v) => !v)}>⚙ Key</button>
+              {!STATIC_DEMO && <AccessChip access={access} disabled={busy} controls="node-prompt-access" />}
             </div>
             <div className="prompt-footer__group">
               <button type="button" className="prompt-secondary" onClick={busy ? generation.cancel : close}>{busy ? "Stop" : "Cancel"}</button>
@@ -210,20 +201,12 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
             </div>
           </div>
         </div>
+        <AccessSheet access={access} id="node-prompt-access" inline onGenerate={() => submit()} />
         {!clarification && <GenerationProgress progress={generation.progress} busy={busy} canResume={canSubmit && generation.canResume} onResume={() => submit(true)} />}
         <div className="prompt-caption">
           <span>Edits apply to this node and its subtree</span>
           <span>Ctrl / ⌘ + Enter to generate · Esc to close</span>
         </div>
-        {showOptions && (
-          <div className="prompt-key-settings" id="node-prompt-settings">
-            <AccountSettings hasOwnKey={!!apiKey.trim()} />
-            <label className="prompt-key-label" htmlFor="node-api-key">API key</label>
-            <input id="node-api-key" className="prompt-key-input" type="password" autoComplete="off"
-              placeholder={service.localKeyAvailable ? "Local test key configured" : account.enabled ? "Your own OpenAI API key (optional)" : "OpenAI API key"} value={apiKey} onChange={(e) => setApiKey(e.target.value)} />
-            <button type="button" className="prompt-secondary prompt-secondary--border" onClick={saveKey}>Save Key</button>
-          </div>
-        )}
         {displayError && <div className={errorCode === 'CLARIFICATION' ? 'prompt-notice' : 'prompt-error'} role={errorCode === 'CLARIFICATION' ? 'status' : 'alert'}>
           {String(displayError).slice(0, 1200)}
           {!service.ready && <button type="button" className="prompt-secondary" onClick={() => service.reconnect()}>Retry connection</button>}

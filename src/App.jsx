@@ -204,9 +204,15 @@ function LegendChip({ type }) {
   return null
 }
 
+function opensOnPrompt() {
+  if (typeof window === 'undefined') return false
+  return /^\/try\/?$/.test(window.location.pathname) || /(?:^#|&)(?:access_token|error_code)=/.test(window.location.hash)
+}
+
 export default function App() {
   const { compact, viewport } = useResponsiveWorkspace()
-  const [mobilePanel, setMobilePanel] = useState('structure')
+  // The /try link (conference QR code) and emailed sign-in links open on the Prompt tab.
+  const [mobilePanel, setMobilePanel] = useState(() => opensOnPrompt() ? 'create' : 'structure')
   const [mobileToolsOpen, setMobileToolsOpen] = useState(false)
   useEffect(() => { if (!compact) setMobileToolsOpen(false) }, [compact])
   const { leftPct, setLeftPct, containerRef, startDrag } = useSplitter(40, 20, 70)

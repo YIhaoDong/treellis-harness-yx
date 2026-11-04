@@ -192,7 +192,7 @@ app.post('/api/generate', async (req, res) => {
     apiKey = accounts.openaiKey;
   }
   if (!apiKey) return res.status(401).json({ error: accounts.enabled
-    ? 'Sign in for free generations, or enter your own OpenAI API key, in ⚙ Key.'
+    ? 'Sign in for free generations, or use your own OpenAI key.'
     : 'Enter an OpenAI API key in Key settings.' });
   if (req.headers['x-generation-id']) {
     try {

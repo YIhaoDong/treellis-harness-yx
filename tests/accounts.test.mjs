@@ -39,7 +39,7 @@ test('accounts stay off unless Supabase and the lab key are all configured', () 
   const accounts = createAccounts(accountSettingsFromEnv(env))
   assert.equal(accounts.enabled, true)
   assert.deepEqual(accounts.publicConfig(), { supabaseUrl: 'https://demo.supabase.co', supabaseKey: 'sb_publishable_x',
-    freeGenerations: 3, freeEfforts: ['low', 'medium', 'high'] })
+    freeGenerations: 3, freeEfforts: ['low', 'medium', 'high'], codeLength: 6 })
   // Neither secret ever reaches the browser config.
   assert.doesNotMatch(JSON.stringify(accounts.publicConfig()), /sb_secret|sk-lab/)
 })
@@ -51,6 +51,8 @@ test('legacy anon keys also accepted, with limits and efforts read from the envi
   assert.equal(settings.freeGenerations, 5); assert.equal(settings.freeAttempts, 12)
   assert.deepEqual(settings.freeEfforts, ['low', 'medium'])
   assert.equal(accountSettingsFromEnv({ FREE_GENERATIONS: 'many' }).freeGenerations, 3)
+  assert.equal(accountSettingsFromEnv({ SIGN_IN_CODE_LENGTH: '8' }).codeLength, 8)
+  assert.equal(accountSettingsFromEnv({ SIGN_IN_CODE_LENGTH: '4' }).codeLength, 6)
 })
 
 test('verify sends the user token with the publishable key and rejects unknown sessions', async () => {

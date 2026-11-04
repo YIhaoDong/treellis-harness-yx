@@ -8,13 +8,20 @@ import useGenerationService from '../hooks/useGenerationService.jsx'
 import useGenerationRun from '../hooks/useGenerationRun.jsx'
 import usePromptImages from '../hooks/usePromptImages.jsx'
 import PromptImageAttachments from './PromptImageAttachments.jsx'
-import AccountSettings, { useAccount } from './AccountSettings.jsx'
+import AccessSheet, { AccessChip } from './AccessSheet.jsx'
+import useGenerationAccess from '../hooks/useGenerationAccess.jsx'
+import { dismissLinkNotice } from '../account/session.mjs'
 import '../prompt.css'
 
+// Shown in the empty composer so a first-time visitor has something to start from.
+export const EXAMPLE_PROMPTS = [
+  'A toy biplane with two wings, a propeller and wheels',
+  'A rocket with four fins standing on a launch pad',
+  'A red Japanese torii gate',
+]
+
 export default function PromptPanel({ onGenerated, defaultModel = '', currentScene, disabled = false, onBusyChange }) {
-  const [apiKey, setApiKey] = useState('')
   const [prompt, setPrompt] = useState('')
-  const [showOptions, setShowOptions] = useState(false)
   const [useCurrent, setUseCurrent] = useState(false)
   const [runMode, setRunMode] = useState(DEFAULT_RUN_MODE)
   const [preferredStrategy, setPreferredStrategy] = useState('staged')
@@ -30,30 +37,28 @@ export default function PromptPanel({ onGenerated, defaultModel = '', currentSce
   const { busy, error, errorCode, setError } = generation
   useEffect(() => { onBusyChange?.(busy); return () => onBusyChange?.(false) }, [busy, onBusyChange])
   const service = useGenerationService()
-  const account = useAccount()
-  const accountReady = account.signedIn && !apiKey.trim() && account.usage?.remaining !== 0
-  useEffect(() => {
-    if (STATIC_DEMO) return
-    try { setApiKey((localStorage.getItem('OPENAI_API_KEY') || '').trim()) } catch {}
-  }, [])
-  useEffect(() => { if (service.ready) setShowOptions(!apiKey && !service.localKeyAvailable) }, [service.ready, service.localKeyAvailable])
-  const canGenerate = service.ready && (!!apiKey.trim() || service.localKeyAvailable || accountReady) && !!prompt.trim() && !busy && !disabled && !attachments.loading
+  const access = useGenerationAccess({ service })
+  const { account } = access
+  // Generate stays available without a key: pressing it asks the visitor to sign in or add one.
+  const canGenerate = service.ready && !!prompt.trim() && !busy && !disabled && !attachments.loading
   const displayError = error || service.error
-  const saveKey = () => {
-    if (STATIC_DEMO) return
-    try {
-      const key = apiKey.trim()
-      if (key) localStorage.setItem('OPENAI_API_KEY', key)
-      else localStorage.removeItem('OPENAI_API_KEY')
-    } catch { setError('This browser cannot save the key. You can still use it for this session.') }
-  }
   const generate = (resume = false) => {
     if (STATIC_DEMO) return
     if (!canGenerate) return
+    if (!access.hasAccess) { access.requestAccess(); return }
     const hasContext = !!(useCurrent && currentScene)
     generation.run({ mode: hasContext ? 'edit' : 'create', prompt,
-      scene: hasContext ? currentScene : null, effort: runMode, strategy, images: attachments.images }, { apiKey, resume })
+      scene: hasContext ? currentScene : null, effort: access.effort(runMode), strategy, images: attachments.images }, { apiKey: access.apiKey, resume })
   }
+  // Free accounts run only some efforts; move off a locked one.
+  useEffect(() => { if (access.effort(runMode) !== runMode) setRunMode(access.effort(runMode)) }, [runMode, access.lockedEfforts.join()])
+  // Run the generation that waited for sign-in or a key.
+  useEffect(() => {
+    if (!access.waiting || !access.settled) return
+    access.finishWaiting()
+    generate()
+  }, [access.waiting, access.settled])
+  useEffect(() => { if (errorCode) access.handleRunError(errorCode) }, [errorCode])
   const handleKeyDown = (event) => {
     if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') { event.preventDefault(); generate() }
   }
@@ -71,6 +76,10 @@ export default function PromptPanel({ onGenerated, defaultModel = '', currentSce
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={handleKeyDown}
         />
+        {!prompt.trim() && !busy && !disabled && !STATIC_DEMO && <div className="prompt-examples" aria-label="Example prompts">
+          <span className="prompt-examples__label">Try</span>
+          {EXAMPLE_PROMPTS.map(example => <button type="button" key={example} className="prompt-example" onClick={() => setPrompt(example)}>{example}</button>)}
+        </div>}
         <div className="prompt-footer">
           <div className="prompt-footer__group">
             <label className="prompt-context" title="Include current scene as context when generating">
@@ -80,29 +89,25 @@ export default function PromptPanel({ onGenerated, defaultModel = '', currentSce
             </label>
           </div>
           <div className="prompt-footer__group">
-            <ModelModeSelect value={runMode} onChange={(e) => setRunMode(e.target.value)} disabled={busy} />
+            <ModelModeSelect value={runMode} onChange={(e) => setRunMode(e.target.value)} disabled={busy} locked={access.lockedEfforts} />
             {detailed && <GenerationStrategySelect value={strategy} disabled={busy} onChange={event => setPreferredStrategy(event.target.value)} />}
-            <button type="button" className="prompt-secondary" title="Options"
-              aria-expanded={showOptions} aria-controls="global-prompt-settings"
-              onClick={() => setShowOptions((v) => !v)}>⚙ Key</button>
+            {!STATIC_DEMO && <AccessChip access={access} controls="global-prompt-access" />}
             {busy && <button type="button" className="prompt-secondary" onClick={generation.cancel}>Stop</button>}
             <GenerateButton onClick={() => generate()} disabled={!canGenerate} busy={busy} status={`${stageLabel(generation.progress?.stage, generation.progress?.attempt)}…`}
-              title={!service.ready ? 'Start the generation server' : !apiKey && !service.localKeyAvailable && !accountReady ? (account.enabled ? 'Sign in or add an API key in ⚙ Key' : 'Missing API key') : !prompt.trim() ? 'Enter a prompt' : 'Ctrl/Cmd + Enter'} />
+              title={!service.ready ? 'Waiting for the generation server' : !prompt.trim() ? 'Describe what you want to build first' : 'Ctrl/Cmd + Enter'} />
           </div>
         </div>
       </div>
       <GenerationProgressPopover progress={generation.progress} busy={busy} canResume={canGenerate && generation.canResume} onResume={() => generate(true)} />
-      {showOptions && (
-        <div className="prompt-key-settings" id="global-prompt-settings">
-          <AccountSettings hasOwnKey={!!apiKey.trim()} />
-          <label className="prompt-key-label" htmlFor="global-api-key">API key</label>
-          <input id="global-api-key" className="prompt-key-input" type="password"
-            autoComplete="off" placeholder={service.localKeyAvailable ? "Local test key configured" : account.enabled ? "Your own OpenAI API key (optional)" : "OpenAI API key"} value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)} />
-          <button type="button" className="prompt-secondary prompt-secondary--border"
-            onClick={saveKey}>Save Key</button>
-        </div>
-      )}
+      {!STATIC_DEMO && !service.ready && service.connecting && <div className="prompt-status prompt-status--delayed" role="status">
+        <span className="prompt-status__spinner" aria-hidden="true" />
+        Waking up the generation server. The first run of the day can take up to a minute.
+      </div>}
+      {account.linkSignedIn && <div className="prompt-status prompt-status--success" role="status">
+        <span>You're signed in{access.remaining ? ` with ${access.remaining} free generation${access.remaining === 1 ? '' : 's'}` : ''}. Describe a model and press Generate.</span>
+        <button type="button" className="prompt-close prompt-status__close" aria-label="Dismiss" onClick={dismissLinkNotice}>×</button>
+      </div>}
+      <AccessSheet access={access} id="global-prompt-access" onGenerate={() => generate()} />
       {displayError ? <div className={errorCode === 'CLARIFICATION' ? 'prompt-notice' : 'prompt-error'} role={errorCode === 'CLARIFICATION' ? 'status' : 'alert'}>
         {displayError}
         {!service.ready && <button type="button" className="prompt-secondary" onClick={() => service.reconnect()}>Retry connection</button>}

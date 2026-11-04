@@ -93,6 +93,7 @@ export async function requestGeneration(input, { apiKey = '', signal, onProgress
         if (!response.ok) {
           const data = await response.json().catch(() => ({}));
           const error = new Error(data.error || `Generation request failed (${response.status}).`);
+          if (data.code) error.code = data.code;
           // A missing retained job cannot be reconstructed after a server restart.
           error.terminal = response.status < 500;
           throw error;

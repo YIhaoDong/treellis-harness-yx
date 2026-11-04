@@ -15,7 +15,7 @@ npm run server
 
 In another terminal, run `npm run dev` and open the URL shown by Vite.
 
-Each user supplies their own OpenAI API key through the application's Key control. A local `OPENAI_API_KEY` environment variable is also supported. This repository contains no API key or `.local` development configuration.
+Each user supplies their own OpenAI API key through the account chip next to Generate (or signs in for free generations when the server enables them). A local `OPENAI_API_KEY` environment variable is also supported. This repository contains no API key or `.local` development configuration.
 
 ## Responsive editor
 
@@ -49,13 +49,15 @@ Users can enter their own OpenAI key, which the server forwards to OpenAI withou
 
 ### Free accounts
 
-Visitors can sign in with their email (a magic link, or the code in the same email) under ⚙ Key and run `FREE_GENERATIONS` generations (default 3, in total) on the lab's OpenAI key, at the efforts in `FREE_EFFORTS` (default low, medium, high). A user's own key always takes precedence. A run that fails is given back; a run the user stops is not. `FREE_ATTEMPTS` (default 10) caps how many runs one account can start including given-back failures, and each account runs one generation at a time. Accounts and usage counts live in Supabase; the lab key stays on Render and never reaches the browser. Without the four variables below the feature stays off and Treellis works as before.
+Visitors can type a prompt (or tap an example) and press Generate before signing in. Generate then opens a short sheet: the free trial first (email → a 6-digit code, or the link in the same email), with "Use your own OpenAI key" as the alternative, and the waiting generation starts as soon as either is done. The chip next to Generate shows the state (`Sign in · 3 free`, `name · 2 left`, `Free runs used`, `Own key`) and reopens the sheet. Free users see the efforts outside `FREE_EFFORTS` marked "own key". Signed-in visitors run `FREE_GENERATIONS` generations (default 3, in total) on the lab's OpenAI key, at the efforts in `FREE_EFFORTS` (default low, medium, high). A user's own key always takes precedence. A run that fails is given back; a run the user stops is not. `FREE_ATTEMPTS` (default 10) caps how many runs one account can start including given-back failures, and each account runs one generation at a time. Accounts and usage counts live in Supabase; the lab key stays on Render and never reaches the browser. Without the four variables below the feature stays off and Treellis works as before.
 
 One-time setup:
 
-1. **Supabase**: create a project. In SQL Editor, run `supabase/schema.sql`. Under Authentication → URL Configuration set Site URL `https://treellis.art` and add redirect URLs `https://treellis.art/**`, `https://www.treellis.art/**`, `http://localhost:5173/**`. Under Authentication → Emails → Magic Link, add `{{ .Token }}` to the template so the email also carries a code (useful when someone opens the email on their phone). Supabase's built-in email sender allows only a few emails per hour, so before inviting people set up custom SMTP (Authentication → Emails → SMTP settings, e.g. Resend or SendGrid) and raise the email rate limit under Authentication → Rate Limits.
+1. **Supabase**: create a project. In SQL Editor, run `supabase/schema.sql`. Under Authentication → URL Configuration set Site URL `https://treellis.art` and add redirect URLs `https://treellis.art/**`, `https://www.treellis.art/**`, `http://localhost:5173/**`. Under Authentication → Email Templates, add the code `{{ .Token }}` to both **Confirm signup** (a visitor's first email) and **Magic Link** (later emails), keeping the `{{ .ConfirmationURL }}` link; on phones the code is the reliable path, since mail apps often open links in their own browser. Keep the template HTML well formed: a stray quote makes Supabase fail with "Error sending confirmation email". The code length is under Authentication → Providers → Email → Email OTP Length; if it is not 6, set `SIGN_IN_CODE_LENGTH` on Render to match. Supabase's built-in email sender allows only a few emails per hour, so before inviting people set up custom SMTP (Authentication → Emails → SMTP settings, e.g. Resend or SendGrid) and raise the email rate limit under Authentication → Rate Limits.
 2. **OpenAI**: create a project for Treellis, set its monthly budget (Settings → Project → Limits), and create a key in it. Budget enforcement can lag behind usage, so keep the organization's prepaid credit modest with auto-recharge off as a hard backstop.
 3. **Render**: in the `treellis-api` service's Environment, set `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY` and `SUPABASE_SECRET_KEY` (Supabase → Project Settings → API Keys) and `ACCOUNT_OPENAI_API_KEY`. The browser receives the Supabase URL and publishable key from `/api/generation/config`, so Vercel needs no new variables.
+
+For a conference QR code, link to `https://www.treellis.art/try`: it opens the Prompt tab directly on phones (`vercel.json` serves the app at `/try`). The empty composer offers example prompts (`EXAMPLE_PROMPTS` in `src/components/PromptPanel.jsx`).
 
 To review sign-ups and usage, see Authentication → Users and the `generation_usage` table in Supabase. To give someone more generations, lower their `used` count there.
 

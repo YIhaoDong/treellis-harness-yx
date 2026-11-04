@@ -2,12 +2,13 @@ import React from 'react'
 import { MODEL_FAMILY_LABEL, RUN_MODES } from '../utils/llmConfig.js'
 import { elapsedLabel, stageLabel, taskProgress } from '../generation/progressState.mjs'
 
-export function ModelModeSelect({ value, onChange, disabled = false }) {
+// `locked` efforts need the visitor's own key (free accounts run only some efforts).
+export function ModelModeSelect({ value, onChange, disabled = false, locked = [] }) {
   return (
     <select className="prompt-mode" aria-label="Reasoning effort" title="GPT-6.1 reasoning effort"
       value={value} onChange={onChange} disabled={disabled}>
       {Object.entries(RUN_MODES).map(([id, mode]) => (
-        <option key={id} value={id}>{MODEL_FAMILY_LABEL} · {mode.label}</option>
+        <option key={id} value={id} disabled={locked.includes(id)}>{MODEL_FAMILY_LABEL} · {mode.label}{locked.includes(id) ? ' · own key' : ''}</option>
       ))}
     </select>
   )
