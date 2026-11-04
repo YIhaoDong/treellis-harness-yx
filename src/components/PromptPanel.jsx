@@ -71,7 +71,7 @@ export default function PromptPanel({ onGenerated, defaultModel = '', currentSce
           className="prompt-textarea"
           aria-label="Scene prompt"
           rows={3}
-          placeholder="Describe what you want to build or change…"
+          placeholder={useCurrent && currentScene ? 'Describe what to change in this model…' : 'Describe something to build…'}
           value={prompt}
           onChange={(e) => setPrompt(e.target.value)}
           onKeyDown={handleKeyDown}
@@ -82,11 +82,13 @@ export default function PromptPanel({ onGenerated, defaultModel = '', currentSce
         </div>}
         <div className="prompt-footer">
           <div className="prompt-footer__group">
-            <label className="prompt-context" title="Include current scene as context when generating">
-              <input type="checkbox" checked={!!useCurrent} disabled={busy}
-                onChange={(e) => setUseCurrent(e.target.checked)} />
-              Use current scene
-            </label>
+            {/* New model replaces the scene; Edit this model sends it along as the starting point. */}
+            <div className="prompt-target" role="radiogroup" aria-label="What Generate does">
+              <button type="button" role="radio" aria-checked={!useCurrent} disabled={busy}
+                onClick={() => setUseCurrent(false)} title="Build a new model from your description">New model</button>
+              <button type="button" role="radio" aria-checked={!!useCurrent} disabled={busy || !currentScene}
+                onClick={() => setUseCurrent(true)} title="Change the model on screen">Edit this model</button>
+            </div>
           </div>
           <div className="prompt-footer__group">
             <ModelModeSelect value={runMode} onChange={(e) => setRunMode(e.target.value)} disabled={busy} locked={access.lockedEfforts} />

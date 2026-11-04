@@ -5,10 +5,11 @@ import { elapsedLabel, stageLabel, taskProgress } from '../generation/progressSt
 // `locked` efforts need the visitor's own key (free accounts run only some efforts).
 export function ModelModeSelect({ value, onChange, disabled = false, locked = [] }) {
   return (
-    <select className="prompt-mode" aria-label="Reasoning effort" title="GPT-6.1 reasoning effort"
+    <select className="prompt-mode" aria-label="Effort"
+      title={`How hard ${MODEL_FAMILY_LABEL} works on it. Higher effort takes longer and handles more detail.`}
       value={value} onChange={onChange} disabled={disabled}>
       {Object.entries(RUN_MODES).map(([id, mode]) => (
-        <option key={id} value={id} disabled={locked.includes(id)}>{MODEL_FAMILY_LABEL} · {mode.label}{locked.includes(id) ? ' · own key' : ''}</option>
+        <option key={id} value={id} disabled={locked.includes(id)}>{mode.label} effort{locked.includes(id) ? ' · own key' : ''}</option>
       ))}
     </select>
   )

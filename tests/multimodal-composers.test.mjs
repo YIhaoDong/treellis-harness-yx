@@ -81,11 +81,12 @@ function harness(kind = 'global') {
 test('global composer defaults to a new scene and only edits the current scene after explicit opt-in', () => {
   for (const useCurrent of [true, false]) {
     const h = harness()
-    assert.equal(h.all().find(item => item.type === 'input' && item.props.type === 'checkbox').props.checked, false)
+    assert.equal(h.button('New model').props['aria-checked'], true)
+    assert.equal(h.button('Edit this model').props['aria-checked'], false)
     h.attach(); h.type('Build the visual reference.')
     h.select('model-select', 'max')
     assert.equal(h.all().find(item => item.type === 'strategy-select').props.value, 'staged')
-    if (useCurrent) h.act(() => h.all().find(item => item.type === 'input' && item.props.type === 'checkbox').props.onChange({ target: { checked: true } }))
+    if (useCurrent) h.act(() => h.button('Edit this model').props.onClick())
     const all = h.all()
     assert.ok(all.findIndex(item => item.type === 'attachment-preview') < all.findIndex(item => item.type === 'textarea'))
     h.act(() => h.button('Generate').props.onClick())

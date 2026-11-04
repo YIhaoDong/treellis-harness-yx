@@ -228,7 +228,7 @@
   }
 
   .workspace-shell[data-mobile-panel='create'] .workspace-main {
-    grid-template-rows: minmax(min(80px, 50%), 1fr) minmax(0, min(220px, max(180px, 34%), calc(100% - min(80px, 50%))));
+    grid-template-rows: minmax(min(80px, 50%), 1fr) minmax(0, min(300px, max(200px, 46%), calc(100% - min(80px, 50%))));
   }
 
   .workspace-shell[data-mobile-panel='create'] .workspace-prompt-boundary {
@@ -309,76 +309,41 @@
   .workspace-shell .prompt-images__thumbnail { width: 64px; height: 48px; }
   .workspace-shell .prompt-images__remove { width: 28px; height: 28px; }
 
-  /* Context + Generate share the first footer row. Settings stay available in
-     one horizontally scrollable strip instead of creating three fixed rows. */
+  /* Phone footer: what Generate does on the first row; effort, access and
+     Generate on the second, with Generate last where the thumb ends up. */
   .workspace-shell .prompt-dock .prompt-footer {
-    position: relative;
     display: flex;
     flex-direction: column;
     align-items: stretch;
-    gap: 3px;
-    min-width: 0;
-    padding: 3px 6px 5px;
-  }
-
-  .workspace-shell .prompt-dock .prompt-footer > .prompt-footer__group:first-child {
-    flex: none;
-    width: calc(100% - 108px);
-    min-width: 0;
-    min-height: 36px;
-  }
-
-  .workspace-shell .prompt-dock .prompt-context {
     gap: 4px;
     min-width: 0;
-    min-height: 36px;
-    padding: 4px 2px;
-    font-size: 11px;
+    padding: 3px 6px 6px;
   }
-
-  .workspace-shell .prompt-dock .prompt-context input { flex: none; }
 
   .workspace-shell .prompt-dock .prompt-footer > .prompt-footer__group:last-child {
-    position: static;
     display: flex;
-    flex: none;
     flex-wrap: nowrap;
+    align-items: center;
     gap: 4px;
-    width: 100%;
     min-width: 0;
-    min-height: 36px;
-    padding-bottom: 2px;
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
   }
 
   .workspace-shell .prompt-dock .prompt-mode,
   .workspace-shell .prompt-dock .prompt-secondary {
-    flex: none;
-    width: auto;
+    flex: 0 1 auto;
+    min-width: 0;
     min-height: 36px;
-    max-width: none;
-    padding: 4px 6px;
+    padding: 4px 4px;
   }
+
+  .workspace-shell .prompt-dock .prompt-chip { flex: 0 1 auto; min-width: 0; }
 
   .workspace-shell .prompt-dock .prompt-generate {
-    position: absolute;
-    top: 3px;
-    right: 6px;
-    width: 102px;
-    height: 36px;
-    min-width: 0;
-    min-height: 36px;
-    gap: 4px;
-    padding: 4px 6px;
-    font-size: 12px;
-  }
-
-  .workspace-shell .prompt-dock .prompt-generate > span:first-child {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    flex: none;
+    min-height: 40px;
+    margin-left: auto;
+    padding: 4px 12px;
+    font-size: 13px;
   }
 
   .workspace-shell .prompt-caption {
