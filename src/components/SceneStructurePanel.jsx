@@ -16,7 +16,7 @@ export default function SceneStructurePanel({
   view = 'tree', onViewChange, multiSelect = false, onMultiSelectChange,
   selectedPaths = [], onGroup, onUngroup, canGroup = false, canUngroup = false,
   groupingBusy = false, onSmartGroup, canSmartGroup = false, smartStatus, error,
-  onClearSelection, onCancelSmartGroup, onExpand, compact = false, children,
+  onClearSelection, onCancelSmartGroup, onExpand, onShowGuide, compact = false, children,
 }) {
   const [actionsOpen, setActionsOpen] = useState(false)
   const count = new Set(selectedPaths).size
@@ -29,6 +29,12 @@ export default function SceneStructurePanel({
             <button type="button" aria-pressed={view === 'tree'} onClick={() => onViewChange?.('tree')}>Tree</button>
             <button type="button" aria-pressed={view === 'layers'} onClick={() => onViewChange?.('layers')}>Layers</button>
           </div>
+          {onShowGuide && <button type="button" className="scene-structure-guide" onClick={onShowGuide}
+            aria-label="Shape guide" title="What the node shapes mean">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" /><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.2-2.4 3.6" /><path d="M12 17.2h.01" />
+            </svg>
+          </button>}
           {onExpand && <button type="button" className="scene-structure-expand" onClick={onExpand}
             aria-label="Expand structure panel" title="Expand structure panel">↗</button>}
           {compact && <button type="button" className="scene-structure-more" aria-label="Structure actions"

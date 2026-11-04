@@ -263,8 +263,9 @@ button, input, select, textarea { font-family: inherit; }
   grid-template-columns: var(--accent-w) 1fr; /* 左色条 + 内容 */
   grid-template-rows: 100%;          /* 单行：覆盖层与内容共用 */
 
-  width: 220px;                      /* 卡片宽度 */
+  width: 100%;                       /* fills the node's foreignObject (220px or less) */
   height: 115px;                     /* 卡片高度 */
+  pointer-events: auto;
   border-radius: 1px;                /* 圆角（保持原样） */
 
   background: transparent;           /* 透明背景 */
@@ -503,136 +504,112 @@ button, input, select, textarea { font-family: inherit; }
 .ttcs-tree { scrollbar-color: #e5e7eb transparent; scrollbar-width: thin; }
 
 
-/* === Node Action Stack (top-right vertical buttons) === */
-:root {
-  /* 控制按钮点击热区；改这里即可整体放大/缩小 */
-  --ttcs-node-action: 32px;
+/* === Node toolbar (above each card) and collapsed badge ===
+   Everything here sits inside the node's <foreignObject>: no position, transform,
+   opacity, z-index or overflow (see .ttcs-tree-card), only grid placement. */
+.ttcs-node__fo {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
-.ttcs-nodebtn-stack {
-  grid-area: 1 / 1 / 2 / 3;          /* 覆盖整张卡片，靠右上 */
-  align-self: start;
-  justify-self: end;
-  margin: 6px;
+.ttcs-node-toolbar {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 6px;
+  align-items: center;
+  gap: 1px;
+  padding: 3px;
+  border: 1px solid #dfe2e8;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgb(17 19 24 / 10%);
   pointer-events: auto;
-
-  /* 桌面端默认隐藏，hover/active 时显现（visibility, not opacity: see .ttcs-tree-card） */
   visibility: hidden;
 }
 
-/* 显示条件：悬停该节点、该节点被设为 active、或栈内获得焦点 */
-.ttcs-node:hover .ttcs-nodebtn-stack,
-.ttcs-node--active .ttcs-nodebtn-stack,
-.ttcs-nodebtn-stack:focus-within {
-  visibility: visible;
-}
+.ttcs-node:hover .ttcs-node-toolbar,
+.ttcs-node--active .ttcs-node-toolbar,
+.ttcs-node-toolbar:focus-within { visibility: visible; }
 
-/* 触屏设备（无 hover）下常显 */
+/* Touch screens have no hover: show the toolbar on the selected part only. */
 @media (hover: none) {
-  .ttcs-nodebtn-stack { visibility: visible; }
+  .ttcs-node:hover .ttcs-node-toolbar { visibility: hidden; }
+  .ttcs-node--active .ttcs-node-toolbar { visibility: visible; }
 }
 
-/* 基础按钮样式（方形命中区 + 居中） */
-.ttcs-nodebtn {
-  width: var(--ttcs-node-action);
-  height: var(--ttcs-node-action);
-  display: inline-grid;
+.ttcs-node-toolbar__btn {
+  display: grid;
   place-items: center;
-
+  width: 26px;
+  height: 26px;
   padding: 0;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255,255,255,.92);
-  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #3a404b;
+  cursor: pointer;
+}
+
+.ttcs-node-toolbar__btn:hover { background: #f1f3f6; color: #111318; }
+.ttcs-node-toolbar__btn:focus-visible { outline: 2px solid var(--ui-focus, #75839d); outline-offset: -2px; }
+.ttcs-node-toolbar__btn:disabled { color: #c3c7ce; background: transparent; cursor: not-allowed; }
+.ttcs-node-toolbar__btn--ai { color: #6d4aff; }
+.ttcs-node-toolbar__btn--ai:hover { background: #f1edff; color: #5b36f0; }
+.ttcs-node-toolbar__btn--del:hover { background: #fef3f2; color: #b42318; }
+.ttcs-node-toolbar__btn--del:disabled:hover { background: transparent; color: #c3c7ce; }
+.ttcs-node-toolbar__divider { width: 1px; height: 18px; margin: 0 2px; background: #e6e8ec; }
+
+.ttcs-node-collapsed {
+  align-self: start;
+  margin-top: 4px;
+  padding: 3px 10px;
+  border: 1px solid #d9dde4;
+  border-radius: 999px;
+  background: #fff;
+  color: #4b5563;
+  font: 600 13px/1.3 var(--app-font);
   cursor: pointer;
   pointer-events: auto;
-
-  line-height: 1;
-  font-weight: 700;
-  user-select: none;
-  transition: background-color .12s ease, color .12s ease;
 }
 
-.ttcs-nodebtn:hover { background: #f8fafc; }
-.ttcs-nodebtn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
-.ttcs-nodebtn[disabled] { color: #cbd5e1; background: rgba(255,255,255,.6); cursor: not-allowed; pointer-events: none; }
+.ttcs-node-collapsed:hover { background: #f4f5f7; color: #111318; }
 
-/* 语义变体：颜色 + 图标尺寸 */
-.ttcs-nodebtn--del { color: #ef4444; font-size: 20px; }
-.ttcs-nodebtn--add { color: #059669; font-size: 28px; }
-.ttcs-nodebtn--ai  { color: #111827; font-size: 20px; }
-
-.ttcs-nodebtn--del:hover  { background: #ffc3c3; }  /* 浅红 */
-.ttcs-nodebtn--add:hover  { background: #c3ffd8; }  /* 浅绿 */
-.ttcs-nodebtn--ai:hover   { background: #b1d4ff; }  /* 浅蓝紫 */
-
-
-/* =========================================================
-   Clipboard (Copy / Paste) stack — 中部偏右，避免与右上角栈重叠
-   ========================================================= */
-:root {
-  /* 将复制/粘贴整体向左错开一个“右上角按钮”的宽度，避免重叠 */
-  --ttcs-clip-xshift: calc(var(--ttcs-node-action) + 10px);
-}
-
-.ttcs-clipstack{
+/* === Tree zoom controls (outside the SVG, so positioning is safe) === */
+.ttcs-tree-zoom {
   position: absolute;
-  left: 6px;          /* ✅ 改：贴左 */
-  bottom: 6px;        /* ✅ 改：贴下 */
-  top: auto;          /* ✅ 取消 top */
-  right: auto;        /* ✅ 取消 right */
-  transform: none;    /* ✅ 不再做垂直居中 */
-  /* 下面这行决定顺序：要“粘贴在上、复制在下”就用 column-reverse；反之用 column */
-  flex-direction: column-reverse;
+  right: 12px;
+  bottom: 12px;
+  z-index: 5;
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid #dfe2e8;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 14px rgb(17 19 24 / 8%);
 }
 
-
-/* 显示：节点 hover/active 或栈内获得焦点 */
-.ttcs-node:hover .ttcs-clipstack,
-.ttcs-node--active .ttcs-clipstack,
-.ttcs-clipstack:focus-within {
-  opacity: 1;
-}
-
-/* 触屏常显 */
-@media (hover: none) {
-  .ttcs-clipstack { opacity: 1; transform: translateY(-50%); }
-}
-
-/* 按钮样式复用 nodebtn 的视觉体系 */
-.ttcs-clipbtn {
-  width: var(--ttcs-node-action);
-  height: var(--ttcs-node-action);
-  display: inline-grid;
+.ttcs-tree-zoom button {
+  display: grid;
   place-items: center;
+  width: 32px;
+  height: 32px;
   padding: 0;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255,255,255,.92);
-  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #3a404b;
   cursor: pointer;
-  pointer-events: auto;
-  line-height: 1;
-  font-weight: 700;
-  user-select: none;
-  transition: transform .12s ease, background-color .12s ease, opacity .12s ease;
 }
 
-.ttcs-clipbtn:hover { background: #f8fafc; transform: scale(1.1); }
-.ttcs-clipbtn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
-.ttcs-clipbtn[disabled] { opacity: .45; cursor: not-allowed; pointer-events: none; }
+.ttcs-tree-zoom button:hover { background: #f1f3f6; color: #111318; }
+.ttcs-tree-zoom button:focus-visible { outline: 2px solid var(--ui-focus, #75839d); outline-offset: -2px; }
 
-/* 语义配色（可按需调整） */
-.ttcs-clipbtn--copy  { color: #0f172a; font-size: 18px; }
-.ttcs-clipbtn--paste { color: #2563eb; font-size: 18px; }
-
-.ttcs-clipbtn--copy:hover  { background: #eef2ff; }
-.ttcs-clipbtn--paste:hover { background: #dbeafe; }
-
+@media (max-width: 1100px) {
+  .ttcs-tree-zoom button { width: 40px; height: 40px; }
+}
 
 /* =========================
    Overlay stack: Legend + InstanceLibrary

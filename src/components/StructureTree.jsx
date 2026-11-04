@@ -8,7 +8,8 @@ import { tree as layoutTree } from 'd3-hierarchy'
 import { getRepeatKey } from '../utils/repeat'
 import InstanceLibrary from './InstanceLibrary'
 import { STATIC_DEMO } from '../staticDemo/mode.mjs'
-import { requestStaticText } from '../staticDemo/dialogs.mjs'
+import { askText } from '../ui/dialogs.mjs'
+import { WorkspaceIcon } from './WorkspaceIcon.jsx'
 import { animateTreeViewport, centerTreeViewport, expandTreeAncestors, sameTreeViewport, visibleTreeData } from '../utils/treeFocus.mjs'
 
 const capitalize = (s) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s)
@@ -84,6 +85,7 @@ function toTree(node, path = '0') {
     _primKey: primKey || null,
     _repeatKey: repeatKey || null,
     _path: path,
+    _childCount: Array.isArray(node?.children) ? node.children.length : 0,
   }
   if (Array.isArray(node?.children) && node.children.length) {
     out.children = node.children.map((c, i) => toTree(c, `${path}.${i}`))
@@ -93,19 +95,23 @@ function toTree(node, path = '0') {
 
 const NODE_W = 240
 const NODE_H = 130
+const SCALE_MIN = 0.05
+const SCALE_MAX = 1.6
 
 function getScaleForDepth(depth) {
   const d = Math.max(0, Math.min(depth, 4))
   switch (d) {
-    case 0: return 2
-    case 1: return 1.15
+    case 0: return 1.35
+    case 1: return 1.12
     case 2: return 0.95
-    case 3: return 0.8
-    case 4: return 0.7
+    case 3: return 0.85
+    case 4: return 0.75
     default: return 1
   }
 }
 const MAX_SCALE = getScaleForDepth(0)
+// Where the root sits: low enough that its card and the toolbar above it are visible.
+const rootTop = (layoutScale) => Math.round((115 / 2 + 40) * MAX_SCALE * layoutScale + 24)
 
 function nodeLayoutWidth(node) {
   const key = node.data._repeatKey || node.data._primKey?.toLowerCase()
@@ -358,7 +364,7 @@ export default function StructureTree({
   const treeRef = useRef(null)
   const [dim, setDim] = useState({ w: 0, h: 0 })
   const dimensionsRef = useRef({ w: 0, h: 0 })
-  const [treeViewport, setTreeViewport] = useState(() => ({ translate: { x: 0, y: layoutScale < 1 ? Math.max(45, 130 * layoutScale + 8) : 96 }, zoom: layoutScale }))
+  const [treeViewport, setTreeViewport] = useState(() => ({ translate: { x: 0, y: rootTop(layoutScale) }, zoom: layoutScale }))
   const treeViewportRef = useRef(treeViewport)
   const layoutScaleRef = useRef(layoutScale)
   const [sceneObj, setSceneObj] = useState(null)
@@ -380,15 +386,37 @@ export default function StructureTree({
     setTreeViewport(previous => sameTreeViewport(previous, next) ? previous : next)
   }, [])
 
+  // Zoom around the middle of the panel, or fit the whole tree into view.
+  const zoomBy = useCallback((factor) => {
+    const box = containerRef.current
+    if (!box) return
+    const current = treeViewportRef.current
+    const zoom = Math.min(SCALE_MAX, Math.max(SCALE_MIN, current.zoom * factor))
+    const cx = box.clientWidth / 2, cy = box.clientHeight / 2
+    const k = zoom / current.zoom
+    updateTreeViewport({ zoom, translate: { x: cx - (cx - current.translate.x) * k, y: cy - (cy - current.translate.y) * k } })
+  }, [updateTreeViewport])
+  const fitTree = useCallback(() => {
+    const box = containerRef.current
+    const group = box?.querySelector('.rd3t-g')
+    if (!box || typeof group?.getBBox !== 'function') return
+    const bounds = group.getBBox()
+    if (!bounds.width || !bounds.height) return
+    const pad = 28
+    const zoom = Math.min(SCALE_MAX, Math.max(SCALE_MIN,
+      Math.min((box.clientWidth - pad * 2) / bounds.width, (box.clientHeight - pad * 2) / bounds.height)))
+    updateTreeViewport({ zoom, translate: {
+      x: box.clientWidth / 2 - (bounds.x + bounds.width / 2) * zoom,
+      y: box.clientHeight / 2 - (bounds.y + bounds.height / 2) * zoom,
+    } })
+  }, [updateTreeViewport])
+
   useEffect(() => () => {
     if (focusFlashRef.current) {
       clearTimeout(focusFlashRef.current.timer)
       focusFlashRef.current.node.classList.remove('ttcs-node--flash')
     }
   }, [])
-
-  // ✅ hover 节点（只在 hover 时显示 Copy/Paste）
-  const [hoveredPath, setHoveredPath] = useState(null)
 
   const hoverPathRef = useRef(null)
   const dispatchHover = useCallback((next) => {
@@ -427,7 +455,7 @@ export default function StructureTree({
       if (scaleChanged) {
         const current = treeViewportRef.current
         updateTreeViewport({ zoom: current.zoom * layoutScale / layoutScaleRef.current,
-          translate: { x: next.w / 2, y: layoutScale < 1 ? Math.max(45, 130 * layoutScale + 8) : 96 } })
+          translate: { x: next.w / 2, y: rootTop(layoutScale) } })
         layoutScaleRef.current = layoutScale
       } else if (previous.w !== next.w) {
         const current = treeViewportRef.current
@@ -495,14 +523,35 @@ export default function StructureTree({
   }, [rawTree, collapsedPaths])
   const treeData = useMemo(() => data ? [data] : [], [data])
 
+  // Hiding or showing a node's parts re-lays out the tree; pan afterwards so the
+  // node stays where it was on screen instead of jumping out of view.
   const toggleCollapse = useCallback((path) => {
+    const key = String(path)
+    const shapeRect = () => {
+      const host = nodeRefs.current.get(key)
+      return (host?.querySelector('.ttcs-node__bgwrap') || host)?.getBoundingClientRect?.()
+    }
+    const before = shapeRect()
     setCollapsedPaths(prev => {
       const next = new Set(prev)
       if (next.has(path)) next.delete(path)
       else next.add(path)
       return next
     })
-  }, [])
+    if (!before) return
+    // Wait for react-d3-tree's 200ms node transition to finish.
+    setTimeout(() => {
+      const after = shapeRect()
+      if (!after) return
+      const current = treeViewportRef.current
+      const next = { zoom: current.zoom, translate: {
+        x: current.translate.x + before.left - after.left,
+        y: current.translate.y + before.top - after.top,
+      } }
+      animateTreeViewport(current, next, { onUpdate: updateTreeViewport, duration: 220,
+        reducedMotion: window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false })
+    }, 260)
+  }, [updateTreeViewport])
 
   const requestOpenPanel = useCallback((path, fallbackName, isPrimitive, shiftKey = false) => {
     if (!sceneObj) return
@@ -544,8 +593,8 @@ export default function StructureTree({
       else requestOpenPanel(path, name, !!primKey, e.shiftKey)
     }
 
-    const onEnter = () => { setHoveredPath(path); dispatchHover(path) }
-    const onLeave = () => { setHoveredPath(null); dispatchHover(null) }
+    const onEnter = () => dispatchHover(path)
+    const onLeave = () => dispatchHover(null)
 
     const onKeyDown = (e) => {
       const isActivate = e.key === 'Enter' || e.key === ' '
@@ -559,8 +608,6 @@ export default function StructureTree({
     const onDeleteClick = (e) => {
       e.stopPropagation()
       if (String(path) === '0') return
-      const ok = window.confirm('是否要删除该节点？\nDelete this node?')
-      if (!ok) return
       if (typeof onDeletePath === 'function') onDeletePath(path)
     }
     const onAddClick = (e) => {
@@ -576,11 +623,11 @@ export default function StructureTree({
     const onInstantiateClick = async (e) => {
       e.stopPropagation()
       if (typeof onInstantiate !== 'function') return
-      const defaultName = String(name || 'Instance')
-      const nm = STATIC_DEMO ? await requestStaticText('Instance name / 实例名称', defaultName) : window.prompt('Instance name / 实例名称', defaultName)
+      const defaultName = String(name || 'Part')
+      const nm = await askText({ title: 'Save as part', label: 'Name', value: defaultName, confirmLabel: 'Save',
+        hint: 'Saved parts can be added to any scene from Add → Saved part.' })
       if (nm == null) return
-      const finalName = String(nm).trim() || defaultName
-      onInstantiate(path, finalName)
+      onInstantiate(path, String(nm).trim() || defaultName)
     }
 
     // copy/paste
@@ -592,15 +639,25 @@ export default function StructureTree({
       e.stopPropagation()
       if (typeof onPasteAsUnion === 'function') onPasteAsUnion(path)
     }
+    const childCount = nodeDatum?._childCount || 0
+    const collapsed = childCount > 0 && !nodeDatum?.children?.length
+    const onCollapseClick = (e) => {
+      e.stopPropagation()
+      toggleCollapse(path)
+    }
 
     // Safari draws HTML that has its own layer (position, transform, opacity, z-index,
     // overflow, clip-path…) inside a <foreignObject> without the tree's pan/zoom transform,
     // so the card's text slides off its shape. Keep everything inside the foreignObject
     // free of those properties: scale with an SVG transform and place overlays with grid.
     const CARD_H = 115
+    const TOOLBAR_H = 40
+    const BADGE_H = collapsed ? 30 : 0
     const foScale = getScaleForDepth(depthClamped)
     // Deeper (smaller) levels have always laid the 220px card out a little narrower.
     const CARD_W = 220 * Math.min(1, foScale)
+    // The toolbar needs the full 220px even where the card is narrower.
+    const FO_W = Math.max(CARD_W, 220)
 
     const halfW = NODE_W / 2, halfH = NODE_H / 2
     const strokeW = 2.5
@@ -675,8 +732,6 @@ export default function StructureTree({
       `ttcs-depth-${depthClamped}` +
       (isActive ? ' ttcs-node--active' : '')
 
-    const showCopyBar = hoveredPath && String(hoveredPath) === String(path)
-
     return (
       <g
         className={nodeClass}
@@ -693,15 +748,43 @@ export default function StructureTree({
         style={{ ['--node-stroke']: '#7b8794' }}
       >
         <ShapeBg />
-        <foreignObject x={-CARD_W / 2} y={-CARD_H / 2} width={CARD_W} height={CARD_H} transform={`scale(${foScale})`}>
+        <foreignObject x={-FO_W / 2} y={-CARD_H / 2 - TOOLBAR_H} width={FO_W} height={CARD_H + TOOLBAR_H + BADGE_H} transform={`scale(${foScale})`}>
           <div
             xmlns="http://www.w3.org/1999/xhtml"
-            style={{
-              width: '100%', height: '100%',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              pointerEvents: 'none'
-            }}
+            className="ttcs-node__fo"
+            style={{ gridTemplateRows: `${TOOLBAR_H}px ${CARD_H}px${BADGE_H ? ` ${BADGE_H}px` : ''}` }}
           >
+            <div
+              className="ttcs-node-toolbar"
+              role="toolbar"
+              aria-label={`Actions for ${name}`}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button type="button" className="ttcs-node-toolbar__btn ttcs-node-toolbar__btn--ai" onClick={onAiClick}
+                title="Change this part with AI" aria-label="Change this part with AI"><WorkspaceIcon name="sparkle" /></button>
+              <button type="button" className="ttcs-node-toolbar__btn" onClick={onAddClick}
+                title="Add a part inside this one" aria-label="Add a part"><WorkspaceIcon name="plus" /></button>
+              {childCount > 0 && (
+                <button type="button" className="ttcs-node-toolbar__btn" onClick={onCollapseClick}
+                  title={collapsed ? 'Show its parts' : 'Hide its parts'} aria-label={collapsed ? 'Show its parts' : 'Hide its parts'}
+                  aria-expanded={!collapsed}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    {collapsed ? <path d="m6 9 6 6 6-6" /> : <path d="m6 15 6-6 6 6" />}
+                  </svg>
+                </button>
+              )}
+              {onCopyPath && <button type="button" className="ttcs-node-toolbar__btn" onClick={onCopyClick}
+                title="Copy" aria-label="Copy this part"><WorkspaceIcon name="copy" /></button>}
+              {onPasteAsUnion && <button type="button" className="ttcs-node-toolbar__btn" onClick={onPasteClick} disabled={!hasClipboard}
+                title={hasClipboard ? 'Paste here' : 'Copy a part first, then paste it here'} aria-label="Paste here"><WorkspaceIcon name="paste" /></button>}
+              {onInstantiate && <button type="button" className="ttcs-node-toolbar__btn" onClick={onInstantiateClick}
+                title="Save as part, to reuse in any scene" aria-label="Save as part"><WorkspaceIcon name="bookmark" /></button>}
+              <span className="ttcs-node-toolbar__divider" aria-hidden="true" />
+              <button type="button" className="ttcs-node-toolbar__btn ttcs-node-toolbar__btn--del" onClick={onDeleteClick}
+                disabled={String(path) === '0'} title={String(path) === '0' ? "The top part can't be deleted" : 'Delete'}
+                aria-label="Delete this part"><WorkspaceIcon name="trash" /></button>
+            </div>
+
             <div
               className={`ttcs-tree-card ttcs-depth-${depthClamped}`}
               data-depth={depth}
@@ -712,21 +795,16 @@ export default function StructureTree({
               tabIndex={0}
               onKeyDown={onKeyDown}
               style={{
-                display: 'grid',
+                width: CARD_W,
                 gridTemplateColumns: 'var(--accent-w, 12px) 1fr',
                 ['--accent-color']: fill,
-                pointerEvents: 'auto',
-                cursor: 'pointer',
-                background: 'transparent',
-                border: 0,
-                boxShadow: 'none'
               }}
             >
               <div
                 className="ttcs-tree-card__accent"
-                style={{ background: `color-mix(in srgb, ${fill} 35%, transparent)`, cursor: 'pointer' }}
+                style={{ background: `color-mix(in srgb, ${fill} 35%, transparent)` }}
                 onClick={(e) => { e.stopPropagation(); toggleCollapse(path) }}
-                title="Alt/Option + Click card to collapse/expand; Click this bar to collapse/expand"
+                title={childCount ? (collapsed ? 'Show its parts' : 'Hide its parts') : undefined}
               />
               <div className="ttcs-tree-card__content" style={{ gridColumn: 2, gridRow: 1 }}>
                 <div className="ttcs-tree-card__title">{name}</div>
@@ -738,93 +816,12 @@ export default function StructureTree({
                   <img className="ttcs-chip__img" src={iconSrc} alt="" />
                 </div>
               )}
-
-              <div
-                className="ttcs-nodebtn-stack"
-                role="toolbar"
-                aria-label="Node actions"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <button
-                  className="ttcs-nodebtn ttcs-nodebtn--del"
-                  onClick={onDeleteClick}
-                  title="Delete"
-                  aria-label="Delete node"
-                  disabled={String(path) === '0'}
-                >✕</button>
-
-                <button
-                  className="ttcs-nodebtn ttcs-nodebtn--add"
-                  onClick={onAddClick}
-                  title="Add child"
-                  aria-label="Add child node"
-                >＋</button>
-
-                <button
-                  className="ttcs-nodebtn ttcs-nodebtn--ai"
-                  onClick={onAiClick}
-                  title="AI prompt (edit this node)"
-                  aria-label="AI prompt this node"
-                >💬</button>
-              </div>
-
-              {(onCopyPath || onPasteAsUnion || onInstantiate) && (
-                <div
-                  className="ttcs-nodebtn-bottomright"
-                  onClick={(e) => e.stopPropagation()}
-                  style={{
-                    gridArea: '1 / 1 / 2 / 3',
-                    alignSelf: 'end',
-                    justifySelf: 'start',
-                    margin: 6,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 6,
-                    visibility: showCopyBar ? 'visible' : 'hidden',
-                    pointerEvents: showCopyBar ? 'auto' : 'none',
-                  }}
-                  role="toolbar"
-                  aria-label="Instance / Copy / Paste"
-                >
-                  {/* ✅ Instantiate (top) */}
-                  {onInstantiate && (
-                    <button
-                      className="ttcs-nodebtn ttcs-nodebtn--inst"
-                      title="Instantiate (save subtree to Library) / 实例化（存入Library）"
-                      aria-label="Instantiate"
-                      onClick={onInstantiateClick}
-                    >
-                      ⧉
-                    </button>
-                  )}
-
-                  {/* Paste */}
-                  {onPasteAsUnion && (
-                    <button
-                      className="ttcs-nodebtn ttcs-nodebtn--paste"
-                      title="Paste as Union"
-                      aria-label="Paste as Union"
-                      onClick={onPasteClick}
-                      disabled={!hasClipboard}
-                    >
-                      📥
-                    </button>
-                  )}
-
-                  {/* Copy */}
-                  {onCopyPath && (
-                    <button
-                      className="ttcs-nodebtn ttcs-nodebtn--copy"
-                      title="Copy subtree"
-                      aria-label="Copy subtree"
-                      onClick={onCopyClick}
-                    >
-                      🗐
-                    </button>
-                  )}
-                </div>
-              )}
             </div>
+
+            {collapsed && (
+              <button type="button" className="ttcs-node-collapsed" onClick={onCollapseClick}
+                title="Show its parts">+{childCount} hidden</button>
+            )}
           </div>
         </foreignObject>
       </g>
@@ -841,7 +838,6 @@ export default function StructureTree({
     onCopyPath,
     onPasteAsUnion,
     hasClipboard,
-    hoveredPath,
     onInstantiate,
   ])
 
@@ -947,8 +943,8 @@ export default function StructureTree({
         if (!host && typeof onBlankClick === 'function') onBlankClick()
       }}
     >
-      {shouldFetch && error && <div style={{ color: '#b91c1c', padding: 8 }}>Load error: {error}</div>}
-      {shouldFetch && !error && !data && <div style={{ color: '#64748b', padding: 8 }}>Loading scene.json…</div>}
+      {shouldFetch && error && <div role="alert" style={{ color: '#b91c1c', padding: 12 }}>Couldn't load the scene ({error}). Reload the page to try again.</div>}
+      {shouldFetch && !error && !data && <div style={{ color: '#64748b', padding: 12 }}>Loading the scene…</div>}
 
       <div className="ttcs-overlays">
         <LegendPanel />
@@ -970,6 +966,7 @@ export default function StructureTree({
           pathFunc="diagonal"
           translate={treeViewport.translate}
           zoom={treeViewport.zoom}
+          scaleExtent={{ min: SCALE_MIN, max: SCALE_MAX }}
           onUpdate={updateTreeViewport}
           depthFactor={250}
           separation={{ siblings: 1.1, nonSiblings: 1.5 }}
@@ -980,6 +977,14 @@ export default function StructureTree({
           transitionDuration={200}
           centerNodeOnClick={true}
         />
+      )}
+
+      {data && dim.w > 0 && (
+        <div className="ttcs-tree-zoom" role="group" aria-label="Tree view" onClick={(e) => e.stopPropagation()}>
+          <button type="button" onClick={() => zoomBy(1 / 1.25)} aria-label="Zoom out" title="Zoom out"><WorkspaceIcon name="minus" /></button>
+          <button type="button" onClick={() => zoomBy(1.25)} aria-label="Zoom in" title="Zoom in"><WorkspaceIcon name="plus" /></button>
+          <button type="button" onClick={fitTree} aria-label="Fit the whole tree" title="Fit the whole tree"><WorkspaceIcon name="fit" /></button>
+        </div>
       )}
     </div>
   )

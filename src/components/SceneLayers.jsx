@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { WorkspaceIcon } from './WorkspaceIcon.jsx'
 import { getRepeatKey } from '../utils/repeat'
 import '../structurePanel.css'
 
@@ -156,9 +157,9 @@ export default function SceneLayers({
               <span className="scene-layer-name" title={name}>{name}</span>
               <span className="scene-layer-kind" title={kind}>{kind}</span>
               <span className="scene-layer-actions">
-                {onNodePrompt && <button type="button" tabIndex={-1} title={`AI edit ${name}`} aria-label={`AI edit ${name}`} onClick={event => { event.stopPropagation(); onNodePrompt(path) }}>AI</button>}
-                {onAddChild && <button type="button" tabIndex={-1} title={`Add to ${name}`} aria-label={`Add to ${name}`} onClick={event => { event.stopPropagation(); onAddChild(path) }}>+</button>}
-                {onDeletePath && path !== '0' && <button type="button" tabIndex={-1} title={`Delete ${name}`} aria-label={`Delete ${name}`} onClick={event => { event.stopPropagation(); onDeletePath(path) }}>×</button>}
+                {onNodePrompt && <button type="button" tabIndex={-1} title={`Change ${name} with AI`} aria-label={`AI edit ${name}`} onClick={event => { event.stopPropagation(); onNodePrompt(path) }}><WorkspaceIcon name="sparkle" size={14} /></button>}
+                {onAddChild && <button type="button" tabIndex={-1} title={`Add to ${name}`} aria-label={`Add to ${name}`} onClick={event => { event.stopPropagation(); onAddChild(path) }}><WorkspaceIcon name="plus" size={14} /></button>}
+                {onDeletePath && path !== '0' && <button type="button" tabIndex={-1} title={`Delete ${name}`} aria-label={`Delete ${name}`} onClick={event => { event.stopPropagation(); onDeletePath(path) }}><WorkspaceIcon name="trash" size={14} /></button>}
               </span>
             </div>
           )
