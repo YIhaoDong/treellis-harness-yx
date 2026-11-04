@@ -593,12 +593,14 @@ export default function StructureTree({
       if (typeof onPasteAsUnion === 'function') onPasteAsUnion(path)
     }
 
-    const CARD_W = 220, CARD_H = 115
+    // Safari draws HTML that has its own layer (position, transform, opacity, z-index,
+    // overflow, clip-path…) inside a <foreignObject> without the tree's pan/zoom transform,
+    // so the card's text slides off its shape. Keep everything inside the foreignObject
+    // free of those properties: scale with an SVG transform and place overlays with grid.
+    const CARD_H = 115
     const foScale = getScaleForDepth(depthClamped)
-    const w = CARD_W * foScale
-    const h = CARD_H * foScale
-    const x = -w / 2
-    const y = -h / 2
+    // Deeper (smaller) levels have always laid the 220px card out a little narrower.
+    const CARD_W = 220 * Math.min(1, foScale)
 
     const halfW = NODE_W / 2, halfH = NODE_H / 2
     const strokeW = 2.5
@@ -691,14 +693,13 @@ export default function StructureTree({
         style={{ ['--node-stroke']: '#7b8794' }}
       >
         <ShapeBg />
-        <foreignObject x={x} y={y} width={w} height={h}>
+        <foreignObject x={-CARD_W / 2} y={-CARD_H / 2} width={CARD_W} height={CARD_H} transform={`scale(${foScale})`}>
           <div
             xmlns="http://www.w3.org/1999/xhtml"
             style={{
               width: '100%', height: '100%',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              pointerEvents: 'none',
-              position: 'relative'
+              pointerEvents: 'none'
             }}
           >
             <div
@@ -713,10 +714,8 @@ export default function StructureTree({
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'var(--accent-w, 12px) 1fr',
-                ['--card-scale']: getScaleForDepth(depthClamped),
                 ['--accent-color']: fill,
                 pointerEvents: 'auto',
-                position: 'relative',
                 cursor: 'pointer',
                 background: 'transparent',
                 border: 0,
@@ -725,11 +724,11 @@ export default function StructureTree({
             >
               <div
                 className="ttcs-tree-card__accent"
-                style={{ background: fill, cursor: 'pointer', opacity: 0.35 }}
+                style={{ background: `color-mix(in srgb, ${fill} 35%, transparent)`, cursor: 'pointer' }}
                 onClick={(e) => { e.stopPropagation(); toggleCollapse(path) }}
                 title="Alt/Option + Click card to collapse/expand; Click this bar to collapse/expand"
               />
-              <div className="ttcs-tree-card__content" style={{ gridColumn: 2 }}>
+              <div className="ttcs-tree-card__content" style={{ gridColumn: 2, gridRow: 1 }}>
                 <div className="ttcs-tree-card__title">{name}</div>
                 <div className="ttcs-tree-sub">{typeLabel}</div>
               </div>
@@ -774,16 +773,15 @@ export default function StructureTree({
                   className="ttcs-nodebtn-bottomright"
                   onClick={(e) => e.stopPropagation()}
                   style={{
-                    position: 'absolute',
-                    left: 6,
-                    bottom: 6,
+                    gridArea: '1 / 1 / 2 / 3',
+                    alignSelf: 'end',
+                    justifySelf: 'start',
+                    margin: 6,
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 6,
-                    opacity: showCopyBar ? 1 : 0,
-                    transition: 'opacity 120ms ease',
+                    visibility: showCopyBar ? 'visible' : 'hidden',
                     pointerEvents: showCopyBar ? 'auto' : 'none',
-                    zIndex: 10,
                   }}
                   role="toolbar"
                   aria-label="Instance / Copy / Paste"

@@ -242,12 +242,17 @@
 .ttcs-donut-outline { vector-effect: non-scaling-stroke; } /* 同步线宽策略 */
 
 /* ========== Node card (soft content overlay) ========== */
+/* The card lives in an SVG <foreignObject>. Safari paints anything in there that gets its
+   own layer (position, transform, opacity < 1, z-index, overflow clipping, clip-path,
+   filter, will-change) without the tree's pan/zoom transform, so text drifts off its
+   shape. Nothing below may use those properties: overlays sit in the card's one grid
+   row instead of being absolutely positioned, and hidden things use visibility. */
 .ttcs-tree-card {
-  position: relative;                /* 相对定位，便于内部绝对元素 */
   display: grid;                     /* 网格布局 */
 
   --accent-w: 0px;                   /* 左色条默认宽度为 0（关闭） */
   grid-template-columns: var(--accent-w) 1fr; /* 左色条 + 内容 */
+  grid-template-rows: 100%;          /* 单行：覆盖层与内容共用 */
 
   width: 220px;                      /* 卡片宽度 */
   height: 115px;                     /* 卡片高度 */
@@ -257,14 +262,7 @@
   border: 0;                         /* 无边框 */
   box-shadow: none;                  /* 无阴影 */
 
-  overflow: hidden;                  /* 超出裁剪 */
-  clip-path: inset(0 round 20px);    /* 裁剪圆角 */
-
-  will-change: transform, filter;    /* 提示浏览器优化 */
-  transition:
-    transform 140ms ease,            /* 放大动画 */
-    filter 140ms ease,               /* 滤镜动画 */
-    grid-template-columns 140ms ease;/* 左色条展开动画 */
+  transition: grid-template-columns 140ms ease; /* 左色条展开动画 */
 
   cursor: pointer;                   /* 鼠标手型 */
   font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; /* 字体 */
@@ -273,10 +271,11 @@
 
 .ttcs-tree-card__accent {
   grid-column: 1 / 2;                /* 放在第一列（色条） */
+  grid-row: 1;
   height: 100%;                      /* ✅ 默认显示全高色条（可点击折叠/展开） */
   border-top-left-radius: 1px;       /* 左上圆角 */
   border-bottom-left-radius: 1px;    /* 左下圆角 */
-  opacity: 0.35;                     /* 微透明，避免喧宾夺主 */
+  /* 35% tint comes from the inline background (color-mix), not opacity. */
 }
 
 /* 移除 grid-column 的类级强制，改由 JSX 内联控制，避免与内联冲突 */
@@ -294,8 +293,6 @@
   font-size: 18px;                   /* 标题字号 */
   letter-spacing: 0.1px;             /* 字距 */
   white-space: normal;               /* 正常换行 */
-  overflow: hidden;                  /* 溢出隐藏 */
-  text-overflow: ellipsis;           /* 省略号 */
   word-break: break-word;            /* 长词断开 */
   line-height: 1.18;                 /* 行高 */
 }
@@ -308,21 +305,15 @@
 
 /* Depth-aware sizing */
 .ttcs-tree-card {
-  --card-scale: 1.00;                /* 基础缩放 */
   --title-fs: 28px;                  /* 基础标题字号 */
   --sub-fs: 20px;                    /* 基础副标题字号 */
   --accent-w: 12px;                  /* 左色条宽度 */
   --radius: 1px;                     /* 圆角 */
 
-  transform-origin: 50% 50%;         /* 变换原点中心 */
-  transform: scale(var(--card-scale)); /* 按深度缩放 */
+  /* Depth scaling is an SVG transform on the <foreignObject> (see StructureTree). */
   border-radius: var(--radius);        /* 圆角应用 */
 }
-.ttcs-depth-0.ttcs-tree-card { --card-scale: 1.4; --title-fs: 19.5px; --sub-fs: 14.5px; --accent-w: 14px; } /* 根层更大 */
-.ttcs-depth-1.ttcs-tree-card { --card-scale: 1.25; } /* 深度1 */
-.ttcs-depth-2.ttcs-tree-card { --card-scale: 1.12; } /* 深度2 */
-.ttcs-depth-3.ttcs-tree-card { --card-scale: 1.02; } /* 深度3 */
-.ttcs-depth-4.ttcs-tree-card { --card-scale: 0.95; } /* 深度4 */
+.ttcs-depth-0.ttcs-tree-card { --title-fs: 19.5px; --sub-fs: 14.5px; --accent-w: 14px; } /* 根层更大 */
 
 .ttcs-tree-card__title { font-size: var(--title-fs); } /* 标题字号跟随变量 */
 .ttcs-tree-sub        { font-size: var(--sub-fs); }    /* 副标题字号跟随变量 */
@@ -337,15 +328,6 @@
 .ttcs-node.ttcs-prim--torus .ttcs-tree-card__content { align-items: center; text-align: center; } /* 内容居中 */
 
 /* ========== Unified hover behavior ========== */
-/* 禁止卡片自身的放大，避免“两个 hover 动画打架” */
-.ttcs-tree .ttcs-tree-card:hover { transform: none !important; filter: none !important; } /* 悬停不再二次放大 */
-
-/* 整个节点 hover：文字/卡片轻微放大 */
-.ttcs-tree .ttcs-node:hover .ttcs-tree-card {
-  transform: scale(calc(var(--card-scale) + 0.012)) !important; /* 整体轻微放大 */
-  filter: none !important;                                       /* 不叠加滤镜 */
-}
-
 /* === TTCS: Hover Highlight === */
 .ttcs-tree .ttcs-node:hover .ttcs-node__bg {
   fill: var(--ttcs-hl-fill) !important;     /* 高亮填充 */
@@ -372,7 +354,7 @@
 .ttcs-tree .ttcs-node:hover .ttcs-donut-cover { fill: #fff; fill-opacity: 1; } /* 中心白色遮罩 */
 
 /* hover 时左侧色条淡出，突出形状 */
-.ttcs-tree .ttcs-node:hover .ttcs-tree-card__accent { opacity: 0 !important; } /* 色条隐藏 */
+.ttcs-tree .ttcs-node:hover .ttcs-tree-card__accent { visibility: hidden; } /* 色条隐藏 */
 .ttcs-tree .ttcs-node:hover .ttcs-tree-card__title { color: #0b0f19; }         /* 标题深色 */
 .ttcs-tree .ttcs-node:hover .ttcs-tree-sub        { color: #334155; }          /* 副标题深色 */
 
@@ -464,10 +446,10 @@
 
 /* ===== Node small type chip (placed centered below) ===== */
 .ttcs-chip {
-  position: absolute;                /* 芯片绝对定位 */
-  left: 50%;                         /* 水平居中基于父 */
-  bottom: -3px;                      /* 底部对齐 */
-  transform: translateX(-50%);       /* 水平中心修正 */
+  grid-area: 1 / 1 / 2 / 3;          /* 覆盖整张卡片 */
+  align-self: end;                   /* 底部对齐 */
+  justify-self: center;              /* 水平居中 */
+  margin-bottom: -3px;
   width: 70px;                       /* 宽度 */
   height: 34px;                      /* 高度 */
   background: transparent;           /* 透明背景 */
@@ -475,7 +457,7 @@
   box-shadow: none;                  /* 无阴影 */
   pointer-events: none;              /* 不可交互 */
 }
-.ttcs-chip__img { width: 100%; height: 100%; display: block; opacity: .95; } /* 芯片图片铺满 */
+.ttcs-chip__img { width: 100%; height: 100%; display: block; } /* 芯片图片铺满 */
 
 /* === TTCS: Programmatic active highlight (from App.highlightPath) === */
 .ttcs-tree .ttcs-node--active .ttcs-node__bg {
@@ -501,7 +483,7 @@
   fill: #fff;
   fill-opacity: 1;
 }
-.ttcs-tree .ttcs-node--active .ttcs-tree-card__accent { opacity: 0 !important; }
+.ttcs-tree .ttcs-node--active .ttcs-tree-card__accent { visibility: hidden; }
 .ttcs-tree .ttcs-node--active .ttcs-tree-card__title { color: #0b0f19; }
 .ttcs-tree .ttcs-node--active .ttcs-tree-sub        { color: #334155; }
 
@@ -519,32 +501,30 @@
 }
 
 .ttcs-nodebtn-stack {
-  position: absolute;
-  top: 6px;
-  right: 6px;
+  grid-area: 1 / 1 / 2 / 3;          /* 覆盖整张卡片，靠右上 */
+  align-self: start;
+  justify-self: end;
+  margin: 6px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 6px;
   pointer-events: auto;
 
-  /* 桌面端默认轻隐藏，hover/active 时显现 */
-  opacity: 0;
-  transform: translateY(-2px);
-  transition: opacity .15s ease, transform .15s ease;
+  /* 桌面端默认隐藏，hover/active 时显现（visibility, not opacity: see .ttcs-tree-card） */
+  visibility: hidden;
 }
 
 /* 显示条件：悬停该节点、该节点被设为 active、或栈内获得焦点 */
 .ttcs-node:hover .ttcs-nodebtn-stack,
 .ttcs-node--active .ttcs-nodebtn-stack,
 .ttcs-nodebtn-stack:focus-within {
-  opacity: 1;
-  transform: translateY(0);
+  visibility: visible;
 }
 
 /* 触屏设备（无 hover）下常显 */
 @media (hover: none) {
-  .ttcs-nodebtn-stack { opacity: 1; transform: none; }
+  .ttcs-nodebtn-stack { visibility: visible; }
 }
 
 /* 基础按钮样式（方形命中区 + 居中） */
@@ -565,12 +545,12 @@
   line-height: 1;
   font-weight: 700;
   user-select: none;
-  transition: transform .12s ease, background-color .12s ease, opacity .12s ease;
+  transition: background-color .12s ease, color .12s ease;
 }
 
-.ttcs-nodebtn:hover { background: #f8fafc; transform: scale(1.1); }
+.ttcs-nodebtn:hover { background: #f8fafc; }
 .ttcs-nodebtn:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
-.ttcs-nodebtn[disabled] { opacity: .45; cursor: not-allowed; pointer-events: none; }
+.ttcs-nodebtn[disabled] { color: #cbd5e1; background: rgba(255,255,255,.6); cursor: not-allowed; pointer-events: none; }
 
 /* 语义变体：颜色 + 图标尺寸 */
 .ttcs-nodebtn--del { color: #ef4444; font-size: 20px; }
