@@ -2,7 +2,7 @@
   --prompt-border: #e6e8ec;
   --prompt-muted: #777c86;
   color: #111318;
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: var(--app-font);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -141,7 +141,7 @@
 .prompt-access__primary:hover:not(:disabled) { background: #101318; }
 .prompt-access__primary:disabled { background: #e9eaed; color: #9398a1; border-color: #e9eaed; cursor: not-allowed; }
 .prompt-access__primary:focus-visible { outline: 2px solid #747f92; outline-offset: 2px; }
-.prompt-access__code { flex: 1 1 100%; text-align: center; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .45em; }
+.prompt-access__code { flex: 1 1 100%; text-align: center; font-family: var(--app-mono); letter-spacing: .45em; }
 .prompt-access .prompt-access__code { min-height: 48px; font-size: 22px !important; }
 .prompt-access__code::placeholder { color: #d3d6dc; }
 .prompt-access__divider { display: flex; align-items: center; gap: 10px; margin: 16px 0 10px; color: #9298a2; font-size: 11px; }

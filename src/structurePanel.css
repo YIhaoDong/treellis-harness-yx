@@ -8,7 +8,7 @@
   overflow: hidden;
   background: #fff;
   color: #252933;
-  font: 12px/1.4 'Segoe UI', system-ui, sans-serif;
+  font: 12px/1.4 var(--app-font);
 }
 
 .scene-structure-toolbar {
@@ -99,11 +99,11 @@
 .scene-layer-row:hover .scene-layer-actions,
 .scene-layer-row:focus-within .scene-layer-actions,
 .scene-layer-row--selected .scene-layer-actions { opacity: 1; }
-.scene-layer-actions button { min-width: 21px; height: 22px; padding: 1px 3px; border: 0; border-radius: 4px; background: transparent; color: #7b8290; font: 10px/1 'Segoe UI', system-ui, sans-serif; cursor: pointer; }
+.scene-layer-actions button { min-width: 21px; height: 22px; padding: 1px 3px; border: 0; border-radius: 4px; background: transparent; color: #7b8290; font: 10px/1 var(--app-font); cursor: pointer; }
 .scene-layer-actions button:hover { background: #e5e7ef; color: #353b48; }
 .scene-layer-actions button:focus-visible { outline: 2px solid #918bc4; }
 .scene-layers-empty { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 80px; color: #949aa6; }
-.scene-organization-form { display: grid; gap: 14px; color: #343946; font: 14px/1.5 'Segoe UI', system-ui, sans-serif; }
+.scene-organization-form { display: grid; gap: 14px; color: #343946; font: 14px/1.5 var(--app-font); }
 .scene-organization-form label { display: grid; gap: 7px; }
 .scene-organization-form input, .scene-organization-form textarea { box-sizing: border-box; width: 100%; border: 1px solid #dfe2e8; border-radius: 9px; padding: 10px 12px; font: inherit; color: inherit; background: #fff; }
 .scene-organization-form p { margin: 0; color: #777e8b; }
