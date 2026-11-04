@@ -64,6 +64,22 @@ export default function useSceneSource({
     setReloadKey(k => k + 1)
   }, [isDraft, setLiveScene])
 
+  // Start over: leave the draft and load the default /scene.json again.
+  const reset = useCallback(() => {
+    draftModeRef.current = false
+    if (blobUrlRef.current) { URL.revokeObjectURL(blobUrlRef.current); blobUrlRef.current = null }
+    lastSceneTextRef.current = null
+    acceptTreeChangeRef.current = true
+    setIsDraft(false)
+    if (STATIC_DEMO) {
+      setLiveScene(createInitialScene())
+    } else {
+      setLiveScene(null)
+      setSceneUrl('/scene.json?ts=' + Date.now())
+    }
+    setReloadKey(k => k + 1)
+  }, [setLiveScene])
+
   // 轮询 /scene.json（仅在非草稿时生效；编辑中暂停）
   useEffect(() => {
     if (STATIC_DEMO || isDraft) return
@@ -106,6 +122,7 @@ export default function useSceneSource({
     reloadKey,
     enterDraftFromRoot,
     refresh,
+    reset,
     acceptTreeChangeRef,
   }
 }

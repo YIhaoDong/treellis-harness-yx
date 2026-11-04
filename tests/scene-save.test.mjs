@@ -102,6 +102,7 @@ function harness(props) {
     act(callback) { callback(); render() },
     button(label) { return find(node => node.type === 'button' && node.children.includes(label)) },
     get input() { return find(node => node.type === 'input') },
+    get submit() { return find(node => node.type === 'button' && node.props.type === 'submit') },
     get form() { return find(node => node.type === 'form') },
     get overlay() { return find(node => node.props.className === 'ttcs-modal-overlay') },
     get alert() { return find(node => node.props.role === 'alert') },
@@ -114,7 +115,7 @@ const event = () => ({ preventDefault() {}, stopPropagation() {} })
 
 test('Save As opens a named dialog and cancel or Escape never downloads', () => {
   const h = harness({ scene })
-  h.act(() => h.button('💾 Save As').props.onClick())
+  h.act(() => h.button('Download').props.onClick())
   assert.equal(h.input.props.value, 'Detailed Aircraft.json')
   assert.equal(h.document.activeElement, h.input)
   assert.ok(h.input.selected)
@@ -123,7 +124,7 @@ test('Save As opens a named dialog and cancel or Escape never downloads', () => 
   h.act(() => h.button('Cancel').props.onClick())
   assert.equal(h.form, undefined)
   assert.equal(h.document.activeElement, h.priorFocus)
-  h.act(() => h.button('💾 Save As').props.onClick())
+  h.act(() => h.button('Download').props.onClick())
   h.act(() => h.overlay.props.onKeyDown({ ...event(), key: 'Escape' }))
   assert.equal(h.form, undefined)
   assert.equal(h.downloads.length, 0)
@@ -131,7 +132,7 @@ test('Save As opens a named dialog and cancel or Escape never downloads', () => 
 
 test('Save As validation keeps the dialog open with a clear error and no download', () => {
   const h = harness({ scene })
-  h.act(() => h.button('💾 Save As').props.onClick())
+  h.act(() => h.button('Download').props.onClick())
   h.act(() => h.input.props.onChange({ target: { value: 'bad/path' } }))
   h.act(() => h.form.props.onSubmit(event()))
   assert.ok(h.alert.children[0].includes('cannot contain'))
@@ -145,7 +146,7 @@ test('Save As validation keeps the dialog open with a clear error and no downloa
 test('Save As downloads exactly the chosen JSON name and preserves wrapped or raw scene data', async () => {
   for (const wrap of [true, false]) {
     const h = harness({ scene, filename: 'initial.json', wrap })
-    h.act(() => h.button('💾 Save As').props.onClick())
+    h.act(() => h.button('Download').props.onClick())
     assert.equal(h.input.props.value, 'initial.json')
     h.act(() => h.input.props.onChange({ target: { value: '我的飞机' } }))
     h.act(() => h.form.props.onSubmit(event()))
@@ -162,15 +163,15 @@ test('Save As downloads exactly the chosen JSON name and preserves wrapped or ra
 
 test('the save dialog traps keyboard focus and cannot open without a scene', () => {
   const h = harness({ scene })
-  h.act(() => h.button('💾 Save As').props.onClick())
-  const save = h.button('Save')
+  h.act(() => h.button('Download').props.onClick())
+  const save = h.submit
   save.focus()
   h.act(() => h.overlay.props.onKeyDown({ ...event(), key: 'Tab' }))
   assert.equal(h.document.activeElement.props['aria-label'], 'Close save dialog')
   h.act(() => h.overlay.props.onKeyDown({ ...event(), key: 'Tab', shiftKey: true }))
   assert.equal(h.document.activeElement, save)
   const disabled = harness({ scene: null })
-  assert.equal(disabled.button('💾 Save As').props.disabled, true)
-  disabled.act(() => disabled.button('💾 Save As').props.onClick())
+  assert.equal(disabled.button('Download').props.disabled, true)
+  disabled.act(() => disabled.button('Download').props.onClick())
   assert.equal(disabled.form, undefined)
 })

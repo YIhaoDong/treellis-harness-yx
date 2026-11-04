@@ -1,5 +1,7 @@
 // src/components/UploadScene.jsx
 import React, { useRef } from 'react'
+import { notify } from '../ui/dialogs.mjs'
+import { WorkspaceIcon } from './WorkspaceIcon.jsx'
 
 /**
  * UploadScene — choose a local JSON file and push it into live draft
@@ -27,7 +29,7 @@ export default function UploadScene({ onUpload }) {
       try {
         const text = String(evt.target?.result || '')
         if (!text.trim()) {
-          alert('Empty file.')
+          notify('That file is empty.', { tone: 'error' })
           return
         }
         const json = JSON.parse(text)
@@ -35,7 +37,7 @@ export default function UploadScene({ onUpload }) {
         // Support both { scene: {...} } and plain {...}
         const root = json && (json.scene || json)
         if (!root || typeof root !== 'object') {
-          alert('Invalid JSON format: expecting an object or { "scene": { ... } }')
+          notify("That file isn't a Treellis scene.", { tone: 'error' })
           return
         }
 
@@ -44,7 +46,7 @@ export default function UploadScene({ onUpload }) {
         }
       } catch (err) {
         console.error('Failed to parse JSON:', err)
-        alert('Invalid JSON file. Please check formatting.')
+        notify("Couldn't read that file. Choose a scene saved from Treellis (.json).", { tone: 'error' })
       }
     }
     reader.readAsText(file)
@@ -53,11 +55,13 @@ export default function UploadScene({ onUpload }) {
   return (
     <>
       <button
-        className="btn btn--ghost"
+        type="button"
+        className="workspace-button"
         onClick={handleClick}
-        title="Upload a JSON scene file / 上传本地 JSON 场景到草稿"
+        title="Open a scene file (.json) saved from Treellis"
       >
-        ⬆ Upload
+        <WorkspaceIcon name="open" />
+        Open
       </button>
 
       {/* hidden file input */}

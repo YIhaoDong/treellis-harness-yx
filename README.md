@@ -19,9 +19,13 @@ Each user supplies their own OpenAI API key through the account chip next to Gen
 
 ## Responsive editor
 
-On phones and tablets up to 1100 CSS pixels wide, the 3D view stays above one full-width editor. The bottom navigation switches between Structure, Parameters and Prompt; Model uses the full workspace for the 3D view. Parameter ranges and extra structure actions collapse to leave more editing space. Larger screens keep the three-column workspace.
+On phones and tablets up to 1100 CSS pixels wide, the 3D view stays above one full-width editor. The bottom navigation switches between Structure, Parameters and Prompt; Model uses the full workspace for the 3D view. Undo and Redo stay in the header; the menu button opens the scene, file and More tools. Larger screens keep the three-column workspace.
 
-Libraries opens the nine selected creation models directly in the editor. Parameter, color and name edits retain the current selection and highlight through Undo and Redo.
+Examples opens the nine selected creation models directly in the editor. Parameter, color and name edits retain the current selection and highlight through Undo and Redo.
+
+The scene is saved in the browser (`localStorage`, key `treellis.scene.v1`) shortly after every change and restored on the next visit; the badge next to the scene name shows Example, Saving…, Saved or Not saved. The untouched example is never stored, so it keeps following the server's `/scene.json`. More → Start over clears the saved scene. Download saves a `.json` file and Open loads one. Less frequent tools (Shape guide, Saved parts, Session log, Scene JSON, Show tips) are under More. A first-visit card explains the workflow; it is dismissed per browser (`treellis.welcome.dismissed`).
+
+Dialogs share one frame (`src/components/Dialog.jsx` and `.ttcs-modal*` in `src/ui.css`), and questions that used `window.prompt`, `confirm` or `alert` use the in-page helpers in `src/ui/dialogs.mjs`. Node actions sit in a toolbar above each tree node (shown on hover, or on the selected node on touch screens); anything inside a node's `<foreignObject>` must avoid layer-creating CSS (position, transform, opacity, z-index, overflow, clip-path), or Safari draws it away from its shape.
 
 An optional offline demo can be built with `npm run build:static`. Open the generated `static-demo/treellis-static.html`; generation and server saving are disabled in this demo. Generated demos and verification artifacts are excluded from Git.
 

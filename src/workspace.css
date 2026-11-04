@@ -36,14 +36,12 @@
   letter-spacing: -.01em;
 }
 
-.workspace-local-label,
 .workspace-filename {
-  font-family: var(--app-mono);
-}
-
-.workspace-local-label {
-  color: #6b7280;
-  font-size: 11px;
+  max-width: 240px;
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .workspace-header-divider {
@@ -75,15 +73,13 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 0 3px 0 10px;
+  padding: 0 7px 0 10px;
+  cursor: default;
   border: 1px solid #e6e8ec;
   border-radius: 9px;
   background: #fff;
 }
 
-.workspace-filename {
-  font-size: 12px;
-}
 
 .workspace-scene-state {
   display: inline-flex;
@@ -98,9 +94,19 @@
   font-weight: 500;
 }
 
-.workspace-scene-state--draft {
+.workspace-scene-state--example {
+  background: #f1f3f6;
+  color: #4b5563;
+}
+
+.workspace-scene-state--saving {
+  background: #f1f3f6;
+  color: #4b5563;
+}
+
+.workspace-scene-state--error {
   background: #fff6df;
-  color: #925e0b;
+  color: #8a5300;
 }
 
 .workspace-state-dot {
@@ -155,12 +161,20 @@
   cursor: not-allowed;
 }
 
-.workspace-reload {
-  width: 28px;
-  height: 28px;
+.workspace-icon-button {
+  width: 34px;
   padding: 0;
-  color: #4a5160;
 }
+
+.workspace-history-actions {
+  display: inline-flex;
+  gap: 0;
+}
+
+.workspace-button--danger { color: #b42318; }
+
+.workspace-more { position: relative; }
+.workspace-more__menu { top: calc(100% + 6px); right: 0; }
 
 .workspace-icon {
   flex: none;

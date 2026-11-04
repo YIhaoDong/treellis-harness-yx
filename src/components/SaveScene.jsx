@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { STATIC_DEMO } from '../staticDemo/mode.mjs'
 import { createPortal } from 'react-dom'
 import { normalizeSceneFilename, suggestSceneFilename } from '../utils/sceneFilename.mjs'
+import { WorkspaceIcon } from './WorkspaceIcon.jsx'
 
 /**
  * SaveScene — name and download the current scene as JSON
@@ -95,12 +96,13 @@ export default function SaveScene({ scene, filename, wrap = true }) {
       <button
         ref={triggerRef}
         type="button"
-        className="btn btn--ghost"
+        className="workspace-button"
         onClick={handleOpen}
         disabled={!scene}
-        title={!scene ? 'No scene to save / 当前没有可导出的场景' : 'Save current scene as JSON / 另存为 JSON'}
+        title={!scene ? 'No scene to download yet' : 'Download this scene as a file (.json) you can open later'}
       >
-        💾 Save As
+        <WorkspaceIcon name="download" />
+        Download
       </button>
       {open && createPortal(
         <div className="ttcs-modal-overlay" onMouseDown={(event) => {
@@ -108,22 +110,25 @@ export default function SaveScene({ scene, filename, wrap = true }) {
         }} onKeyDown={onDialogKeyDown}>
           <form
             ref={dialogRef}
-            className="ttcs-modal"
-            style={{ width: 'min(440px, 92vw)' }}
+            className="ttcs-modal ttcs-modal--sm"
             role="dialog"
             aria-modal="true"
             aria-labelledby="save-scene-title"
             onSubmit={handleSave}
           >
             <div className="ttcs-modal__bar">
-              <div className="ttcs-modal__title" id="save-scene-title">Save scene as</div>
+              <div className="ttcs-modal__heading">
+                <h2 className="ttcs-modal__title" id="save-scene-title">Download scene</h2>
+                <p className="ttcs-modal__subtitle">Saves a .json file you can open in Treellis later.</p>
+              </div>
               <button type="button" className="ttcs-modal__close" onClick={close} aria-label="Close save dialog">×</button>
             </div>
-            <div className="ttcs-modal__body" style={{ padding: 20 }}>
-              <label htmlFor="save-scene-filename" style={{ display: 'block', color: '#374151', fontSize: 13, marginBottom: 8 }}>File name</label>
+            <div className="ttcs-modal__body">
+              <label htmlFor="save-scene-filename" className="ui-field__label">File name</label>
               <input
                 ref={inputRef}
                 id="save-scene-filename"
+                className="ui-input"
                 type="text"
                 autoComplete="off"
                 spellCheck={false}
@@ -131,14 +136,15 @@ export default function SaveScene({ scene, filename, wrap = true }) {
                 onChange={(event) => { setName(event.target.value); setError('') }}
                 aria-invalid={!!error}
                 aria-describedby={error ? 'save-scene-error' : 'save-scene-hint'}
-                style={{ width: '100%', boxSizing: 'border-box', minWidth: 0, padding: '10px 12px', border: `1px solid ${error ? '#dc7777' : '#d9dde4'}`, borderRadius: 9, font: 'inherit' }}
+                style={{ marginTop: 6, borderColor: error ? '#dc7777' : undefined }}
               />
-              <div id="save-scene-hint" style={{ color: '#777c86', fontSize: 12, marginTop: 8 }}>.json is added automatically.</div>
-              {error && <div id="save-scene-error" role="alert" style={{ color: '#a33636', fontSize: 12, marginTop: 8 }}>{error}</div>}
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 22 }}>
-                <button type="button" className="btn btn--ghost" onClick={close}>Cancel</button>
-                <button type="submit" className="btn" disabled={!scene} style={{ background: '#242831', color: '#fff', borderColor: '#242831' }}>Save</button>
-              </div>
+              {error
+                ? <div id="save-scene-error" role="alert" className="ui-error">{error}</div>
+                : <div id="save-scene-hint" className="ui-hint">.json is added automatically.</div>}
+            </div>
+            <div className="ttcs-modal__footer">
+              <button type="button" className="ui-btn" onClick={close}>Cancel</button>
+              <button type="submit" className="ui-btn ui-btn--primary" disabled={!scene}>Download</button>
             </div>
           </form>
         </div>,

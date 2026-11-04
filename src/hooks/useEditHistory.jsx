@@ -190,6 +190,7 @@ export default function useEditHistory({ liveScene, setLiveScene }) {
     editTagRef,
     // 快照
     pushSnapshot,
+    pushSnapshotForScene,
     snapshotsRef,
     downloadSnapshotsAsJSON,
     downloadSnapshotsAsJSONL,

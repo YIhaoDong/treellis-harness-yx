@@ -90,11 +90,10 @@
 
   .workspace-mobile-actions {
     display: flex;
-    order: 1;
+    order: 2;
     flex: none;
     align-items: center;
     gap: 3px;
-    margin-left: auto;
   }
 
   .workspace-header .workspace-button,
@@ -110,47 +109,50 @@
     color: #665015;
   }
 
-  .workspace-shell .workspace-header > .workspace-toolbar,
-  .workspace-shell .workspace-header > .workspace-global-tools {
-    display: none;
-  }
+  /* Undo/Redo stay in the header row; the scene, file and More tools open with the menu. */
+  .workspace-shell .workspace-header > .workspace-toolbar { display: contents; }
+  .workspace-shell .workspace-header .workspace-history-actions { order: 1; display: flex; gap: 0; margin-left: auto; }
+  .workspace-shell .workspace-header .workspace-history-actions + .workspace-file-actions,
+  .workspace-shell .workspace-header .workspace-scene-file,
+  .workspace-shell .workspace-header > .workspace-global-tools { display: none; }
 
-  .workspace-shell[data-tools-open='true'] .workspace-header > .workspace-toolbar,
+  .workspace-shell[data-tools-open='true'] .workspace-header .workspace-scene-file,
+  .workspace-shell[data-tools-open='true'] .workspace-header .workspace-history-actions + .workspace-file-actions,
   .workspace-shell[data-tools-open='true'] .workspace-header > .workspace-global-tools {
     display: flex;
     flex: 1 0 100%;
     width: 100%;
     min-width: 0;
     margin: 0;
-    padding-top: 7px;
-    border-top: 1px solid #eef0f3;
-    gap: 5px;
   }
 
-  .workspace-header > .workspace-toolbar { order: 2; }
-  .workspace-header > .workspace-global-tools { order: 3; }
+  .workspace-shell[data-tools-open='true'] .workspace-header .workspace-scene-file { order: 3; margin-top: 6px; }
+  .workspace-shell[data-tools-open='true'] .workspace-header .workspace-history-actions + .workspace-file-actions { order: 4; gap: 4px; }
+  .workspace-shell[data-tools-open='true'] .workspace-header > .workspace-global-tools {
+    order: 5;
+    padding-top: 6px;
+    border-top: 1px solid #eef0f3;
+  }
+  .workspace-more-inline { display: flex; flex-wrap: wrap; gap: 4px; }
 
   .workspace-shell[data-tools-open='true'] .workspace-global-tools .workspace-libraries-trigger {
     display: none;
   }
 
-  .workspace-toolbar .workspace-scene-file {
-    flex: 1 1 100%;
-    min-width: 0;
+  .workspace-header .workspace-scene-file {
     min-height: 46px;
     max-width: 100%;
   }
 
-  .workspace-toolbar .workspace-filename {
+  .workspace-header .workspace-filename {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .workspace-toolbar .workspace-file-actions {
+  .workspace-header .workspace-file-actions {
     flex-wrap: wrap;
-    gap: 4px;
     min-width: 0;
     max-width: 100%;
   }
