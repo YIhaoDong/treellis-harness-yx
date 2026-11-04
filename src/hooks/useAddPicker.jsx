@@ -2,6 +2,9 @@
 import { useCallback, useState } from 'react'
 import { getNodeAtPath, deepClone } from '../utils/tree'
 import { createPrimitive, createOperation, createRepeat } from '../utils/factories'
+import { notify } from '../ui/dialogs.mjs'
+
+const BINARY_FULL = 'A Subtract node takes exactly two parts. Add to one of its parts instead.'
 
 const initAddState = {
   open: false,
@@ -18,8 +21,8 @@ const initAddState = {
   op: 'union',
   opName: '',
 
-  // primitive
-  prim: null,
+  // primitive (a cube is chosen up front so Add works straight away)
+  prim: 'cube',
   primName: '',
 
   // repeat
@@ -28,6 +31,9 @@ const initAddState = {
 
   // ✅ NEW: instance selection (append mode)
   instanceId: null,
+
+  // name of the node being added to, for the dialog title
+  targetName: '',
 }
 
 export default function useAddPicker({
@@ -49,11 +55,11 @@ export default function useAddPicker({
   const openAddChild = useCallback((path) => {
     if (!liveScene) return
     const target = getNodeAtPath(liveScene, path)
-    if (!target) { alert('Path not found.'); return }
+    if (!target) { notify("That part no longer exists.", { tone: 'error' }); return }
 
     const opKey = String(target.operation || 'group').toLowerCase()
     if (opKey === 'subtract' && Array.isArray(target.children) && target.children.length >= 2) {
-      alert('This operation is binary (max 2 operands).')
+      notify(BINARY_FULL, { tone: 'error' })
       return
     }
 
@@ -71,6 +77,7 @@ export default function useAddPicker({
       repeatType: 'linear',
       repeatName: '',
       instanceId: null,
+      targetName: target.name || '',
     })
   }, [liveScene])
 
@@ -150,7 +157,7 @@ export default function useAddPicker({
 
       const opKeyNow = String(cur.operation || 'group').toLowerCase()
       if (opKeyNow === 'subtract' && Array.isArray(cur.children) && cur.children.length >= 2) {
-        endEdit(); alert('This operation is binary (max 2 operands).'); closeAddUI(); return
+        endEdit(); notify(BINARY_FULL, { tone: 'error' }); closeAddUI(); return
       }
 
       if (!Array.isArray(cur.children)) cur.children = []
@@ -161,7 +168,7 @@ export default function useAddPicker({
         const it = (typeof getLibraryItem === 'function') ? getLibraryItem(instanceId) : null
         if (!it || !it.subtree) {
           endEdit()
-          alert('Instance not found. Please re-open Add dialog and pick again.')
+          notify("That saved part is no longer available. Choose another one.", { tone: 'error' })
           closeAddUI()
           return
         }

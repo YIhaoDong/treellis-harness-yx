@@ -1,5 +1,6 @@
 // src/hooks/useNodeEditing.jsx
 import { useCallback } from 'react'
+import { notify } from '../ui/dialogs.mjs'
 import { deepClone, getNodeAtPath } from '../utils/tree'
 import { normalizeHex, applyColorToDescendants } from '../utils/color'
 import useClipboard from './useClipboard'
@@ -97,7 +98,7 @@ export default function useNodeEditing({
       const idx = parts[parts.length - 1]
 
       if (!Array.isArray(parent.children) || parent.children[idx] == null) {
-        alert('Target path not found.')
+        notify('That part no longer exists, so the AI edit could not be applied.', { tone: 'error' })
         return
       }
 
@@ -123,7 +124,7 @@ export default function useNodeEditing({
     if (!liveScene || targetPath == null) return
     const clip = getClipboard()
     if (!clip || !clip.subtree) {
-      alert('Clipboard is empty.')
+      notify('Nothing to paste yet. Copy a part first.')
       return
     }
 
@@ -134,12 +135,12 @@ export default function useNodeEditing({
 
     if (error === 'PASTE_INTO_DESCENDANT') {
       endEdit?.()
-      alert('Cannot paste a node into one of its own descendants.')
+      notify("A part can't be pasted inside itself.", { tone: 'error' })
       return
     }
     if (error) {
       endEdit?.()
-      alert('Paste failed: ' + error)
+      notify(`Paste failed: ${error}`, { tone: 'error' })
       return
     }
 

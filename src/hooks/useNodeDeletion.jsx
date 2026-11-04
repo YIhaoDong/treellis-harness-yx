@@ -1,5 +1,6 @@
 // hooks/useNodeDeletion.jsx
 import { useCallback } from 'react'
+import { notify } from '../ui/dialogs.mjs'
 import { deepClone } from '../utils/tree'
 
 /**
@@ -23,17 +24,17 @@ export default function useNodeDeletion({
   const deleteNodeAtPath = useCallback((path) => {
     if (!liveScene) return
     const parts = String(path).split('.').slice(1).map(n => parseInt(n, 10))
-    if (parts.length === 0) { alert('Root node cannot be deleted.'); return }
+    if (parts.length === 0) { notify("The top part can't be deleted. Use Start over in More to begin again."); return }
 
     // 校验路径
     let parent = liveScene
     for (let i = 0; i < parts.length - 1; i++) {
       const idx = parts[i]
-      if (!parent?.children || !parent.children[idx]) { alert('Path not found.'); return }
+      if (!parent?.children || !parent.children[idx]) { notify('That part no longer exists.', { tone: 'error' }); return }
       parent = parent.children[idx]
     }
     const delIdx = parts[parts.length - 1]
-    if (!Array.isArray(parent.children) || parent.children[delIdx] == null) { alert('Path not found.'); return }
+    if (!Array.isArray(parent.children) || parent.children[delIdx] == null) { notify('That part no longer exists.', { tone: 'error' }); return }
 
     // 执行删除（可撤销）
     beginEdit()

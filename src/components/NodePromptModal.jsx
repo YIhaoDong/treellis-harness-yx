@@ -137,9 +137,9 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
       <div className="prompt-modal" onClick={(e) => e.stopPropagation()}>
         <div className="prompt-modal__header">
           <div>
-            <div className="prompt-modal__eyebrow">Node prompt</div>
-            <h2 className="prompt-modal__title" id="node-prompt-title">AI Edit · {nodeName}</h2>
-            <div className="prompt-modal__path">Path: {activePath}</div>
+            <div className="prompt-modal__eyebrow">Change with AI</div>
+            <h2 className="prompt-modal__title" id="node-prompt-title">{nodeName}</h2>
+            <div className="prompt-modal__path">Changes apply to this part and everything inside it.</div>
           </div>
           <button type="button" className="prompt-close" onClick={close} aria-label="Close">×</button>
         </div>
@@ -184,7 +184,7 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
                 submit()
               }
             }}
-            placeholder={hasReply ? 'Reply or describe another change…' : 'Describe how to modify this node…'}
+            placeholder={hasReply ? 'Reply or describe another change…' : 'Describe how to change this part…'}
           />
           <div className="prompt-footer">
             <div className="prompt-footer__group">
@@ -204,7 +204,7 @@ export default function NodePromptModal({ open, path, node, scene, onClose, onAp
         <AccessSheet access={access} id="node-prompt-access" inline onGenerate={() => submit()} />
         {!clarification && <GenerationProgress progress={generation.progress} busy={busy} canResume={canSubmit && generation.canResume} onResume={() => submit(true)} />}
         <div className="prompt-caption">
-          <span>Edits apply to this node and its subtree</span>
+          <span>Other parts stay as they are</span>
           <span>Ctrl / ⌘ + Enter to generate · Esc to close</span>
         </div>
         {displayError && <div className={errorCode === 'CLARIFICATION' ? 'prompt-notice' : 'prompt-error'} role={errorCode === 'CLARIFICATION' ? 'status' : 'alert'}>

@@ -97,7 +97,7 @@
 .scene-libraries__card:disabled:hover { border-color: #e1e4ea; background: #fff; }
 .scene-libraries__card:focus-visible, .scene-libraries__close:focus-visible { outline: 2px solid #75839d; outline-offset: 3px; }
 .scene-libraries__card-top { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
-.scene-libraries__index { color: #9299a4; font: 11px/1.5 var(--app-mono); }
+.scene-libraries__index { color: #6b7280; font: 11px/1.5 var(--app-mono); }
 .scene-libraries__arrow { margin-left: auto; color: #8d95a1; font-size: 17px; line-height: 1; }
 .scene-libraries__title { overflow-wrap: anywhere; font-size: 15px; font-weight: 600; line-height: 1.35; }
 .scene-libraries__thumbnail { width: 100%; height: 115px; border-radius: 5px; object-fit: contain; }
@@ -115,7 +115,7 @@
   font-size: 11px;
 }
 
-.scene-libraries__escape { flex: none; color: #9299a4; }
+.scene-libraries__escape { flex: none; color: #6b7280; }
 
 @media (max-width: 680px) {
   .scene-libraries-overlay { padding: 14px; }

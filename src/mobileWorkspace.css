@@ -733,7 +733,6 @@
 
   /* Shared modal classes cover Scene JSON, naming, Libraries and AI editing.
      The viewport variables are also written on :root for body portals. */
-  .ttcs-modal-overlay,
   .prompt-modal-overlay,
   .scene-libraries-overlay {
     top: var(--workspace-top, 0px);
@@ -746,7 +745,6 @@
     overflow: hidden;
   }
 
-  .ttcs-modal,
   .prompt-modal,
   .scene-libraries {
     min-width: 0;
@@ -755,21 +753,18 @@
     border-radius: 13px;
   }
 
-  .ttcs-modal__bar,
   .scene-libraries__header {
     flex: none;
     gap: 10px;
     padding: 12px;
   }
 
-  .ttcs-modal__title,
   .scene-libraries h2 {
     min-width: 0;
     font-size: 20px;
     overflow-wrap: anywhere;
   }
 
-  .ttcs-modal__close,
   .scene-libraries__close,
   .prompt-close {
     flex: none;
@@ -777,7 +772,6 @@
     height: 44px;
   }
 
-  .ttcs-modal__body,
   .scene-libraries__body {
     min-width: 0;
     min-height: 0;
@@ -797,6 +791,9 @@
   .ttcs-librow {
     grid-template-columns: minmax(0, 1fr);
   }
+
+  .add-node__options { grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); }
+  .add-node__names { grid-template-columns: minmax(0, 1fr); }
 
   .ttcs-librow__actions,
   .ttcs-live-actions {
@@ -829,48 +826,10 @@
     max-width: 100%;
   }
 
-  /* Older Add/History dialogs use inline dimensions and have no class names.
-     Override only their outer shell, header wrapping and control hit areas. */
-  .workspace-shell > [role='dialog'][aria-modal='true'] {
-    top: var(--workspace-top, 0px) !important;
-    right: 0 !important;
-    bottom: auto !important;
-    left: 0 !important;
-    z-index: 1500 !important;
-    height: var(--workspace-height, 100dvh) !important;
-    min-height: 0;
-    padding: 8px !important;
-    overflow: hidden;
-  }
-
-  .workspace-shell > [role='dialog'][aria-modal='true'] > div {
-    min-width: 0;
-    max-width: min(760px, 100%) !important;
-    max-height: 100% !important;
-  }
-
-  .workspace-shell > [role='dialog'][aria-modal='true'] > div > div:first-child {
-    min-width: 0;
-    flex-wrap: wrap;
-  }
-
-  .workspace-shell > [role='dialog'][aria-modal='true'] > div > div:first-child > div:last-child,
-  .workspace-shell > [role='dialog'][aria-modal='true'] > div > div:has(> .ttcs-seg) {
-    min-width: 0;
-    flex-wrap: wrap !important;
-  }
-
-  .workspace-shell > [role='dialog'][aria-modal='true'] > div [style*='grid-template-columns'] {
-    grid-template-columns: minmax(0, 1fr) !important;
-  }
-
-  .workspace-shell > [role='dialog'][aria-modal='true'] button {
-    flex-shrink: 0;
-  }
 }
 
 @media (max-width: 360px) {
-  .workspace-header .workspace-local-label {
+  .workspace-header .workspace-brand-name {
     display: none;
   }
 

@@ -72,10 +72,10 @@ export default function SceneLibraries({ open, onClose, items = [], onSelect, bu
       >
         <header className="scene-libraries__header">
           <div>
-            <h2 id={titleId}>Libraries <span className="scene-libraries__count">{items.length}</span></h2>
-            <p id={descriptionId}>Choose a creation to open it in Treellis.</p>
+            <h2 id={titleId}>Examples <span className="scene-libraries__count">{items.length}</span></h2>
+            <p id={descriptionId}>Open a model made with Treellis to explore or change it.</p>
           </div>
-          <button ref={closeRef} type="button" className="scene-libraries__close" onClick={onClose} aria-label="Close Libraries">×</button>
+          <button ref={closeRef} type="button" className="scene-libraries__close" onClick={onClose} aria-label="Close examples">×</button>
         </header>
         <div className="scene-libraries__body" aria-busy={busy}>
           {items.length ? (
@@ -98,10 +98,10 @@ export default function SceneLibraries({ open, onClose, items = [], onSelect, bu
                 </button>
               ))}
             </div>
-          ) : <p className="scene-libraries__empty">No creations are available yet.</p>}
+          ) : <p className="scene-libraries__empty">No examples are available yet.</p>}
         </div>
         <footer className="scene-libraries__footer">
-          <span role="status">{busy ? 'Finish the current generation before switching creations.' : 'Click any creation to switch the current scene.'}</span>
+          <span role="status">{busy ? 'Wait for the current generation to finish before opening an example.' : 'Opening an example replaces the current scene. Undo brings it back.'}</span>
           <span className="scene-libraries__escape">Esc to close</span>
         </footer>
       </section>

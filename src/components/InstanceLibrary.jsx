@@ -1,7 +1,7 @@
 // src/components/InstanceLibrary.jsx
 import React, { useEffect, useMemo, useState } from 'react'
 import { STATIC_DEMO } from '../staticDemo/mode.mjs'
-import { requestStaticText } from '../staticDemo/dialogs.mjs'
+import { askConfirm, askText } from '../ui/dialogs.mjs'
 
 /**
  * InstanceLibrary (copy-based)
@@ -94,16 +94,16 @@ export default function InstanceLibrary({
 
   const handleRename = async (id, currentName) => {
     if (typeof onRename !== 'function') return
-    const next = STATIC_DEMO ? await requestStaticText('Rename instance / 重命名实例', String(currentName || 'Instance')) : window.prompt('Rename instance / 重命名实例', String(currentName || 'Instance'))
+    const next = await askText({ title: 'Rename part', label: 'Name', value: String(currentName || 'Part'), confirmLabel: 'Rename' })
     if (next == null) return
     const nm = String(next).trim()
     if (!nm) return
     onRename(id, nm)
   }
 
-  const handleRemove = (id) => {
+  const handleRemove = async (id) => {
     if (typeof onRemove !== 'function') return
-    const ok = window.confirm('Remove this instance from Library?\n是否从 Library 删除该实例？')
+    const ok = await askConfirm({ title: 'Remove this part?', message: 'It will be removed from Saved parts.', confirmLabel: 'Remove', danger: true })
     if (!ok) return
     onRemove(id)
   }
